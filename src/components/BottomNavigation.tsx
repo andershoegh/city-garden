@@ -25,6 +25,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
           <IonTabs>
             <IonRouterOutlet>
               <Route path="/have" component={Home} exact />
+              <Route path="/opslagstavle" component={Home} exact /> {/* Tilføj komponent når oprettet */}
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
               <IonTabButton tab="have" href="/have">
