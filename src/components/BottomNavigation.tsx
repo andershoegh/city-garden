@@ -21,11 +21,11 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
     <IonApp>
       <IonPage>
         <IonReactRouter>
-          <Redirect path="/" to="/have"></Redirect>
           <IonTabs>
             <IonRouterOutlet>
               <Route path="/have" component={Home} exact />
               <Route path="/opslagstavle" component={Home} exact /> {/* Tilføj komponent når oprettet */}
+              <Redirect path="/" to="/have" exact></Redirect>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
               <IonTabButton tab="have" href="/have">
