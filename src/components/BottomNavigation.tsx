@@ -27,7 +27,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
               <Route path="/have" component={Home} exact />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
-              <IonTabButton tab="have" href="/home">
+              <IonTabButton tab="have" href="/have">
                 <IonIcon icon={leafOutline}></IonIcon>
                 <IonLabel>Have</IonLabel>
               </IonTabButton>
