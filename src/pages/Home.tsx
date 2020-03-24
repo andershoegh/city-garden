@@ -6,6 +6,7 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <h1>City Garden</h1>
+      <h1>City Garden</h1>
     </IonPage>
   );
 };
