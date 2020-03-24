@@ -8,10 +8,8 @@ interface BedProps {
     info?:string,
     opgave?:string,
     taget?:boolean,
-    style:string,
+    style:string
 }
-
-
 
 const Bed: React.FC<BedProps> = ({bedNr,indhold,info,opgave,taget,style}) => {
     let className = 'bed-style';
