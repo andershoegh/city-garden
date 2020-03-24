@@ -10,12 +10,10 @@ import {
   IonText,
   IonCardSubtitle,
   IonButton,
-  IonBackdrop,
   IonModal
 } from "@ionic/react";
 import { firebase } from "../Utility/Firebase";
 import AddNote from "../components/NoteComponents/AddNoteComponent";
-import NoteRepeater from "../components/NoteComponents/NoteReapeter";
 
 export interface MessageBoardProps {}
 

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   IonItem,
-  IonText,
   IonContent,
   IonButton,
   IonTextarea,
