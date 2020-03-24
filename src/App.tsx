@@ -23,7 +23,7 @@ import { BottomNavigation } from "./components/BottomNavigation";
 
 const App: React.FC = () => (
   <IonApp>
-    <BottomNavigation></BottomNavigation>
+    <BottomNavigation />
   </IonApp>
 );
 
