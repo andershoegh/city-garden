@@ -15,7 +15,7 @@ const Bed: React.FC<BedProps> = ({bedNr,indhold,info,opgave,taget,style}) => {
     let className = 'bed-style';
     if(style) className += '-'+style;
     return (
-        <button className={className} onClick={()=>(console.log(style,'\n',bedNr))}>Click ME!</button>
+    <button className={className} onClick={()=>(console.log(style,'\n',bedNr))}>Bed nr: {bedNr}</button>
     );
 };
 
