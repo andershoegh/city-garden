@@ -5,15 +5,12 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonCard,
-  IonCardContent,
-  IonText,
-  IonCardSubtitle,
   IonButton,
   IonModal
 } from "@ionic/react";
 import { firebase } from "../Utility/Firebase";
 import AddNote from "../components/NoteComponents/AddNoteComponent";
+import NoteRepeater from "../components/NoteComponents/NoteRepeater";
 
 export interface MessageBoardProps {}
 
@@ -49,17 +46,7 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
         <IonModal isOpen={modalOpen}>
           <AddNote closeModal={() => setModalOpen(false)} />
         </IonModal>
-        {/* <NoteRepeater notes={notes} /> */}
-        {notes.length !== 0
-          ? notes.map((note, index) => (
-              <IonCard key={index}>
-                <IonCardContent>
-                  <IonText>{note.note}</IonText>
-                  <IonCardSubtitle>- {note.author}</IonCardSubtitle>
-                </IonCardContent>
-              </IonCard>
-            ))
-          : null}
+        <NoteRepeater notes={notes} />
         <IonButton onClick={() => setModalOpen(true)}>Write a Note</IonButton>
       </IonContent>
     </IonPage>
