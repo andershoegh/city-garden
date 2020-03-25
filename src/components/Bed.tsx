@@ -1,4 +1,4 @@
-import { IonPage } from "@ionic/react";
+import { IonButton } from "@ionic/react";
 import React from "react";
 import "./Bed.css";
 
@@ -15,7 +15,7 @@ const Bed: React.FC<BedProps> = ({bedNr,indhold,info,opgave,taget,style}) => {
     let className = 'bed-style';
     if(style) className += '-'+style;
     return (
-    <button className={className} onClick={()=>(console.log(style,'\n',bedNr))}>Bed nr: {bedNr}</button>
+    <IonButton className={className} onClick={()=>(console.log(style,'\n',bedNr))}>Bed nr: {bedNr}</IonButton>
     );
 };
 
