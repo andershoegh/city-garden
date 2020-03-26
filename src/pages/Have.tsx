@@ -1,7 +1,8 @@
 import { IonContent, IonGrid, IonCol, IonRow } from "@ionic/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Have.css";
 import Bed from "../components/Bed";
+import { firebase } from "../Utility/Firebase"
 
 const Have: React.FC = () => {
 const sizeRow = "1"
@@ -11,7 +12,7 @@ const sizeRow = "1"
         <IonGrid>
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="1">
+                <IonCol size={sizeRow} size-sm>
                     <Bed bedNr={1} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    
@@ -32,7 +33,7 @@ const sizeRow = "1"
             </IonRow>
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="1">
+                <IonCol size={sizeRow} size-sm>
                     <Bed bedNr={7} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    
@@ -53,7 +54,7 @@ const sizeRow = "1"
             </IonRow>
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="1">
+                <IonCol size={sizeRow} size-sm>
                     <Bed bedNr={13} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    
@@ -75,7 +76,7 @@ const sizeRow = "1"
 
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="5">
+                <IonCol size={sizeRow} size-sm offset='4'>
                     <Bed bedNr={19} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    
@@ -84,7 +85,7 @@ const sizeRow = "1"
             </IonRow>
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="5">
+                <IonCol size={sizeRow} size-sm offset='4'>
                     <Bed bedNr={21} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    
@@ -93,7 +94,7 @@ const sizeRow = "1"
             </IonRow>
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="1">
+                <IonCol size={sizeRow} size-sm>
                     <Bed bedNr={23} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    
@@ -114,7 +115,7 @@ const sizeRow = "1"
             </IonRow>
 
             <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset="1">
+                <IonCol size={sizeRow} size-sm>
                     <Bed bedNr={29} style='primary'/>
                 </IonCol>
                 <IonCol size={sizeRow} size-sm>                    

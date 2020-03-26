@@ -1,4 +1,9 @@
 .bed-row{
     text-align: center;
+    justify-content: flex-start;
     margin-top: 5%;
+}
+
+.bed-col{
+
 }
