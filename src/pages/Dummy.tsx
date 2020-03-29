@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { IonPage, IonButton } from "@ionic/react";
 import { firebase } from "../Utility/Firebase";
 
@@ -28,15 +28,15 @@ const Dummy: React.SFC = () => {
 
   let db = firebase.firestore();
 
-  function addTask() {
+  const addTask = () => {
     db.collection("alltasks")
       .add(taskData)
       .then(function() {
         console.log("Document in Firebase = OK!");
       });
-  }
+  };
 
-  function updateGardenBox(gardenBoxId: any) {
+  const updateGardenBox = (gardenBoxId: number) => {
     let gardenBox = db.collection("gardenBox").doc("" + gardenBoxId);
 
     if (gardenBoxId > 30) {
@@ -47,9 +47,9 @@ const Dummy: React.SFC = () => {
     return gardenBox
       .set(
         {
-          airMoisture: 10,
-          soilMoisture: 10,
-          soilTemperature: 10
+          airMoisture: 1000,
+          soilMoisture: 1000,
+          soilTemperature: 1000
         },
         { merge: true }
       )
@@ -59,16 +59,16 @@ const Dummy: React.SFC = () => {
       .catch(function(err: any) {
         console.log("Error updating: ", err);
       });
-  }
+  };
 
-  function createTaskTemplate(taskTemplateId: any) {
+  const createTaskTemplate = (taskTemplateId: string) => {
     db.collection("taskTemplate")
       .doc(taskTemplateId)
       .set(taskTemplateData)
       .then(function() {
         console.log("Document in Firebase = OK!");
       });
-  }
+  };
 
   return (
     <IonPage>
@@ -76,7 +76,7 @@ const Dummy: React.SFC = () => {
       <IonButton onClick={() => createTaskTemplate("Harvest")}>
         Add task template to DB
       </IonButton>
-      <IonButton onClick={() => updateGardenBox(20)}>
+      <IonButton onClick={() => updateGardenBox(31)}>
         Update garden box values
       </IonButton>
     </IonPage>
