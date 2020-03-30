@@ -2,139 +2,44 @@ import { IonContent, IonGrid, IonCol, IonRow } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import "./Have.css";
 import Bed from "../components/Bed";
-import { firebase } from "../Utility/Firebase"
+import { firebase } from "../Utility/Firebase";
 
-const Have: React.FC = () => {
-const sizeRow = "1"
+interface HaveProps{
+    tasks: firebase.firestore.DocumentData[];
+}
+
+const Have: React.FC<HaveProps> = props => {
+    const { tasks } = props;
+    const sizeRow = "2"
+
+    const [beds, setBeds] = useState<firebase.firestore.DocumentData[]>([]);
+
+  useEffect(() => {
+    const unsub = firebase.getBed().onSnapshot(snapShot => {
+      let tempArray: firebase.firestore.DocumentData[];
+      tempArray = [];
+      snapShot.forEach(doc => {
+        tempArray = [...tempArray, {...doc.data(), id:Number(doc.id)}];
+      });
+      tempArray.sort((a:any, b:any) => a.id-b.id);
+      console.log(tempArray);
+      setBeds(tempArray)
+    });
+
+    return () => {
+      unsub();
+    };
+  }, []);
 
   return (
     <IonContent>
         <IonGrid>
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={1} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={2} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={3} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={4} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={5} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={6} style='disabled'/>
-                </IonCol>
+            <IonRow>
+                {beds.map((bed,index)=>
+                <IonCol className="bed-col" size-sm={sizeRow} key={index} offset={bed.id===19 || bed.id===21?"8":"0"}>
+                    <Bed style="primary" bedNr={bed.id}></Bed>
+                </IonCol>)}
             </IonRow>
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={7} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={8} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={9} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={10} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={11} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={12} style='disabled'/>
-                </IonCol>
-            </IonRow>
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={13} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={14} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={15} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={16} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={17} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={18} style='disabled'/>
-                </IonCol>
-            </IonRow>
-
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset='4'>
-                    <Bed bedNr={19} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={20} style='disabled'/>
-                </IonCol>
-            </IonRow>
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm offset='4'>
-                    <Bed bedNr={21} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={22} style='disabled'/>
-                </IonCol>
-            </IonRow>
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={23} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={24} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={25} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={26} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={27} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={28} style='disabled'/>
-                </IonCol>
-            </IonRow>
-
-            <IonRow className="bed-row">
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={29} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={30} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={31} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={32} style='disabled'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>
-                    <Bed bedNr={33} style='primary'/>
-                </IonCol>
-                <IonCol size={sizeRow} size-sm>                    
-                    <Bed bedNr={34} style='disabled'/>
-                </IonCol>
-            </IonRow>
-
         </IonGrid>
     </IonContent>
   );
