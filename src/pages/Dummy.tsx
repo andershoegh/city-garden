@@ -1,45 +1,65 @@
-import React from "react";
-import { IonPage, IonButton } from "@ionic/react";
+import React, { useState } from "react";
+import {
+  IonPage,
+  IonButton,
+  IonCard,
+  IonRow,
+  IonCol,
+  IonInput,
+  IonLabel,
+  IonList,
+  IonItem,
+  IonTitle
+} from "@ionic/react";
+import "./Dummy.css";
 import { firebase } from "../Utility/Firebase";
+import "../theme/elements.scss";
 
 export interface IDummyData {
-  created: string;
-  finished: boolean;
-  gardenBoxId: number;
-  taskTaken: boolean;
+  gardenBoxId: string;
   taskTemplateId: string;
+  airMoisture: string;
+  soilMoisture: string;
+  soilTemperature: string;
+  taskDescription: string;
+  taskTitle: string;
 }
 
 const Dummy: React.SFC = () => {
-  //const [DummyData, setDummyData] = useState<IDummyData>();
+  const [state, setState] = useState<IDummyData>({
+    gardenBoxId: "",
+    taskTemplateId: "",
+    airMoisture: "",
+    soilMoisture: "",
+    soilTemperature: "",
+    taskDescription: "",
+    taskTitle: ""
+  });
 
-  let taskData = {
-    created: firebase.firestore.Timestamp.fromDate(new Date()),
-    finished: false,
-    gardenBoxId: 2,
-    taskTaken: false,
-    taskTemplateId: 1
-  };
-
-  let taskTemplateData = {
-    taskDescription: "Dummy task description",
-    taskTitle: "Dummy title"
+  const handleChange = (e: any) => {
+    setState({ ...state, [e.target.id]: e.detail.value! });
   };
 
   let db = firebase.firestore();
 
   const addTask = () => {
     db.collection("alltasks")
-      .add(taskData)
+      .set({
+        created: firebase.firestore.Timestamp.fromDate(new Date()),
+        finished: false,
+        gardenBoxId: state.gardenBoxId,
+        taskTaken: false,
+        taskTemplateId: state.taskTemplateId
+      })
       .then(function() {
         console.log("Document in Firebase = OK!");
       });
   };
 
-  const updateGardenBox = (gardenBoxId: number) => {
-    let gardenBox = db.collection("gardenBox").doc("" + gardenBoxId);
+  const updateGardenBox = () => {
+    let gardenBox = db.collection("gardenBox").doc("" + state.gardenBoxId);
 
-    if (gardenBoxId > 30) {
+    if (Number(state.gardenBoxId) > 30) {
       console.log("There aren't that many garden boxes!");
       return;
     }
@@ -47,9 +67,9 @@ const Dummy: React.SFC = () => {
     return gardenBox
       .set(
         {
-          airMoisture: 1000,
-          soilMoisture: 1000,
-          soilTemperature: 1000
+          airMoisture: state.airMoisture,
+          soilMoisture: state.soilMoisture,
+          soilTemperature: state.soilTemperature
         },
         { merge: true }
       )
@@ -61,10 +81,15 @@ const Dummy: React.SFC = () => {
       });
   };
 
-  const createTaskTemplate = (taskTemplateId: string) => {
+  const createTaskTemplate = () => {
+    let taskTemplateId = state.taskTemplateId.toString();
+    console.log(taskTemplateId);
     db.collection("taskTemplate")
       .doc(taskTemplateId)
-      .set(taskTemplateData)
+      .set({
+        taskDescription: state.taskDescription,
+        taskTitle: state.taskTitle
+      })
       .then(function() {
         console.log("Document in Firebase = OK!");
       });
@@ -72,13 +97,119 @@ const Dummy: React.SFC = () => {
 
   return (
     <IonPage>
-      <IonButton onClick={addTask}>Add task to DB</IonButton>
-      <IonButton onClick={() => createTaskTemplate("Harvest")}>
-        Add task template to DB
-      </IonButton>
-      <IonButton onClick={() => updateGardenBox(31)}>
-        Update garden box values
-      </IonButton>
+      <IonRow>
+        <IonCol className="ion-padding">
+          <IonList class="line-input">
+            <IonCard>
+              <IonItem>
+                <IonTitle>Add a task</IonTitle>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Garden box id - </IonLabel>
+                <IonInput
+                  id="gardenBoxId"
+                  value={state.gardenBoxId}
+                  onIonChange={handleChange}
+                  class="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+              {/* Add picker for taskTemplateId */}
+
+              <IonButton className="ion-margin" onClick={addTask}>
+                Add task
+              </IonButton>
+            </IonCard>
+          </IonList>
+        </IonCol>
+
+        <IonCol className="ion-padding">
+          <IonList class="line-input">
+            <IonCard>
+              <IonItem>
+                <IonTitle>Add a new task template</IonTitle>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Task template name</IonLabel>
+                <IonInput
+                  id="taskTemplateId"
+                  value={state.taskTemplateId}
+                  onIonChange={handleChange}
+                  class="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Task template title -</IonLabel>
+                <IonInput
+                  id="taskTitle"
+                  value={state.taskTitle}
+                  onIonChange={handleChange}
+                  class="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>Task description - </IonLabel>
+                <IonInput
+                  id="taskDescription"
+                  value={state.taskDescription}
+                  onIonChange={handleChange}
+                  class="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+
+              <IonButton
+                className="ion-margin"
+                onClick={() => createTaskTemplate()}
+              >
+                Add task template
+              </IonButton>
+            </IonCard>
+          </IonList>
+        </IonCol>
+
+        <IonCol className="ion-padding">
+          <IonList className="line-input">
+            <IonCard>
+              <IonItem>
+                <IonTitle>Set values for box</IonTitle>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Air Moisture</IonLabel>
+                <IonInput
+                  id="airMoisture"
+                  value={state.airMoisture}
+                  onIonChange={handleChange}
+                  className="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Soil Moisture</IonLabel>
+                <IonInput
+                  id="soilMoisture"
+                  value={state.soilMoisture}
+                  onIonChange={handleChange}
+                  className="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Soil Temperature</IonLabel>
+                <IonInput
+                  id="soilTemperature"
+                  value={state.soilTemperature}
+                  onIonChange={handleChange}
+                  className="ion-text-right ion-padding-top"
+                ></IonInput>
+              </IonItem>
+              <IonButton
+                className="ion-margin"
+                onClick={() => updateGardenBox()}
+              >
+                Update garden box values
+              </IonButton>
+            </IonCard>
+          </IonList>
+        </IonCol>
+      </IonRow>
     </IonPage>
   );
 };
