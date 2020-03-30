@@ -1,0 +1,27 @@
+.task-header {
+  padding: 10px 0 10px 15px;
+}
+
+.task-info {
+  padding: 20px 20px 20px 30px;
+  height: 100%;
+  background-color: grey;
+  color: black;
+}
+
+.task-info-hidden {
+  visibility: collapse;
+  height: 0;
+}
+
+.task-title {
+  padding-bottom: 15px;
+}
+
+.task-description {
+  padding-bottom: 20px;
+}
+
+strong {
+  color: rgb(97, 97, 97);
+}
