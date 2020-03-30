@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   IonButton, 
   IonLabel, 
   IonItemGroup, 
-  IonItemDivider 
+  IonItemDivider,
+  IonIcon
 } from "@ionic/react";
 import { firebase } from "../../Utility/Firebase";
+import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 import "./Task.css"
 
 export interface TaskProps {
@@ -13,19 +15,28 @@ export interface TaskProps {
   taskDescription: firebase.firestore.DocumentData[];
   showTaken: boolean;
   index: number;
+  isOpen: string;
+  toggleOpen: CallableFunction;
 }
 
 export const Task: React.FC<TaskProps> = props => {
-  let task: firebase.firestore.DocumentData;
-  task = props.task;
+  const { showTaken, index, isOpen, task, toggleOpen } = props;
   const taskDescription = props.taskDescription.filter(e => e.taskTemplateId === task.taskTemplateId);
-  const showTaken = props.showTaken;
-  const index = props.index;
-  
+
   const [toggle, setToggle] = useState("task-info-hidden");
-  const [isHidden, setIsHidden] = useState(true);
   const [isTaken, setIsTaken] = useState<boolean>(task.taskTaken);
   const [isFinished, setIsFinished] = useState<boolean>(task.finished);
+  const [iconToggle, setIconToggle] = useState(chevronForwardOutline);
+
+  useEffect(() => {
+    if (isOpen === task.gardenBoxId) {
+      setToggle("task-info");
+      setIconToggle(chevronDownOutline);
+    } else {
+      setToggle("task-info-hidden");
+      setIconToggle(chevronForwardOutline);
+    }
+  }, [isOpen, task.gardenBoxId])
 
   if (showTaken !== task.taskTaken || task.finished) {
     return null;
@@ -35,16 +46,12 @@ export const Task: React.FC<TaskProps> = props => {
     switch (update) {
       case "toggleTaken" :
         let tempTaken = !isTaken;       
-                
         firebase.updateTaskTaken(task.gardenBoxId, tempTaken);
-
         setIsTaken(tempTaken);
         break;
       case "setFinished" :
         let tempFinished = !isFinished;
-                
         firebase.setTaskFinished(task.gardenBoxId, tempFinished);
-
         setIsFinished(tempFinished);
         break;
       default:
@@ -53,12 +60,10 @@ export const Task: React.FC<TaskProps> = props => {
   }
 
   const toggleInfo = () => {
-    if (isHidden) {
-      setToggle("task-info");
-      setIsHidden(false);
+    if (isOpen === task.gardenBoxId) {
+      toggleOpen("0");
     } else {
-      setToggle("task-info-hidden");
-      setIsHidden(true)
+      toggleOpen(task.gardenBoxId);
     }
   }
 
@@ -66,16 +71,19 @@ export const Task: React.FC<TaskProps> = props => {
     <IonItemGroup className="task-group">
       <IonItemDivider className="task-header" onClick={() => toggleInfo()}>
         <IonLabel>Garden box {task.gardenBoxId}</IonLabel>
+        <div className="icon-box">
+          <IonIcon icon={iconToggle} />
+        </div>
       </IonItemDivider>
-      {taskDescription.map(desc => (
+      { taskDescription.map(taskDescription => (
         <IonItemGroup key={index} className={toggle}>
           <div className="task-title">
             <strong>Task</strong> 
-            <br/> {desc.taskTitle}
+            <br/> {taskDescription.taskTitle}
           </div>
           <div className="task-description">
             <strong>Description</strong> 
-            <br/> {desc.taskDescription}
+            <br/> {taskDescription.taskDescription}
           </div>
           { showTaken ?
             <div className="btn-div">
@@ -89,7 +97,7 @@ export const Task: React.FC<TaskProps> = props => {
                 onClick={() => toggleTask("setFinished")}>
                 finish task
               </IonButton>
-          </div>
+            </div>
           :
             <IonButton 
               className="task-btn"
