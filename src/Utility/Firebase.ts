@@ -26,6 +26,30 @@ class Firebase {
       note: text,
       created: new Date()
     });
+  getTasks = () =>
+    this.db
+      .collection("alltasks")
+      .orderBy("gardenBoxId", "asc");
+  updateTaskTaken = (id: number, taskTaken: boolean) => {
+    this.db
+      .collection("alltasks")
+      .doc(`${id}`)
+      .update({
+        taskTaken: taskTaken
+      });
+  }
+  setTaskFinished = (id: number, finished: boolean) => {
+    this.db
+      .collection("alltasks")
+      .doc(`${id}`)
+      .update({
+        finished: finished
+      });
+  }
+  getTaskDescription = () =>
+    this.db
+      .collection("taskTemplate")
+      .orderBy("taskTemplateId", "asc");
 }
 
 export const firebase = new Firebase();

@@ -1,0 +1,13 @@
+.card {
+  max-height: 900px;
+}
+
+.list {
+  width: 105%;
+  height: 90%;
+  overflow: scroll;
+  margin-left: -1.5%;
+  margin-bottom: 10px;
+}
+
+
