@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   IonPage,
   IonHeader,
@@ -11,7 +11,7 @@ import {
   IonRefresherContent,
   IonIcon
 } from "@ionic/react";
-import { addOutline, addCircleOutline } from "ionicons/icons";
+import { addOutline } from "ionicons/icons";
 import { firebase } from "../Utility/Firebase";
 import AddNote from "../components/NoteComponents/AddNoteComponent";
 import NoteRepeater from "../components/NoteComponents/NoteRepeater";
@@ -21,44 +21,49 @@ export interface MessageBoardProps {}
 const MessageBoard: React.SFC<MessageBoardProps> = () => {
   const [notes, setNotes] = useState<firebase.firestore.DocumentData[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [subscribe, setSubscribe] = useState<Function>();
+  const [subscribe, setSubscribe] = useState<CallableFunction>();
 
-  const update = (event: any) => {
-    if (subscribe !== undefined) {
-      subscribe();
-    }
+  const update = useCallback(
+    (event: any, unsub: Function) => {
+      if (unsub !== undefined) {
+        unsub();
+      }
 
-    const dt = new Date();
-    dt.setDate(dt.getDate() - 14);
+      const dt = new Date();
+      dt.setDate(dt.getDate() - 14);
 
-    setSubscribe(() =>
-      firebase
-        .getNotes()
-        .where("created", ">=", dt)
-        .onSnapshot(snapShot => {
-          let tempArray: firebase.firestore.DocumentData[];
-          tempArray = [];
-          snapShot.forEach(doc => {
-            tempArray = [...tempArray, doc.data()];
-          });
+      setSubscribe(() =>
+        firebase
+          .getNotes()
+          .where("created", ">=", dt)
+          .onSnapshot(snapShot => {
+            let tempArray: firebase.firestore.DocumentData[];
+            tempArray = [];
+            snapShot.forEach(doc => {
+              tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+            });
 
-          setNotes(tempArray);
-          if (event !== null) {
-            setTimeout(() => event.detail.complete(), 1000);
-          }
-        })
-    );
-  };
+            setNotes(tempArray);
+            if (event !== null) {
+              setTimeout(() => event.detail.complete(), 1000);
+            }
+          })
+      );
+    },
+    [setSubscribe]
+  );
 
   useEffect(() => {
-    update(null);
+    if (subscribe === undefined) {
+      update(null, () => undefined);
+    }
 
     return () => {
       if (subscribe !== undefined) {
         subscribe();
       }
     };
-  }, []);
+  }, [update, subscribe]);
 
   return (
     <IonPage>
@@ -76,7 +81,10 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonRefresher slot="fixed" onIonRefresh={e => update(e)}>
+        <IonRefresher
+          slot="fixed"
+          onIonRefresh={e => update(e, () => subscribe)}
+        >
           <IonRefresherContent />
         </IonRefresher>
         <IonModal isOpen={modalOpen}>
