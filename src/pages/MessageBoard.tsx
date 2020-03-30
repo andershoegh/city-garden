@@ -35,12 +35,16 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
       setSubscribe(() =>
         firebase
           .getNotes()
-          .where("created", ">=", dt)
+          /*.where("created", ">=", dt)*/
           .onSnapshot(snapShot => {
             let tempArray: firebase.firestore.DocumentData[];
             tempArray = [];
             snapShot.forEach(doc => {
-              tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+              if(doc.data().pinned || new Date(doc.data().created.toDate()) >= dt){
+                tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+              }else{
+                firebase.db.collection('notes').doc(doc.id).delete();
+              }
             });
 
             setNotes(tempArray);
@@ -48,6 +52,7 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
               setTimeout(() => event.detail.complete(), 1000);
             }
           })
+
       );
     },
     [setSubscribe]
@@ -64,6 +69,7 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
       }
     };
   }, [update, subscribe]);
+ 
 
   return (
     <IonPage>

@@ -4,3 +4,10 @@
   align-items: center;
   justify-content: center;
 }
+
+.pin-icon{
+  font-size: 25px;
+  position: absolute;
+  left:87%;
+  
+}

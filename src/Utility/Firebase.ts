@@ -12,16 +12,20 @@ class Firebase {
     app.initializeApp(firebaseConfig);
     this.db = app.firestore();
     this.firestore = app.firestore;
+
   }
 
   getTypes = () => firebase;
-  getNotes = () => this.db.collection("notes").orderBy("created", "desc");
+  
+  getNotes = () => this.db.collection("notes").orderBy("pinned", "desc").orderBy("created", "desc");
   createNote = (author: string, text: string) =>
     this.db.collection("notes").add({
       author: author,
       note: text,
       created: new Date()
     });
+  
+  updatePin = (id:string) => this.db.collection("notes").doc(id);
 }
 
 export const firebase = new Firebase();
