@@ -8,7 +8,8 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonLabel
+  IonLabel,
+  IonButtons
 } from "@ionic/react";
 import { firebase } from "../../Utility/Firebase";
 
@@ -56,10 +57,12 @@ const AddNote: React.SFC<AddNoteProps> = props => {
             onIonChange={e => setText(e.detail.value!)}
           />
         </IonItem>
-        <IonButton onClick={() => closeModal()} color="danger">
-          Close
-        </IonButton>
-        <IonButton onClick={addNewNote}>Submit</IonButton>
+        <IonButtons>
+          <IonButton onClick={() => closeModal()} color="danger">
+            Close
+          </IonButton>
+          <IonButton onClick={addNewNote}>Submit</IonButton>
+        </IonButtons>
       </IonContent>
     </>
   );

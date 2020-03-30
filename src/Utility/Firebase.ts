@@ -15,11 +15,7 @@ class Firebase {
   }
 
   getTypes = () => firebase;
-  getNotes = () =>
-    this.db
-      .collection("notes")
-      .orderBy("created", "desc")
-      .limit(10);
+  getNotes = () => this.db.collection("notes").orderBy("created", "desc");
   createNote = (author: string, text: string) =>
     this.db.collection("notes").add({
       author: author,

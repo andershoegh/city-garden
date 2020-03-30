@@ -8,6 +8,7 @@ import {
   IonText,
   IonCardSubtitle
 } from "@ionic/react";
+import "./NoteStyle.css";
 
 export interface NoteRepeaterProps {
   notes: firebase.firestore.DocumentData[];
@@ -15,6 +16,7 @@ export interface NoteRepeaterProps {
 
 const NoteRepeater: React.SFC<NoteRepeaterProps> = props => {
   const { notes } = props;
+
   return (
     <IonGrid>
       <IonRow>
@@ -23,7 +25,9 @@ const NoteRepeater: React.SFC<NoteRepeaterProps> = props => {
               <IonCol size="3" key={index}>
                 <IonCard>
                   <IonCardContent>
-                    <IonText>{note.note}</IonText>
+                    <div className="card-div">
+                      <IonText>{note.note}</IonText>
+                    </div>
                     <IonCardSubtitle>- {note.author}</IonCardSubtitle>
                   </IonCardContent>
                 </IonCard>
