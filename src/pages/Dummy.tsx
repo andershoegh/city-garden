@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonPage,
   IonButton,
@@ -19,56 +19,89 @@ import "../theme/elements.scss";
 
 export interface IDummyData {
   gardenBoxId: string;
+  gardenBoxArray: firebase.firestore.DocumentData[];
   taskTemplateId: string;
   airMoisture: string;
   soilMoisture: string;
   soilTemperature: string;
   taskDescription: string;
   taskTitle: string;
-  taskTemplateIdArray: Array<string>;
+  chosenTaskTemplate: string;
+}
+
+export interface ITemplateArray {
+  taskTemplateArray: Array<string>;
 }
 
 const Dummy: React.SFC = () => {
   const [state, setState] = useState<IDummyData>({
     gardenBoxId: "",
+    gardenBoxArray: [],
     taskTemplateId: "",
     airMoisture: "",
     soilMoisture: "",
     soilTemperature: "",
     taskDescription: "",
     taskTitle: "",
-    taskTemplateIdArray: []
+    chosenTaskTemplate: ""
   });
+
+  const [taskTemplateArray, setTaskTemplateArray] = useState<
+    firebase.firestore.DocumentData[]
+  >([]);
 
   const handleChange = (e: any) => {
     setState({ ...state, [e.target.id]: e.detail.value! });
   };
 
-  let db = firebase.firestore();
+  useEffect(() => {
+    const unsub = firebase.db
+      .collection("taskTemplate")
+      .onSnapshot(snapshot => {
+        let documents: any = [];
+        snapshot.forEach(doc => {
+          documents.push({ ...doc.data(), id: doc.id });
+        });
+        setTaskTemplateArray(documents);
+      });
+    return () => {
+      unsub();
+    };
+  }, []);
 
-  const getTaskTemplates = async () => {
-    const snapshot = await db.collection("taskTemplate").get();
-    const documents: any = [];
-    snapshot.forEach((doc: { id: string | number; data: () => any }) => {
-      documents[doc.id] = doc.data();
+  useEffect(() => {
+    const unsub = firebase.db.collection("gardenBox").onSnapshot(snapshot => {
+      let documents: any = [];
+      snapshot.forEach(doc => {
+        documents.push({ ...doc.data(), id: doc.id });
+      });
+      documents.sort(
+        (
+          a: firebase.firestore.DocumentData,
+          b: firebase.firestore.DocumentData
+        ) => {
+          return Number(a.id) - Number(b.id);
+        }
+      );
+      setState(s => {
+        return { ...s, gardenBoxArray: documents };
+      });
     });
-    return documents;
-  };
-
-  const addTaskTemplatesToState = async () => {
-    setState((state.taskTemplateIdArray = await getTaskTemplates()));
-  };
-
-  addTaskTemplatesToState();
+    return () => {
+      unsub();
+    };
+  }, []);
 
   const addTask = () => {
-    db.collection("alltasks")
+    firebase.db
+      .collection("alltasks")
+      .doc()
       .set({
         created: firebase.firestore.Timestamp.fromDate(new Date()),
         finished: false,
         gardenBoxId: state.gardenBoxId,
         taskTaken: false,
-        taskTemplateId: state.taskTemplateId
+        taskTemplateId: state.chosenTaskTemplate
       })
       .then(function() {
         console.log("Document in Firebase = OK!");
@@ -76,9 +109,9 @@ const Dummy: React.SFC = () => {
   };
 
   const updateGardenBox = () => {
-    let gardenBox = db.collection("gardenBox").doc("" + state.gardenBoxId);
+    let gardenBox = firebase.db.collection("gardenBox").doc(state.gardenBoxId);
 
-    if (Number(state.gardenBoxId) > 30) {
+    if (Number(state.gardenBoxId) > 35) {
       console.log("There aren't that many garden boxes!");
       return;
     }
@@ -103,7 +136,8 @@ const Dummy: React.SFC = () => {
   const createTaskTemplate = () => {
     let taskTemplateId = state.taskTemplateId.toString();
     console.log(taskTemplateId);
-    db.collection("taskTemplate")
+    firebase.db
+      .collection("taskTemplate")
       .doc(taskTemplateId)
       .set({
         taskDescription: state.taskDescription,
@@ -123,34 +157,44 @@ const Dummy: React.SFC = () => {
               <IonItem>
                 <IonTitle>Add a task</IonTitle>
               </IonItem>
+
               <IonItem>
-                <IonLabel>Garden box id - </IonLabel>
-                <IonInput
+                <IonLabel>Garden box id -</IonLabel>
+                <IonSelect
                   id="gardenBoxId"
                   value={state.gardenBoxId}
+                  placeholder="Select garden box id"
                   onIonChange={handleChange}
-                  class="ion-text-right ion-padding-top"
-                ></IonInput>
+                >
+                  {state.gardenBoxArray.map((gardenBox, index) => (
+                    <IonSelectOption key={index}>
+                      {gardenBox.id}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
               </IonItem>
 
               <IonItem>
                 <IonLabel>Task template id</IonLabel>
                 <IonSelect
-                  value={state.taskTemplateId}
+                  id="chosenTaskTemplate"
+                  value={state.chosenTaskTemplate}
                   placeholder="Select task template"
                   onIonChange={handleChange}
                 >
-                  {state.taskTemplateIdArray.length !== 0
-                    ? state.taskTemplateIdArray.map((taskTemplate, index) => (
-                        <IonSelectOption key={index}>
-                          {taskTemplate}
-                        </IonSelectOption>
-                      ))
-                    : null}
+                  {taskTemplateArray.map((taskTemplate, index) => (
+                    <IonSelectOption key={index}>
+                      {taskTemplate.id}
+                    </IonSelectOption>
+                  ))}
                 </IonSelect>
               </IonItem>
 
-              <IonButton className="ion-margin" onClick={addTask}>
+              <IonButton
+                expand="block"
+                className="ion-margin"
+                onClick={addTask}
+              >
                 Add task
               </IonButton>
             </IonCard>
@@ -193,6 +237,7 @@ const Dummy: React.SFC = () => {
               </IonItem>
 
               <IonButton
+                expand="block"
                 className="ion-margin"
                 onClick={() => createTaskTemplate()}
               >
@@ -208,6 +253,23 @@ const Dummy: React.SFC = () => {
               <IonItem>
                 <IonTitle>Set values for box</IonTitle>
               </IonItem>
+
+              <IonItem>
+                <IonLabel>Garden box id -</IonLabel>
+                <IonSelect
+                  id="gardenBoxId"
+                  value={state.gardenBoxId}
+                  placeholder="Select garden box id"
+                  onIonChange={handleChange}
+                >
+                  {state.gardenBoxArray.map((gardenBox, index) => (
+                    <IonSelectOption key={index}>
+                      {gardenBox.id}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+
               <IonItem>
                 <IonLabel>Air Moisture</IonLabel>
                 <IonInput
@@ -236,6 +298,7 @@ const Dummy: React.SFC = () => {
                 ></IonInput>
               </IonItem>
               <IonButton
+                expand="block"
                 className="ion-margin"
                 onClick={() => updateGardenBox()}
               >
