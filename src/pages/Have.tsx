@@ -33,11 +33,11 @@ const Have: React.FC<HaveProps> = props => {
 
   return (
     <IonContent>
-        <IonGrid>
+        <IonGrid className="garden-background">
             <IonRow>
                 {beds.map((bed,index)=>
                 <IonCol className="bed-col" size-sm={sizeRow} key={index} offset={bed.id===19 || bed.id===21?"8":"0"}>
-                    <Bed style="primary" bedNr={bed.id}></Bed>
+                    <Bed bedNr={bed.id}></Bed>
                 </IonCol>)}
             </IonRow>
         </IonGrid>
