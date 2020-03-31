@@ -9,7 +9,9 @@ import {
   IonLabel,
   IonList,
   IonItem,
-  IonTitle
+  IonTitle,
+  IonSelect,
+  IonSelectOption
 } from "@ionic/react";
 import "./Dummy.css";
 import { firebase } from "../Utility/Firebase";
@@ -23,6 +25,7 @@ export interface IDummyData {
   soilTemperature: string;
   taskDescription: string;
   taskTitle: string;
+  taskTemplateIdArray: Array<string>;
 }
 
 const Dummy: React.SFC = () => {
@@ -33,7 +36,8 @@ const Dummy: React.SFC = () => {
     soilMoisture: "",
     soilTemperature: "",
     taskDescription: "",
-    taskTitle: ""
+    taskTitle: "",
+    taskTemplateIdArray: []
   });
 
   const handleChange = (e: any) => {
@@ -41,6 +45,21 @@ const Dummy: React.SFC = () => {
   };
 
   let db = firebase.firestore();
+
+  const getTaskTemplates = async () => {
+    const snapshot = await db.collection("taskTemplate").get();
+    const documents: any = [];
+    snapshot.forEach((doc: { id: string | number; data: () => any }) => {
+      documents[doc.id] = doc.data();
+    });
+    return documents;
+  };
+
+  const addTaskTemplatesToState = async () => {
+    setState((state.taskTemplateIdArray = await getTaskTemplates()));
+  };
+
+  addTaskTemplatesToState();
 
   const addTask = () => {
     db.collection("alltasks")
@@ -113,7 +132,23 @@ const Dummy: React.SFC = () => {
                   class="ion-text-right ion-padding-top"
                 ></IonInput>
               </IonItem>
-              {/* Add picker for taskTemplateId */}
+
+              <IonItem>
+                <IonLabel>Task template id</IonLabel>
+                <IonSelect
+                  value={state.taskTemplateId}
+                  placeholder="Select task template"
+                  onIonChange={handleChange}
+                >
+                  {state.taskTemplateIdArray.length !== 0
+                    ? state.taskTemplateIdArray.map((taskTemplate, index) => (
+                        <IonSelectOption key={index}>
+                          {taskTemplate}
+                        </IonSelectOption>
+                      ))
+                    : null}
+                </IonSelect>
+              </IonItem>
 
               <IonButton className="ion-margin" onClick={addTask}>
                 Add task
