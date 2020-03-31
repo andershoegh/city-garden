@@ -1,0 +1,11 @@
+.bed-style-disabled{
+    border-radius: 10px;
+    background: chartreuse;
+    opacity: 50%;
+}
+
+.bed-style-primary{
+    border-radius: 10px;
+    color: black;
+    background: brown;
+}

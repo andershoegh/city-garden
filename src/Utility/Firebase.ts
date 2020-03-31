@@ -14,6 +14,10 @@ class Firebase {
     this.firestore = app.firestore;
   }
 
+  getBed = () =>
+  this.db
+  .collection("gardenBox");
+
   getTypes = () => firebase;
   getNotes = () =>
     this.db
