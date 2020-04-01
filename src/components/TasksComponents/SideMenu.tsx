@@ -28,7 +28,7 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach(doc => {
-        tempArray = [...tempArray, doc.data()];
+        tempArray = [...tempArray, {...doc.data(), id: doc.id}];
       });
       setTaskDescriptions(tempArray);
     })
@@ -38,6 +38,11 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
     };
   }, []);
 
+  const toggleTab = (show: boolean) => {
+    setShowTaken(show);
+    setIsOpen("0");
+  }
+
   const toggleOpen = (id: string) => {
     setIsOpen(id);
   }
@@ -45,7 +50,7 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
   return (
     <IonCard className="card">
       <IonCardHeader>
-          <IonSegment key="segment" onIonChange={e => e.detail.value === "taken" ? setShowTaken(true) : setShowTaken(false)}>
+          <IonSegment key="segment" onIonChange={e => e.detail.value === "taken" ? toggleTab(true) : toggleTab(false)}>
             <IonSegmentButton mode="ios" value="available">
               <IonLabel>Available</IonLabel>
             </IonSegmentButton>
@@ -59,18 +64,17 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
           <div className="sticky-header">These garden boxes need your help!</div>
         </IonItemDivider>
         <IonList>
-        { tasks.map((task, index) => (
-          <Task 
-            key={index} 
-            task={task} 
-            taskDescription={taskDescriptions} 
-            showTaken={showTaken} 
-            index={index}
-            isOpen={isOpen}
-            toggleOpen={toggleOpen}
-          />
-        ))  
-        }
+            {tasks.filter(task => !task.finished && task.taskTaken === showTaken).map((task, index) => {           
+              return <Task 
+                key={index} 
+                task={task} 
+                taskDescription={taskDescriptions}
+                showTaken={showTaken}
+                index={index} 
+                isOpen={isOpen}
+                toggleOpen={toggleOpen}
+              />
+            })}
         </IonList>
       </IonCardContent>
     </IonCard>
@@ -78,18 +82,3 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
 };
 
 export default SideMenu;
-
-
-/*
-  const toggleInfoMode = (newId : string) => {
-    console.log(`newId: ${newId}`);
-    console.log(`infoId: ${infoId}`);
-
-    if (infoId === newId) {
-      setInfoIsOpen(!infoIsOpen);
-    } else {
-      setInfoId(newId)
-      setInfoIsOpen(true);
-    }  
-  }
-  */

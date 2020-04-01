@@ -12,7 +12,7 @@ const Home: React.FC = () => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach(doc => {
-        tempArray = [...tempArray, doc.data()];
+        tempArray = [...tempArray, {...doc.data(), id: doc.id}];
       });
       setTasks(tempArray)
     });
