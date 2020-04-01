@@ -1,4 +1,4 @@
-import { IonPage } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonCard } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { firebase } from "../Utility/Firebase";
@@ -24,7 +24,26 @@ const Home: React.FC = () => {
 
   return (
     <IonPage>
-      <SideMenu tasks={tasks} /> 
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Have</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent style={{height:"100%"}}>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="8">
+              <div />
+            </IonCol>
+            <IonCol size="4">
+              <SideMenu tasks={tasks} />
+              <IonCard className="info-card"> 
+                Hello! Give me a message to display, plz daddy <span role="img" aria-label="emoji">😘</span> 
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>     
     </IonPage>
   );
 };

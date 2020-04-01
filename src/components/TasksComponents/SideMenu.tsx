@@ -22,6 +22,7 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
   const [taskDescriptions, setTaskDescriptions] = useState<firebase.firestore.DocumentData[]>([])
   const [showTaken, setShowTaken] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<string>("0");
+  let priorBoxId = "0";
 
   useEffect(() => {
     const unsub = firebase.getTaskDescription().onSnapshot(snapShot => {
@@ -39,18 +40,31 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
   }, []);
 
   const toggleTab = (show: boolean) => {
-    setShowTaken(show);
     setIsOpen("0");
+    setShowTaken(show);
   }
 
   const toggleOpen = (id: string) => {
     setIsOpen(id);
   }
 
+  const toggleTask = (taskId : string, update : string, takenStatus : boolean) => {
+    switch (update) {
+      case "toggleTaken" :    
+        firebase.updateTaskTaken(taskId, !takenStatus);
+        break;
+      case "setFinished" :
+        firebase.setTaskFinished(taskId, true);
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <IonCard className="card">
       <IonCardHeader>
-          <IonSegment key="segment" onIonChange={e => e.detail.value === "taken" ? toggleTab(true) : toggleTab(false)}>
+          <IonSegment className="segment" key="segment" onIonChange={e => e.detail.value === "taken" ? toggleTab(true) : toggleTab(false)}>
             <IonSegmentButton mode="ios" value="available">
               <IonLabel>Available</IonLabel>
             </IonSegmentButton>
@@ -65,6 +79,8 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
         </IonItemDivider>
         <IonList>
             {tasks.filter(task => !task.finished && task.taskTaken === showTaken).map((task, index) => {           
+              let newTab = task.gardenBoxId !== priorBoxId;
+              if (newTab) {priorBoxId = task.gardenBoxId;}
               return <Task 
                 key={index} 
                 task={task} 
@@ -73,6 +89,8 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
                 index={index} 
                 isOpen={isOpen}
                 toggleOpen={toggleOpen}
+                toggleTask={toggleTask}
+                newTab={newTab}
               />
             })}
         </IonList>
