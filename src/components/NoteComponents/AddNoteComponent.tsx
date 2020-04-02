@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent } from 'react';
 import {
   IonItem,
   IonContent,
@@ -10,8 +10,8 @@ import {
   IonTitle,
   IonLabel,
   IonButtons
-} from "@ionic/react";
-import { firebase } from "../../Utility/Firebase";
+} from '@ionic/react';
+import { firebase } from '../../Utility/Firebase';
 
 export interface AddNoteProps {
   closeModal: CallableFunction;
@@ -19,9 +19,9 @@ export interface AddNoteProps {
 
 const AddNote: React.SFC<AddNoteProps> = props => {
   const { closeModal } = props;
-  const [author, setAuthor] = useState<string>("");
-  const [text, setText] = useState<string>("");
-  const addNewNote = (e:FormEvent) => {
+  const [author, setAuthor] = useState<string>('');
+  const [text, setText] = useState<string>('');
+  const addNewNote = (e: FormEvent) => {
     e.preventDefault();
     firebase
       .createNote(author, text)
@@ -37,37 +37,49 @@ const AddNote: React.SFC<AddNoteProps> = props => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>
-            <h2 className="ion-padding">Hi, write a note to your peers!</h2>
+            <h2 className='ion-padding'>New note</h2>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <form onSubmit={addNewNote}>  
-          <IonItem>
-            <IonLabel position="floating">Note...</IonLabel>
-            <IonTextarea style={{height: "50%"}}
-              value={text}
-              required={true}
-              onIonChange={e => setText(e.detail.value!)}
-            />
+        <form onSubmit={addNewNote}>
+          <div className='costum-item'>
+            <IonItem>
+              <IonLabel position='floating'>Author</IonLabel>
+              <IonInput
+                value={author}
+                required={true}
+                onIonChange={e => setAuthor(e.detail.value!)}
+              />
+            </IonItem>
+          </div>
+
+          <IonItem lines='none'>
+            <IonLabel position='floating' className='costum-label'>
+              Note...
+            </IonLabel>
+            <div className='costum-text-area'>
+              <IonTextarea
+                rows={7}
+                maxlength={215}
+                value={text}
+                required={true}
+                onIonChange={e => setText(e.detail.value!)}
+              />
+            </div>
           </IonItem>
-          <IonItem>
-            <IonLabel position="floating">Author</IonLabel>
-            <IonInput
-              value={author}
-              required={true}
-              onIonChange={e => setAuthor(e.detail.value!)}
-            />
-          </IonItem>
-        <IonToolbar>
-        <IonButtons >
-            <IonButton onClick={ () => closeModal() } color="danger">
-              Close
-            </IonButton>
-            <IonButton type="submit">Submit</IonButton>
-          </IonButtons>
-        </IonToolbar>
-       </form>
+
+          <IonToolbar>
+            <IonButtons slot='end' className='ion-padding tester'>
+              <IonButton onClick={() => closeModal()} color='danger' fill='solid'>
+                Close
+              </IonButton>
+              <IonButton type='submit' fill='solid'>
+                Submit
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </form>
       </IonContent>
     </>
   );

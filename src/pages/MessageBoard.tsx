@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -10,11 +10,12 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonIcon
-} from "@ionic/react";
-import { addOutline } from "ionicons/icons";
-import { firebase } from "../Utility/Firebase";
-import AddNote from "../components/NoteComponents/AddNoteComponent";
-import NoteRepeater from "../components/NoteComponents/NoteRepeater";
+} from '@ionic/react';
+import { addOutline } from 'ionicons/icons';
+import { firebase } from '../Utility/Firebase';
+import AddNote from '../components/NoteComponents/AddNoteComponent';
+import NoteRepeater from '../components/NoteComponents/NoteRepeater';
+import '../components/NoteComponents/NoteStyle.css';
 
 export interface MessageBoardProps {}
 
@@ -33,26 +34,25 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
       dt.setDate(dt.getDate() - 14);
 
       setSubscribe(() =>
-        firebase
-          .getNotes()
-          /*.where("created", ">=", dt)*/
-          .onSnapshot(snapShot => {
-            let tempArray: firebase.firestore.DocumentData[];
-            tempArray = [];
-            snapShot.forEach(doc => {
-              if(doc.data().pinned || new Date(doc.data().created.toDate()) >= dt){
-                tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
-              }else{
-                firebase.db.collection('notes').doc(doc.id).delete();
-              }
-            });
-
-            setNotes(tempArray);
-            if (event !== null) {
-              setTimeout(() => event.detail.complete(), 1000);
+        firebase.getNotes().onSnapshot(snapShot => {
+          let tempArray: firebase.firestore.DocumentData[];
+          tempArray = [];
+          snapShot.forEach(doc => {
+            if (doc.data().pinned || new Date(doc.data().created.toDate()) >= dt) {
+              tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+            } else {
+              firebase.db
+                .collection('notes')
+                .doc(doc.id)
+                .delete();
             }
-          })
+          });
 
+          setNotes(tempArray);
+          if (event !== null) {
+            setTimeout(() => event.detail.complete(), 1000);
+          }
+        })
       );
     },
     [setSubscribe]
@@ -69,31 +69,23 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
       }
     };
   }, [update, subscribe]);
- 
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Opslagstavle</IonTitle>
-          <IonButton
-            slot="end"
-            onClick={() => setModalOpen(true)}
-            style={{ marginRight: "20px" }}
-          >
-            <IonIcon icon={addOutline} slot="start" />
+          <IonButton slot='end' onClick={() => setModalOpen(true)} style={{ marginRight: '20px' }}>
+            <IonIcon icon={addOutline} slot='start' />
             Write a Note
           </IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonRefresher
-          slot="fixed"
-          onIonRefresh={e => update(e, () => subscribe)}
-        >
+        <IonRefresher slot='fixed' onIonRefresh={e => update(e, () => subscribe)}>
           <IonRefresherContent />
         </IonRefresher>
-        <IonModal isOpen={modalOpen}>
+        <IonModal cssClass='costum-modal' isOpen={modalOpen}>
           <AddNote closeModal={() => setModalOpen(false)} />
         </IonModal>
         <NoteRepeater notes={notes} />
