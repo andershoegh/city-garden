@@ -14,6 +14,10 @@ class Firebase {
     this.firestore = app.firestore;
   }
 
+  getBed = () =>
+  this.db
+  .collection("gardenBox");
+
   getTypes = () => firebase;
 
   getNotes = () =>
@@ -29,6 +33,34 @@ class Firebase {
       created: new Date(),
       pinned: false
     });
+
+  getTasks = () =>
+    this.db
+      .collection("alltasks")
+      .orderBy("gardenBoxId", "asc");
+  
+  updateTaskTaken = (id: string, taskTaken: boolean) => {
+    this.db
+      .collection("alltasks")
+      .doc(id)
+      .update({
+        taskTaken: taskTaken
+      });
+  }
+  
+  setTaskFinished = (id: string, finished: boolean) => {
+    this.db
+      .collection("alltasks")
+      .doc(id)
+      .update({
+        finished: finished
+      });
+  }
+  
+  getTaskDescription = () =>
+    this.db
+      .collection("taskTemplate");
+}
 
   updatePin = (id: string) => this.db.collection('notes').doc(id);
 

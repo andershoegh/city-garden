@@ -14,6 +14,7 @@ import Home from "../pages/Home";
 import { leafOutline, clipboardOutline } from "ionicons/icons";
 import { IonReactRouter } from "@ionic/react-router";
 import MessageBoard from "../pages/MessageBoard";
+import Dummy from "../pages/Dummy";
 
 interface BottomNavigationProps {}
 
@@ -26,6 +27,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
             <IonRouterOutlet>
               <Route path="/have" component={Home} exact />
               <Route path="/opslagstavle" component={MessageBoard} exact />
+              <Route path="/dummy" component={Dummy} />
               <Redirect path="/" to="/have" exact />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">

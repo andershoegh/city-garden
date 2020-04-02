@@ -1,12 +1,50 @@
-import { IonPage } from "@ionic/react";
-import React from "react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonCard } from "@ionic/react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
+import { firebase } from "../Utility/Firebase";
+import { SideMenu } from "../components/TasksComponents/SideMenu";
+import Have from "./Have"
 
 const Home: React.FC = () => {
+  const [tasks, setTasks] = useState<firebase.firestore.DocumentData[]>([]);
+
+  useEffect(() => {
+    const unsub = firebase.getTasks().onSnapshot(snapShot => {
+      let tempArray: firebase.firestore.DocumentData[];
+      tempArray = [];
+      snapShot.forEach(doc => {
+        tempArray = [...tempArray, {...doc.data(), id: doc.id}];
+      });
+      setTasks(tempArray)
+    });
+
+    return () => {
+      unsub();
+    };
+  }, []);
+
   return (
     <IonPage>
-      <h1>City Garden</h1>
-      <h1>City Garden</h1>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Have</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent style={{height:"100%"}}>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="8">
+              <Have tasks={tasks}/>
+            </IonCol>
+            <IonCol size="4">
+              <SideMenu tasks={tasks} />
+              <IonCard className="info-card"> 
+                Hello! Give me a message to display, plz daddy <span role="img" aria-label="emoji">😘</span> 
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>  
     </IonPage>
   );
 };
