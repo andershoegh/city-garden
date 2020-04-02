@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   IonButton, 
   IonLabel, 
   IonItemGroup, 
-  IonItemDivider 
+  IonItemDivider,
+  IonIcon,
 } from "@ionic/react";
-import { firebase } from "../../Utility/Firebase";
+import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 import "./Task.css"
 
 export interface TaskProps {
@@ -13,89 +14,81 @@ export interface TaskProps {
   taskDescription: firebase.firestore.DocumentData[];
   showTaken: boolean;
   index: number;
+  isOpen: string;
+  toggleOpen: CallableFunction;
+  toggleTask: CallableFunction
+  newTab: boolean;
 }
 
 export const Task: React.FC<TaskProps> = props => {
-  let task: firebase.firestore.DocumentData;
-  task = props.task;
-  const taskDescription = props.taskDescription.filter(e => e.taskTemplateId === task.taskTemplateId);
-  const showTaken = props.showTaken;
-  const index = props.index;
-  
-  const [toggle, setToggle] = useState("task-info-hidden");
-  const [isHidden, setIsHidden] = useState(true);
-  const [isTaken, setIsTaken] = useState<boolean>(task.taskTaken);
-  const [isFinished, setIsFinished] = useState<boolean>(task.finished);
+  const { task, showTaken, index, isOpen, toggleOpen, toggleTask, newTab } = props;
+  const taskDescription = props.taskDescription.filter(t => t.id === task.taskTemplateId);
+  const [toggle, setToggle] = useState(false);
+  const [iconToggle, setIconToggle] = useState(chevronForwardOutline);
 
-  if (showTaken !== task.taskTaken || task.finished) {
-    return null;
-  }
-
-  const toggleTask = (update : string) => {
-    switch (update) {
-      case "toggleTaken" :
-        let tempTaken = !isTaken;       
-                
-        firebase.updateTaskTaken(task.gardenBoxId, tempTaken);
-
-        setIsTaken(tempTaken);
-        break;
-      case "setFinished" :
-        let tempFinished = !isFinished;
-                
-        firebase.setTaskFinished(task.gardenBoxId, tempFinished);
-
-        setIsFinished(tempFinished);
-        break;
-      default:
-        break;
+  useEffect(() => {
+    if (isOpen === task.gardenBoxId) {
+      setToggle(true);
+      setIconToggle(chevronDownOutline);
+    } else {
+      setToggle(false);
+      setIconToggle(chevronForwardOutline);
     }
-  }
+  }, [isOpen, task.gardenBoxId])
 
   const toggleInfo = () => {
-    if (isHidden) {
-      setToggle("task-info");
-      setIsHidden(false);
+    if (isOpen === task.gardenBoxId) {
+      toggleOpen("0");
     } else {
-      setToggle("task-info-hidden");
-      setIsHidden(true)
+      toggleOpen(task.gardenBoxId);
     }
   }
 
   return  (
     <IonItemGroup className="task-group">
-      <IonItemDivider className="task-header" onClick={() => toggleInfo()}>
+      { newTab ?
+        <IonItemDivider className="task-header" onClick={() => toggleInfo()}>
         <IonLabel>Garden box {task.gardenBoxId}</IonLabel>
+        <div className="icon-box">
+          <IonIcon icon={iconToggle} />
+        </div>
       </IonItemDivider>
-      {taskDescription.map(desc => (
-        <IonItemGroup key={index} className={toggle}>
+      : <div className={toggle ? "line-divider" : "line-divider-hidden"} />
+      }
+      { taskDescription.map(taskDescription => (
+        <IonItemGroup key={index} className={toggle ? "task-info" : "task-info-hidden"}>
           <div className="task-title">
-            <strong>Task</strong> 
-            <br/> {desc.taskTitle}
+            <div> Task </div> 
+            <p> {taskDescription.taskTitle} </p>
           </div>
           <div className="task-description">
-            <strong>Description</strong> 
-            <br/> {desc.taskDescription}
+            <div> Description </div> 
+            <p> {taskDescription.taskDescription} </p>
           </div>
           { showTaken ?
             <div className="btn-div">
               <IonButton 
                 className="task-btn" 
-                onClick={() => toggleTask("toggleTaken")}>
+                color="warning"
+                onClick={() => toggleTask(task.id, "toggleTaken", task.taskTaken)}>
                   leave task
               </IonButton>
               <IonButton
                 className="task-btn"
-                onClick={() => toggleTask("setFinished")}>
+                color="success"
+                onClick={() => toggleTask(task.id, "setFinished", task.taskTaken)}>
                 finish task
               </IonButton>
-          </div>
+            </div>
           :
-            <IonButton 
+            <div className="btn-div">
+              <IonButton 
               className="task-btn"
-              onClick={() => toggleTask("toggleTaken")}>
+              color="success"
+              onClick={() => toggleTask(task.id, "toggleTaken", task.taskTaken)}>
                 take task
             </IonButton>
+            </div>
           }
         </IonItemGroup>
       ))}
@@ -104,20 +97,3 @@ export const Task: React.FC<TaskProps> = props => {
 };
 
 export default Task;
-
-
-
-/*  const toggleInfo = () => {
-    props.toggleInfoMode(task.gardenBoxId);
-
-    console.log(`gardenBoxId: ${task.gardenBoxId}`);
-    console.log(`infoId: ${infoId}`);
-    console.log(`infoIsOpen: ${infoIsOpen}`);
-
-    if (task.gardenBoxId === infoId) {
-      infoIsOpen ? setToggle("task-info") : setToggle("task-info-hidden");
-    } else {
-      setToggle("task-info-hidden");
-    }
-  }
-*/
