@@ -15,13 +15,14 @@ import Task from "./Task";
 
 export interface SideMenuProps {
   tasks: firebase.firestore.DocumentData[];
+  selection:string;
+  setSelection:CallableFunction;
 }
 
 export const SideMenu: React.FC<SideMenuProps> = props => {
-  const { tasks } = props;
+  const { tasks, selection, setSelection } = props;
   const [taskDescriptions, setTaskDescriptions] = useState<firebase.firestore.DocumentData[]>([])
   const [showTaken, setShowTaken] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<string>("0");
   let priorBoxId = "0";
 
   useEffect(() => {
@@ -40,12 +41,12 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
   }, []);
 
   const toggleTab = (show: boolean) => {
-    setIsOpen("0");
+    setSelection("0");
     setShowTaken(show);
   }
 
   const toggleOpen = (id: string) => {
-    setIsOpen(id);
+    setSelection(id);
   }
 
   const toggleTask = (taskId : string, update : string, takenStatus : boolean) => {
@@ -87,7 +88,7 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
                 taskDescription={taskDescriptions}
                 showTaken={showTaken}
                 index={index} 
-                isOpen={isOpen}
+                isOpen={selection}
                 toggleOpen={toggleOpen}
                 toggleTask={toggleTask}
                 newTab={newTab}
