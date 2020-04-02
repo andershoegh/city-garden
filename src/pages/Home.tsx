@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { firebase } from "../Utility/Firebase";
 import { SideMenu } from "../components/TasksComponents/SideMenu";
+import Have from "./Have"
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<firebase.firestore.DocumentData[]>([]);
@@ -33,7 +34,7 @@ const Home: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol size="8">
-              <div />
+              <Have tasks={tasks}/>
             </IonCol>
             <IonCol size="4">
               <SideMenu tasks={tasks} />
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
-      </IonContent>     
+      </IonContent>  
     </IonPage>
   );
 };
