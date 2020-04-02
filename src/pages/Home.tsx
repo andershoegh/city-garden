@@ -1,4 +1,4 @@
-import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonHeader, IonToolbar, IonTitle } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonCard } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { firebase } from "../Utility/Firebase";
@@ -13,7 +13,7 @@ const Home: React.FC = () => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach(doc => {
-        tempArray = [...tempArray, doc.data()];
+        tempArray = [...tempArray, {...doc.data(), id: doc.id}];
       });
       setTasks(tempArray)
     });
@@ -38,6 +38,9 @@ const Home: React.FC = () => {
             </IonCol>
             <IonCol size="4">
               <SideMenu tasks={tasks} />
+              <IonCard className="info-card"> 
+                Hello! Give me a message to display, plz daddy <span role="img" aria-label="emoji">😘</span> 
+              </IonCard>
             </IonCol>
           </IonRow>
         </IonGrid>

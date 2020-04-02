@@ -1,12 +1,26 @@
 .card {
-  max-height: 900px;
+  height: 800px;
+}
+
+.segment {
+  width: 100%;
+  margin: -2% 0 -1% 0;
+  height: 55px;
+}
+
+.sticky-header {
+  padding: 20px 0;
+  font-size: .9em;
+  font-weight: 300;
+  vertical-align: auto;  
+  margin: 0 auto;
 }
 
 .list {
-  width: 105%;
+  width: 110%;
   height: 90%;
   overflow: scroll;
-  margin-left: -1.5%;
+  margin-left: -5%;
   margin-bottom: 10px;
 }
 
