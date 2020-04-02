@@ -4,9 +4,8 @@ import {
   IonLabel, 
   IonItemGroup, 
   IonItemDivider,
-  IonIcon
+  IonIcon,
 } from "@ionic/react";
-import { firebase } from "../../Utility/Firebase";
 import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
 import "./Task.css"
 
@@ -26,8 +25,6 @@ export const Task: React.FC<TaskProps> = props => {
   const taskDescription = props.taskDescription.filter(t => t.id === task.taskTemplateId);
   const [toggle, setToggle] = useState(false);
   const [iconToggle, setIconToggle] = useState(chevronForwardOutline);
-
-  let div = true;
 
   useEffect(() => {
     if (isOpen === task.gardenBoxId) {
@@ -72,12 +69,13 @@ export const Task: React.FC<TaskProps> = props => {
             <div className="btn-div">
               <IonButton 
                 className="task-btn" 
+                color="warning"
                 onClick={() => toggleTask(task.id, "toggleTaken", task.taskTaken)}>
                   leave task
               </IonButton>
               <IonButton
                 className="task-btn"
-                color="warning"
+                color="success"
                 onClick={() => toggleTask(task.id, "setFinished", task.taskTaken)}>
                 finish task
               </IonButton>
