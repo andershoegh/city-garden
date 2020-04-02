@@ -8,8 +8,9 @@
 }
 
 .garden-background{
-    /* background-image: url(../pics/5443.jpg); */
-    background-size: cover;
-    /* border-radius: 1%;
-    margin-top: 3%; */
+    background-image: url(../pics/grass3.png);
+    background-size: 150px 150px;
+    background-repeat: repeat;
+    border-radius: 2%;
+    margin-top: 3%;
 }
