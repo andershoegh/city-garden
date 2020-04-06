@@ -74,25 +74,29 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
             </IonSegmentButton>
           </IonSegment>
       </IonCardHeader>
+      
       <IonCardContent className="list">
         <IonItemDivider sticky={true}>
-          <div className="sticky-header">These garden boxes need your help!</div>
+          <div className="sticky-header">{tasks.filter(task => !task.finished && task.taskTaken === showTaken).length?
+          'These garden boxes need your help!':
+          'No available tasks'}
+          </div>
         </IonItemDivider>
-        <IonList>
-            {tasks.filter(task => !task.finished && task.taskTaken === showTaken).map((task, index) => {           
-              let newTab = task.gardenBoxId !== priorBoxId;
-              if (newTab) {priorBoxId = task.gardenBoxId;}
-              return <Task 
-                key={index} 
-                task={task} 
-                taskDescription={taskDescriptions}
-                showTaken={showTaken}
-                index={index} 
-                isOpen={selection}
-                toggleOpen={toggleOpen}
-                toggleTask={toggleTask}
-                newTab={newTab}
-              />
+        <IonList>  
+          {tasks.filter(task => !task.finished && task.taskTaken === showTaken).map((task, index) => {         
+            let newTab = task.gardenBoxId !== priorBoxId;
+            if (newTab) {priorBoxId = task.gardenBoxId;}
+            return <Task 
+            key={index} 
+            task={task} 
+            taskDescription={taskDescriptions}
+            showTaken={showTaken}
+            index={index} 
+            isOpen={selection}
+            toggleOpen={toggleOpen}
+            toggleTask={toggleTask}
+            newTab={newTab}
+            />
             })}
         </IonList>
       </IonCardContent>

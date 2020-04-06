@@ -14,9 +14,10 @@ const Home: React.FC = () => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach(doc => {
-        tempArray = [...tempArray, {...doc.data(), id: doc.id}];
+        tempArray = [...tempArray, {...doc.data(), id: doc.id, idSort: doc.data().gardenBoxId}];
       });
-      console.log("set");
+      tempArray.sort((a:any, b:any) => Number(a.idSort)-Number(b.idSort));
+      console.log(tempArray);
       setTasks(tempArray)
     });
 
