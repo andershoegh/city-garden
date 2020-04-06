@@ -7,6 +7,7 @@ import Have from "./Have"
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<firebase.firestore.DocumentData[]>([]);
+  const [selection, setSelection] = useState<string>("0");
 
   useEffect(() => {
     const unsub = firebase.getTasks().onSnapshot(snapShot => {
@@ -15,6 +16,7 @@ const Home: React.FC = () => {
       snapShot.forEach(doc => {
         tempArray = [...tempArray, {...doc.data(), id: doc.id}];
       });
+      console.log("set");
       setTasks(tempArray)
     });
 
@@ -31,13 +33,13 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent style={{height:"100%"}}>
-        <IonGrid>
+        <IonGrid className="page-background">
           <IonRow>
             <IonCol size="8">
-              <Have tasks={tasks}/>
+              <Have setSelection={setSelection} tasks={tasks}/>
             </IonCol>
             <IonCol size="4">
-              <SideMenu tasks={tasks} />
+              <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
               <IonCard className="info-card"> 
                 Hello! Give me a message to display, plz daddy <span role="img" aria-label="emoji">😘</span> 
               </IonCard>

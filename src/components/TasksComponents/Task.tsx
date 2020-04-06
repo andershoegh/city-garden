@@ -27,6 +27,7 @@ export const Task: React.FC<TaskProps> = props => {
   const [iconToggle, setIconToggle] = useState(chevronForwardOutline);
 
   useEffect(() => {
+    console.log("useEffect: ", isOpen, task.gardenBoxId)
     if (isOpen === task.gardenBoxId) {
       setToggle(true);
       setIconToggle(chevronDownOutline);

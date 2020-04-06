@@ -6,10 +6,11 @@ import { firebase } from "../Utility/Firebase";
 
 interface HaveProps{
     tasks: firebase.firestore.DocumentData[];
+    setSelection:CallableFunction;
 }
 
 const Have: React.FC<HaveProps> = props => {
-    const { tasks } = props;
+    const { tasks, setSelection } = props;
     const sizeRow = "2"
 
     const [beds, setBeds] = useState<firebase.firestore.DocumentData[]>([]);
@@ -19,9 +20,9 @@ const Have: React.FC<HaveProps> = props => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach(doc => {
-        tempArray = [...tempArray, {...doc.data(), id:Number(doc.id)}];
+        tempArray = [...tempArray, {...doc.data(), id:doc.id}];
       });
-      tempArray.sort((a:any, b:any) => a.id-b.id);
+      tempArray.sort((a:any, b:any) => Number(a.id)-Number(b.id));
       console.log(tempArray);
       setBeds(tempArray)
     });
@@ -32,16 +33,16 @@ const Have: React.FC<HaveProps> = props => {
   }, []);
 
   return (
-    <IonContent>
-        <IonGrid>
+    // <IonContent className="garden-background">
+    //     <IonGrid >
             <IonRow>
                 {beds.map((bed,index)=>
-                <IonCol className="bed-col" size-sm={sizeRow} key={index} offset={bed.id===19 || bed.id===21?"8":"0"}>
-                    <Bed style="primary" bedNr={bed.id}></Bed>
+                <IonCol size-sm={sizeRow} key={index} offset={bed.id==="19" || bed.id==="21"?"8":"0"}>
+                    <Bed bedNr={bed.id} setSelection={setSelection}></Bed>
                 </IonCol>)}
             </IonRow>
-        </IonGrid>
-    </IonContent>
+    //     </IonGrid>
+    // </IonContent>
   );
 };
 

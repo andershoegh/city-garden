@@ -1,9 +1,17 @@
 .bed-row{
     text-align: center;
     justify-content: flex-start;
-    margin-top: 5%;
 }
 
 .bed-col{
+    /* margin-bottom: 5%; */
+}
 
+.garden-background{
+    /* background-image: url(../pics/grass3.png);
+    background-size: 150px 150px;
+    background-repeat: repeat;
+    border-radius: 2%;
+    margin-top: 3%; */
+    background-color: transparent;
 }
