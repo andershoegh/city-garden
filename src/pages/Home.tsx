@@ -26,7 +26,7 @@ const Home: React.FC = () => {
       snapShot.forEach(doc => {
         tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
       });
-      console.log('set');
+
       setTasks(tempArray);
     });
 
