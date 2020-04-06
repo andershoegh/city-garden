@@ -14,9 +14,7 @@ class Firebase {
     this.firestore = app.firestore;
   }
 
-  getBed = () =>
-  this.db
-  .collection("gardenBox");
+  getBed = () => this.db.collection('gardenBox');
 
   getTypes = () => firebase;
 
@@ -34,33 +32,27 @@ class Firebase {
       pinned: false
     });
 
-  getTasks = () =>
-    this.db
-      .collection("alltasks")
-      .orderBy("gardenBoxId", "asc");
-  
+  getTasks = () => this.db.collection('alltasks').orderBy('gardenBoxId', 'asc');
+
   updateTaskTaken = (id: string, taskTaken: boolean) => {
     this.db
-      .collection("alltasks")
+      .collection('alltasks')
       .doc(id)
       .update({
         taskTaken: taskTaken
       });
-  }
-  
+  };
+
   setTaskFinished = (id: string, finished: boolean) => {
     this.db
-      .collection("alltasks")
+      .collection('alltasks')
       .doc(id)
       .update({
         finished: finished
       });
-  }
-  
-  getTaskDescription = () =>
-    this.db
-      .collection("taskTemplate");
-}
+  };
+
+  getTaskDescription = () => this.db.collection('taskTemplate');
 
   updatePin = (id: string) => this.db.collection('notes').doc(id);
 
@@ -70,4 +62,5 @@ class Firebase {
       .doc(id)
       .delete();
 }
+
 export const firebase = new Firebase();

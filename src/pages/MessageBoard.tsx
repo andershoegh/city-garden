@@ -74,10 +74,10 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Opslagstavle</IonTitle>
+          <IonTitle>Message board</IonTitle>
           <IonButton slot='end' onClick={() => setModalOpen(true)} style={{ marginRight: '20px' }}>
             <IonIcon icon={addOutline} slot='start' />
-            Write a Note
+            Note
           </IonButton>
         </IonToolbar>
       </IonHeader>
