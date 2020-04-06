@@ -1,13 +1,7 @@
-import * as React from "react";
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonCard,
-  IonCardContent,
-  IonText,
-  IonCardSubtitle
-} from "@ionic/react";
+import * as React from 'react';
+import { IonGrid, IonRow, IonCol } from '@ionic/react';
+import './NoteStyle.css';
+import Note from './Note';
 
 export interface NoteRepeaterProps {
   notes: firebase.firestore.DocumentData[];
@@ -15,21 +9,27 @@ export interface NoteRepeaterProps {
 
 const NoteRepeater: React.SFC<NoteRepeaterProps> = props => {
   const { notes } = props;
+
   return (
     <IonGrid>
       <IonRow>
-        {notes.length !== 0
-          ? notes.map((note, index) => (
-              <IonCol size="3" key={index}>
-                <IonCard>
-                  <IonCardContent>
-                    <IonText>{note.note}</IonText>
-                    <IonCardSubtitle>- {note.author}</IonCardSubtitle>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            ))
-          : null}
+        {notes.length ? (
+          notes.map((note, index) => (
+            <IonCol sizeXl='3' sizeLg='4' sizeMd='6' sizeSm='12' sizeXs='12' key={index + note.id}>
+              <Note
+                note={note.note}
+                author={note.author}
+                pinned={note.pinned}
+                id={note.id}
+                key={note.id}
+              />
+            </IonCol>
+          ))
+        ) : (
+          <div className='no-note-content'>
+            <h2>Seems like there's currently no posts available...</h2>
+          </div>
+        )}
       </IonRow>
     </IonGrid>
   );
