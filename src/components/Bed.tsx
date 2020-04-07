@@ -14,11 +14,14 @@ interface BedProps {
 }
 
 const Bed: React.FC<BedProps> = ({ bedNr, indhold, info, opgave, taget, style, setSelection }) => {
+  let boxIllustration = indhold != null ? "gardenbox-" + indhold + " gardenbox" : "gardenbox-empty gardenbox";
+
   return (
     <IonButton
-      className='bed-style-primary'
+      className={boxIllustration}
       fill='clear'
       expand='block'
+      
       onClick={() => {
         setSelection(bedNr);
         const taskElement: any = document.getElementById(bedNr + '-tasks-id');
@@ -27,7 +30,7 @@ const Bed: React.FC<BedProps> = ({ bedNr, indhold, info, opgave, taget, style, s
         }
       }}
     >
-      Bed nr: {bedNr}
+      Garden box {bedNr}
     </IonButton>
   );
 };

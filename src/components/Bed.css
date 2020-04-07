@@ -4,15 +4,44 @@
     opacity: 50%;
 }
 
-.bed-style-primary{
-    border-radius: 10px;
-    background-image: url(../pics/bedcrate.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    min-height: 100px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
+.gardenbox {
+  border-radius: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100px;
+  text-align: center;
+  padding-top: 42%;
+  color: white;
+  font-weight: 300;
+  font-size: .9em;
 }
+
+.gardenbox-empty {
+  background-image: url(../pics/gardenbox-empty.png);
+}
+
+.gardenbox-carrots {
+  background-image: url(../pics/gardenbox-carrots.png);
+}
+
+.gardenbox-lettuce {
+  background-image: url(../pics/gardenbox-lettuce.png);
+}
+
+.gardenbox-peas {
+  background-image: url(../pics/gardenbox-peas.png);
+}
+
+.gardenbox-potatoes {
+  background-image: url(../pics/gardenbox-potatoes.png);
+}
+
+.gardenbox-squash {
+  background-image: url(../pics/gardenbox-squash.png);
+}
+
+.gardenbox-anders {
+  background-image: url(../pics/gardenbox-anders.png);
+}
+
