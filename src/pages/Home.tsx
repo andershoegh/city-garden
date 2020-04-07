@@ -32,10 +32,12 @@ const Home: React.FC = () => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach(doc => {
-        tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+        tempArray = [...tempArray, {...doc.data(), id: doc.id, idSort: doc.data().gardenBoxId}];
       });
+      
+      tempArray.sort((a:any, b:any) => Number(a.idSort)-Number(b.idSort));
+      setTasks(tempArray)
 
-      setTasks(tempArray);
     });
 
     const unsubNotes = firebase.db
