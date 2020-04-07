@@ -10,9 +10,9 @@
 
 .sticky-header {
   padding: 20px 0;
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: 300;
-  vertical-align: auto;  
+  vertical-align: auto;
   margin: 0 auto;
 }
 
@@ -23,5 +23,3 @@
   margin-left: -5%;
   margin-bottom: 10px;
 }
-
-

@@ -1,14 +1,42 @@
 ion-content ion-toolbar {
   --background: translucent;
 }
-
+/*
 .info-card {
   text-align: center;
   padding: 20px 0;
 }
+*/
 
-.page-background{
+.page-background {
   background-image: url(../pics/green-grass.png);
   background-size: 200px 200px;
   background-repeat: repeat;
+}
+.info-card {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+/*.info-card > div {
+  width: 90%;
+  position: absolute;
+  overflow: hidden;
+}
+
+.info-card > div > p {
+  display: inline-block;
+  position: absolute;
+  white-space: nowrap;
+}*/
+@keyframes marquee {
+  0% {
+    transform: translate(0, 0);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translate(-100%, 0);
+    animation-timing-function: ease-out;
+  }
 }
