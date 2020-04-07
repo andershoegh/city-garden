@@ -22,7 +22,7 @@ const Have: React.FC<HaveProps> = props => {
         tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
       });
       tempArray.sort((a: any, b: any) => Number(a.id) - Number(b.id));
-      console.log(tempArray);
+
       setBeds(tempArray);
     });
 
