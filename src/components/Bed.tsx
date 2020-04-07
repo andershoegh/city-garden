@@ -10,13 +10,18 @@ interface BedProps {
   setSelection: CallableFunction;
 }
 
+
 const Bed: React.FC<BedProps> = ({ bedNr, content, setSelection }) => {
-  const [showAlert,setShowAlert] = useState(false);
+const [showAlert,setShowAlert] = useState(false);
+let boxIllustration = content != null ? "gardenbox-" + content + " gardenbox" : "gardenbox-empty gardenbox";
+
+
   return (
     <IonButton
-      className='bed-style-primary'
+      className={boxIllustration}
       fill='clear'
       expand='block'
+      
       onClick={() => {
         console.log(content);
         setSelection(bedNr);
