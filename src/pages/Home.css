@@ -1,12 +1,6 @@
 ion-content ion-toolbar {
   --background: translucent;
 }
-/*
-.info-card {
-  text-align: center;
-  padding: 20px 0;
-}
-*/
 
 .page-background {
   background-image: url(../pics/green-grass.png);
@@ -18,18 +12,9 @@ ion-content ion-toolbar {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 0px;
-}
-/*.info-card > div {
-  width: 90%;
-  position: absolute;
-  overflow: hidden;
+  padding: 10px 0px;
 }
 
-.info-card > div > p {
-  display: inline-block;
-  position: absolute;
-  white-space: nowrap;
-}*/
 @keyframes marquee {
   0% {
     transform: translate(0, 0);

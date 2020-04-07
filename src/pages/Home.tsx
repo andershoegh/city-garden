@@ -7,7 +7,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonCard
+  IonCard,
 } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import './Home.css';
@@ -28,25 +28,25 @@ const Home: React.FC = () => {
   const [infoCardTextArray, setInfoCardTextArray] = useState<infoCard[]>([]);
 
   useEffect(() => {
-    const unsub = firebase.getTasks().onSnapshot(snapShot => {
+    const unsub = firebase.getTasks().onSnapshot((snapShot) => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
-      snapShot.forEach(doc => {
-        tempArray = [...tempArray, {...doc.data(), id: doc.id, idSort: doc.data().gardenBoxId}];
+      snapShot.forEach((doc) => {
+        tempArray = [...tempArray, { ...doc.data(), id: doc.id, idSort: doc.data().gardenBoxId }];
       });
-      
-      tempArray.sort((a:any, b:any) => Number(a.idSort)-Number(b.idSort));
-      setTasks(tempArray)
 
+      tempArray.sort((a: any, b: any) => Number(a.idSort) - Number(b.idSort));
+      setTasks(tempArray);
     });
 
     const unsubNotes = firebase.db
       .collection('notes')
       .where('pinned', '==', true)
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         let tempArray: infoCard[] = [];
         snapshot.forEach(
-          doc => (tempArray = [...tempArray, { note: doc.data().note, author: doc.data().author }])
+          (doc) =>
+            (tempArray = [...tempArray, { note: doc.data().note, author: doc.data().author }])
         );
         setInfoCardTextArray(tempArray);
       });
@@ -76,11 +76,6 @@ const Home: React.FC = () => {
                 <div style={{ width: '90%' }}>
                   <MyMarquee infoCardData={infoCardTextArray} />
                 </div>
-
-                {/*    <div className='marquee'>
-                  <div className='marquee-text'>Testing this marquee function</div>
-                  <div>- this is author</div>
-                </div>*/}
               </IonCard>
             </IonCol>
           </IonRow>
