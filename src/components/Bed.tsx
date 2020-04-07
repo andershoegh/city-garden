@@ -1,7 +1,7 @@
 import { IonButton, IonAlert } from '@ionic/react';
 import React, { useState } from 'react';
 import './Bed.css';
-import { firestore } from 'firebase';
+import { firebase } from '../Utility/Firebase';
 
 interface BedProps {
   bedNr: string;
@@ -11,7 +11,6 @@ interface BedProps {
 }
 
 const Bed: React.FC<BedProps> = ({ bedNr, content, setSelection }) => {
-  
   const [showAlert,setShowAlert] = useState(false);
   return (
     <IonButton
@@ -35,16 +34,16 @@ const Bed: React.FC<BedProps> = ({ bedNr, content, setSelection }) => {
           header={'Empty'}
           subHeader={'Do you want to plant something?'}
           message={'Please select what to plant.'}
-          inputs={[{name:'Plant',
+          inputs={[{name:'plantSelection',
             type:'radio',
             label:'Peas',
             value:'peas',
             checked:true},
-            {name:'Plant',
+            {name:'plantSelection',
             type:'radio',
             label:'Carrots',
             value:'carrots'},
-            {name:'Plant',
+            {name:'plantSelection',
             type:'radio',
             label:'Squash',
             value:'squash'}
@@ -54,8 +53,8 @@ const Bed: React.FC<BedProps> = ({ bedNr, content, setSelection }) => {
             cssClass:'alert-cancel'
           },
           {text:'Plant',
-            handler:()=>{
-              
+            handler: e => {
+              firebase.updatePlant(bedNr,e)
             }
           }]}
         />
