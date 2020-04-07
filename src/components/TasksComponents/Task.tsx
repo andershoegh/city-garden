@@ -93,7 +93,11 @@ export const Task: React.FC<TaskProps> = props => {
       />
       <IonItemGroup className='task-group'>
         {newTab ? (
-          <IonItemDivider className='task-header' onClick={() => toggleInfo()}>
+          <IonItemDivider
+            id={task.gardenBoxId + '-tasks-id'}
+            className='task-header'
+            onClick={() => toggleInfo()}
+          >
             <IonLabel>Garden box {task.gardenBoxId}</IonLabel>
             <div className='icon-box'>
               <IonIcon icon={iconToggle} />
@@ -103,7 +107,11 @@ export const Task: React.FC<TaskProps> = props => {
           <div className={toggle ? 'line-divider' : 'line-divider-hidden'} />
         )}
         {taskDescription.map(taskDescription => (
-          <IonItemGroup key={index} className={toggle ? 'task-info' : 'task-info-hidden'}>
+          <IonItemGroup
+            key={index}
+            className={toggle ? 'task-info' : 'task-info-hidden'}
+            id={task.gardenBoxId + '-tasks-id'}
+          >
             <div className='task-title'>
               <div> Task </div>
               <p> {taskDescription.taskTitle} </p>

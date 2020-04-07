@@ -15,9 +15,17 @@ import { firebase } from '../Utility/Firebase';
 import { SideMenu } from '../components/TasksComponents/SideMenu';
 import Have from './Have';
 
+import MyMarquee from '../components/MyMarquee';
+
+export interface infoCard {
+  note: string;
+  author: string;
+}
+
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<firebase.firestore.DocumentData[]>([]);
   const [selection, setSelection] = useState<string>('0');
+  const [infoCardTextArray, setInfoCardTextArray] = useState<infoCard[]>([]);
 
   useEffect(() => {
     const unsub = firebase.getTasks().onSnapshot(snapShot => {
@@ -30,8 +38,20 @@ const Home: React.FC = () => {
       setTasks(tempArray);
     });
 
+    const unsubNotes = firebase.db
+      .collection('notes')
+      .where('pinned', '==', true)
+      .onSnapshot(snapshot => {
+        let tempArray: infoCard[] = [];
+        snapshot.forEach(
+          doc => (tempArray = [...tempArray, { note: doc.data().note, author: doc.data().author }])
+        );
+        setInfoCardTextArray(tempArray);
+      });
+
     return () => {
       unsub();
+      unsubNotes();
     };
   }, []);
 
@@ -51,10 +71,14 @@ const Home: React.FC = () => {
             <IonCol size='4'>
               <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
               <IonCard className='info-card'>
-                Hello! Give me a message to display, plz daddy{' '}
-                <span role='img' aria-label='emoji'>
-                  😘
-                </span>
+                <div style={{ width: '90%' }}>
+                  <MyMarquee infoCardData={infoCardTextArray} />
+                </div>
+
+                {/*    <div className='marquee'>
+                  <div className='marquee-text'>Testing this marquee function</div>
+                  <div>- this is author</div>
+                </div>*/}
               </IonCard>
             </IonCol>
           </IonRow>
