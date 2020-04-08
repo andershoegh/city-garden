@@ -30,7 +30,7 @@ const Bed: React.FC<BedProps> = ({ bedNr, indhold, info, opgave, taget, style, s
         }
       }}
     >
-      Garden box {bedNr}
+      {bedNr}
     </IonButton>
   );
 };
