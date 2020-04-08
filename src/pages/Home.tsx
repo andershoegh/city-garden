@@ -64,8 +64,8 @@ const Home: React.FC = () => {
           <IonTitle>Garden</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent style={{ height: '100%' }}>
-        <IonGrid className='page-background'>
+      <IonContent style={{ height: '100%' } } className='page-background'>
+        <IonGrid>
           <IonRow>
             <IonCol size='8'>
               <Have setSelection={setSelection} />
