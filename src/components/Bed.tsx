@@ -51,7 +51,15 @@ let boxIllustration = content != null ? "gardenbox-" + content + " gardenbox" : 
             {name:'plantSelection',
             type:'radio',
             label:'Squash',
-            value:'squash'}
+            value:'squash'},
+            {name:'plantSelection',
+            type:'radio',
+            label:'Potato',
+            value:'potato'},
+            {name:'plantSelection',
+            type:'radio',
+            label:'Lettuce',
+            value:'lettuce'}
           ]}
           buttons={[{text:'Cancel',
             role:'cancel',

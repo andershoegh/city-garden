@@ -29,7 +29,7 @@
   height: 200px;
   color: black;
   overflow: hidden;
-  transition: height 0.5s ease-in-out, padding-top 0.5s ease-in-out, padding-bottom 0.5s ease-in-out;
+  transition: height 0.3s ease-in-out, padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
 
 }
 
@@ -37,7 +37,7 @@
   visibility: hidden;
   overflow: hidden;
   height: 0px;
-  transition: height 0.5s linear;
+  transition: height 0.3s linear;
 }
 
 .task-title {
