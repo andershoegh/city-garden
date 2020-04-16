@@ -68,7 +68,7 @@ const Home: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol size='8'>
-              <Have setSelection={setSelection} />
+              <Have setSelection={setSelection} tasks={tasks} />
             </IonCol>
             <IonCol size='4'>
               <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
