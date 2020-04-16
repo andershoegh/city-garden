@@ -11,7 +11,8 @@ import {
   IonItem,
   IonTitle,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonDatetime,
 } from "@ionic/react";
 import "./Dummy.css";
 import { firebase } from "../Utility/Firebase";
@@ -28,6 +29,7 @@ export interface IDummyData {
   taskTitle: string;
   chosenTaskTemplate: string;
   lastWeeding: string;
+  lastWatered: string;
 }
 
 export interface ITemplateArray {
@@ -45,7 +47,8 @@ const Dummy: React.SFC = () => {
     taskDescription: "",
     taskTitle: "",
     chosenTaskTemplate: "",
-    lastWeeding: ""
+    lastWeeding: "",
+    lastWatered: ""
   });
 
   const [taskTemplateArray, setTaskTemplateArray] = useState<
@@ -124,7 +127,8 @@ const Dummy: React.SFC = () => {
           airMoisture: state.airMoisture,
           soilMoisture: state.soilMoisture,
           soilTemperature: state.soilTemperature,
-          lastWeeding:state.lastWeeding
+          lastWeeding: new Date(state.lastWeeding),
+          lastWatered: new Date(state.lastWatered)
         },
         { merge: true }
       )
@@ -302,12 +306,22 @@ const Dummy: React.SFC = () => {
               </IonItem>
               <IonItem>
                 <IonLabel>Last weeding</IonLabel>
-                <IonInput
+                <IonDatetime
                   id="lastWeeding"
-                  type="date"
+                  displayFormat="MM DD YYYY"
+                  placeholder="Please select date"
                   value={state.lastWeeding}
                   onIonChange={handleChange}
                   className="ion-text-right ion-padding-top"/>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Last watered</IonLabel>
+                <IonDatetime
+                  id="lastWatered"
+                  displayFormat="MM DD YYYY"
+                  placeholder="Please select date"
+                  value={state.lastWatered}
+                  onIonChange={handleChange}/>
               </IonItem>
               <IonButton
                 expand="block"
