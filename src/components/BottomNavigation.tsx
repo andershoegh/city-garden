@@ -11,10 +11,11 @@ import {
 import React from 'react';
 import { Redirect, Route } from 'react-router';
 import Home from '../pages/Home';
-import { leafOutline, clipboardOutline } from 'ionicons/icons';
+import { leafOutline, clipboardOutline, calendarOutline } from 'ionicons/icons';
 import { IonReactRouter } from '@ionic/react-router';
 import MessageBoard from '../pages/MessageBoard';
 import Dummy from '../pages/Dummy';
+import Events from '../pages/Events';
 
 interface BottomNavigationProps {}
 
@@ -27,6 +28,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
             <IonRouterOutlet>
               <Route path='/garden' component={Home} exact />
               <Route path='/messageboard' component={MessageBoard} exact />
+              <Route path='/events' component={Events} />
               <Route path='/dummy' component={Dummy} />
               <Redirect path='/' to='/garden' exact />
             </IonRouterOutlet>
@@ -38,6 +40,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
               <IonTabButton tab='messageboard' href='/messageboard'>
                 <IonIcon icon={clipboardOutline} />
                 <IonLabel>Message board</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab='events' href='/events'>
+                <IonIcon icon={calendarOutline} />
+                <IonLabel>Events</IonLabel>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>

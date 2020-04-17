@@ -68,6 +68,8 @@ class Firebase {
       .collection('notes')
       .doc(id)
       .delete();
+
+  getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
 }
 
 export const firebase = new Firebase();
