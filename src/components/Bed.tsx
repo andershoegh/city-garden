@@ -37,16 +37,6 @@ const Bed: React.FC<BedProps> = props => {
       
       setTouchStart(0);
     }
-
-      /*
-      setSelection(bedNr);
-        const taskElement: any = document.getElementById(bedNr + '-tasks-id');
-        if (taskElement !== null) {
-          taskElement.scrollIntoView({ behavior: 'smooth' });
-        }
-        if (content === "empty"){setShowAlert(true)}
-      */
-    
   }
 
   return (
@@ -98,7 +88,7 @@ const Bed: React.FC<BedProps> = props => {
             handler: e => {
               firebase.updatePlant(bedNr, e)
             }
-          }]}
+          }]}          
         />
         <IonAlert 
           isOpen={showFullAlert}
