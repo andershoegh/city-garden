@@ -65,11 +65,11 @@ const Home: React.FC = (props) => {
           <IonTitle>Garden</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className='page-background' style={{ height: '100%' }}>
+      <IonContent style={{ height: '100%' } } className='page-background'>
         <IonGrid>
           <IonRow>
             <IonCol size='8'>
-              <Have setSelection={setSelection} />
+              <Have setSelection={setSelection} tasks={tasks} />
             </IonCol>
             <IonCol size='4'>
               <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />

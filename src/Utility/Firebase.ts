@@ -16,6 +16,13 @@ class Firebase {
 
   getBed = () => this.db.collection('gardenBox');
 
+  updatePlant = (id:string, plant:string) => {
+    this.db
+    .collection('gardenBox')
+    .doc(id)
+    .update({plant:plant});
+  };
+
   getTypes = () => firebase;
 
   getNotes = () => this.db.collection('notes').orderBy('pinned', 'desc').orderBy('created', 'desc');

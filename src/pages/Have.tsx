@@ -6,14 +6,15 @@ import { firebase } from '../Utility/Firebase';
 
 interface HaveProps {
   setSelection: CallableFunction;
+  tasks: firebase.firestore.DocumentData[];
 }
 
-const Have: React.FC<HaveProps> = (props) => {
-  const { setSelection } = props;
-
+const Have: React.FC<HaveProps> = props => {
+  const { setSelection, tasks } = props;
   const sizeRow = '2';
 
   const [beds, setBeds] = useState<firebase.firestore.DocumentData[]>([]);
+  const [selectedBox,setSelectedBox] = useState("");
 
   useEffect(() => {
     const unsub = firebase.getBed().onSnapshot((snapShot) => {
@@ -34,15 +35,17 @@ const Have: React.FC<HaveProps> = (props) => {
 
   return (
     <IonRow>
-      {beds.map((bed, index) => (
-        <IonCol
+      {beds.map((bed, index) => {
+        let availTasks = 0;
+        tasks.forEach(task => task.gardenBoxId === bed.id && task.taskTaken === false ? availTasks++ : null);
+        return <IonCol
           size-sm={sizeRow}
           key={index}
           offset={bed.id === '19' || bed.id === '21' ? '8' : '0'}
         >
-          <Bed bedNr={bed.id} setSelection={setSelection} />
+          <Bed bedNr={bed.id} setSelection={setSelection} content={bed.plant} availTasks={availTasks} />
         </IonCol>
-      ))}
+      })}
     </IonRow>
   );
 };
