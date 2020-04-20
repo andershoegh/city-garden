@@ -17,10 +17,35 @@ class Firebase {
   getBed = () => this.db.collection('gardenBox');
 
   updatePlant = (id:string, plant:string) => {
+    const dt = new Date();
+
+    if(plant !== 'empty'){
+      this.db
+      .collection('plants')
+      .doc(plant)
+      .onSnapshot(snapShot => {
+        console.log(snapShot.get('weeksToHarvest'))
+        dt.setDate(dt.getDate() + snapShot.get('weeksToHarvest'));
+
+        this.db
+        .collection('gardenBox')
+        .doc(id)
+        .update({timeToHarvest:dt});
+    })}
+    else{
+      this.db
+      .collection('gardenBox')
+      .doc(id)
+      .update({timeToHarvest:null});
+    }
+
+
+
     this.db
     .collection('gardenBox')
     .doc(id)
-    .update({plant:plant});
+    .update({plant:plant, 
+      sowTime:new Date()});
   };
 
   getTypes = () => firebase;

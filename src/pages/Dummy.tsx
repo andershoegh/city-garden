@@ -30,6 +30,7 @@ export interface IDummyData {
   chosenTaskTemplate: string;
   lastWeeding: string;
   lastWatered: string;
+  lastFertilized: string;
 }
 
 export interface ITemplateArray {
@@ -48,7 +49,8 @@ const Dummy: React.SFC = () => {
     taskTitle: "",
     chosenTaskTemplate: "",
     lastWeeding: "",
-    lastWatered: ""
+    lastWatered: "",
+    lastFertilized: ""
   });
 
   const [taskTemplateArray, setTaskTemplateArray] = useState<
@@ -128,7 +130,8 @@ const Dummy: React.SFC = () => {
           soilMoisture: state.soilMoisture,
           soilTemperature: state.soilTemperature,
           lastWeeding: new Date(state.lastWeeding),
-          lastWatered: new Date(state.lastWatered)
+          lastWatered: new Date(state.lastWatered),
+          lastFertilized: new Date(state.lastFertilized)
         },
         { merge: true }
       )
@@ -323,6 +326,15 @@ const Dummy: React.SFC = () => {
                   value={state.lastWatered}
                   onIonChange={handleChange}/>
               </IonItem>
+              <IonItem>
+                <IonLabel>Last Fertilized</IonLabel>
+                <IonDatetime
+                    id="lastFertilized"
+                    displayFormat="MM DD YYYY"
+                    placeholder="Please select date"
+                    value={state.lastFertilized}
+                    onIonChange={handleChange}/>
+                </IonItem>
               <IonButton
                 expand="block"
                 className="ion-margin"
