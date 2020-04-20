@@ -6,7 +6,7 @@ import {
   IonSegmentButton,
   IonLabel,
   IonList,
-  IonItemDivider
+  IonItemDivider,
 } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import { firebase } from '../../Utility/Firebase';
@@ -19,7 +19,7 @@ export interface SideMenuProps {
   setSelection: CallableFunction;
 }
 
-export const SideMenu: React.FC<SideMenuProps> = props => {
+export const SideMenu: React.FC<SideMenuProps> = (props) => {
   const { tasks, selection, setSelection } = props;
   const [taskDescriptions, setTaskDescriptions] = useState<firebase.firestore.DocumentData[]>([]);
   const [showTaken, setShowTaken] = useState<boolean>(false);
@@ -27,10 +27,10 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
   let priorBoxId = '0';
 
   useEffect(() => {
-    const unsub = firebase.getTaskDescription().onSnapshot(snapShot => {
+    const unsub = firebase.getTaskDescription().onSnapshot((snapShot) => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
-      snapShot.forEach(doc => {
+      snapShot.forEach((doc) => {
         tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
       });
       setTaskDescriptions(tempArray);
@@ -66,12 +66,12 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
 
   return (
     <IonCard className='card'>
-      <IonCardHeader>
+      <IonCardHeader className='side-menu-header'>
         <IonSegment
           className='segment'
           value={tabChosen}
           key='segment'
-          onIonChange={e => (e.detail.value === 'taken' ? toggleTab(true) : toggleTab(false))}
+          onIonChange={(e) => (e.detail.value === 'taken' ? toggleTab(true) : toggleTab(false))}
         >
           <IonSegmentButton mode='ios' value='available' defaultChecked>
             <IonLabel>Available</IonLabel>
@@ -81,29 +81,36 @@ export const SideMenu: React.FC<SideMenuProps> = props => {
           </IonSegmentButton>
         </IonSegment>
       </IonCardHeader>
-      
-      <IonCardContent className="list">
+
+      <IonCardContent className='list' id='side-menu-list'>
         <IonItemDivider sticky={true}>
-          <div className="sticky-header">{tasks.filter(task => !task.finished && task.taskTaken === showTaken).length?
-          'These garden boxes need your help!':
-          'No available tasks'}
+          <div className='sticky-header'>
+            {tasks.filter((task) => !task.finished && task.taskTaken === showTaken).length
+              ? 'These garden boxes need your help!'
+              : 'No available tasks'}
           </div>
         </IonItemDivider>
-        <IonList>  
-          {tasks.filter(task => !task.finished && task.taskTaken === showTaken).map((task, index) => {         
-            let newTab = task.gardenBoxId !== priorBoxId;
-            if (newTab) {priorBoxId = task.gardenBoxId;}
-            return <Task 
-            key={index} 
-            task={task} 
-            taskDescription={taskDescriptions}
-            showTaken={showTaken}
-            index={index} 
-            isOpen={selection}
-            toggleOpen={toggleOpen}
-            toggleTask={toggleTask}
-            newTab={newTab}
-            />
+        <IonList>
+          {tasks
+            .filter((task) => !task.finished && task.taskTaken === showTaken)
+            .map((task, index) => {
+              let newTab = task.gardenBoxId !== priorBoxId;
+              if (newTab) {
+                priorBoxId = task.gardenBoxId;
+              }
+              return (
+                <Task
+                  key={index}
+                  task={task}
+                  taskDescription={taskDescriptions}
+                  showTaken={showTaken}
+                  index={index}
+                  isOpen={selection}
+                  toggleOpen={toggleOpen}
+                  toggleTask={toggleTask}
+                  newTab={newTab}
+                />
+              );
             })}
         </IonList>
       </IonCardContent>

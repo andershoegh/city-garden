@@ -11,7 +11,6 @@ interface BedProps {
   availTasks: number;
 }
 
-
 const Bed: React.FC<BedProps> = props => {
   const { bedNr, content, setSelection, availTasks } = props;
   const [showEmptyAlert, setShowEmptyAlert] = useState(false);
@@ -31,7 +30,7 @@ const Bed: React.FC<BedProps> = props => {
       setSelection(bedNr);
       const taskElement: any = document.getElementById(bedNr + '-tasks-id');
       if (taskElement !== null) {
-        taskElement.scrollIntoView({ behavior: 'smooth' });
+        taskElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
       }
       if (content === 'empty') { setShowEmptyAlert(true) }
       
@@ -117,5 +116,4 @@ const Bed: React.FC<BedProps> = props => {
     </div>
   );
 };
-
 export default Bed;

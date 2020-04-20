@@ -14,9 +14,9 @@ export interface TaskProps {
   newTab: boolean;
 }
 
-export const Task: React.FC<TaskProps> = props => {
+export const Task: React.FC<TaskProps> = (props) => {
   const { task, showTaken, index, isOpen, toggleOpen, toggleTask, newTab } = props;
-  const taskDescription = props.taskDescription.filter(t => t.id === task.taskTemplateId);
+  const taskDescription = props.taskDescription.filter((t) => t.id === task.taskTemplateId);
 
   const [toggle, setToggle] = useState(false);
   const [iconToggle, setIconToggle] = useState(chevronForwardOutline);
@@ -26,29 +26,29 @@ export const Task: React.FC<TaskProps> = props => {
       text: 'Cancel',
       handler: () => {
         setAlerts({ take: false, leave: false, finish: false });
-      }
+      },
     },
     takeTask: {
       text: 'Take task',
       handler: () => {
-        setAlerts(prevState => ({ ...prevState, take: false }));
+        setAlerts((prevState) => ({ ...prevState, take: false }));
         toggleTask(task.id, 'toggleTaken', task.taskTaken);
-      }
+      },
     },
     leaveTask: {
       text: 'Leave task',
       handler: () => {
-        setAlerts(prevState => ({ ...prevState, leave: false }));
+        setAlerts((prevState) => ({ ...prevState, leave: false }));
         toggleTask(task.id, 'toggleTaken', task.taskTaken);
-      }
+      },
     },
     finishTask: {
       text: 'Finish task',
       handler: () => {
-        setAlerts(prevState => ({ ...prevState, finish: false }));
+        setAlerts((prevState) => ({ ...prevState, finish: false }));
         toggleTask(task.id, 'setFinished', task.taskTaken);
-      }
-    }
+      },
+    },
   };
 
   useEffect(() => {
@@ -91,13 +91,9 @@ export const Task: React.FC<TaskProps> = props => {
         message={'Did you finish the task of: ' + taskDescription[0].taskTitle + '?'}
         buttons={[alertButtons.cancel, alertButtons.finishTask]}
       />
-      <IonItemGroup className='task-group'>
+      <IonItemGroup className='task-group' id={task.gardenBoxId + '-tasks-id'}>
         {newTab ? (
-          <IonItemDivider
-            id={task.gardenBoxId + '-tasks-id'}
-            className='task-header'
-            onClick={() => toggleInfo()}
-          >
+          <IonItemDivider className='task-header' onClick={() => toggleInfo()}>
             <IonLabel>Garden box {task.gardenBoxId}</IonLabel>
             <div className='icon-box'>
               <IonIcon icon={iconToggle} />
@@ -106,12 +102,8 @@ export const Task: React.FC<TaskProps> = props => {
         ) : (
           <div className={toggle ? 'line-divider' : 'line-divider-hidden'} />
         )}
-        {taskDescription.map(taskDescription => (
-          <IonItemGroup
-            key={index}
-            className={toggle ? 'task-info' : 'task-info-hidden'}
-            id={task.gardenBoxId + '-tasks-id'}
-          >
+        {taskDescription.map((taskDescription) => (
+          <IonItemGroup key={index} className={toggle ? 'task-info' : 'task-info-hidden'}>
             <div className='task-title'>
               <div> Task </div>
               <p> {taskDescription.taskTitle} </p>
@@ -125,14 +117,14 @@ export const Task: React.FC<TaskProps> = props => {
                 <IonButton
                   className='task-btn'
                   color='warning'
-                  onClick={() => setAlerts(prevState => ({ ...prevState, leave: true }))}
+                  onClick={() => setAlerts((prevState) => ({ ...prevState, leave: true }))}
                 >
                   leave task
                 </IonButton>
                 <IonButton
                   className='task-btn'
                   color='success'
-                  onClick={() => setAlerts(prevState => ({ ...prevState, finish: true }))}
+                  onClick={() => setAlerts((prevState) => ({ ...prevState, finish: true }))}
                 >
                   finish task
                 </IonButton>
@@ -142,7 +134,7 @@ export const Task: React.FC<TaskProps> = props => {
                 <IonButton
                   className='task-btn'
                   color='success'
-                  onClick={() => setAlerts(prevState => ({ ...prevState, take: true }))}
+                  onClick={() => setAlerts((prevState) => ({ ...prevState, take: true }))}
                 >
                   take task
                 </IonButton>

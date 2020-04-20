@@ -31,7 +31,8 @@
 
 }
 
-.task-info-hidden, .line-divider-hidden {
+.task-info-hidden,
+.line-divider-hidden {
   visibility: hidden;
   overflow: hidden;
   height: 0px;
@@ -46,8 +47,9 @@
   padding-bottom: 20px;
 }
 
-.task-title div, .task-description div {
-  font-size: .8em;
+.task-title div,
+.task-description div {
+  font-size: 0.8em;
   color: rgb(85, 85, 85);
   padding-bottom: 4px;
 }
