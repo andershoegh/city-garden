@@ -1,4 +1,4 @@
-import { IonButton, IonAlert } from '@ionic/react';
+import { IonButton, IonAlert, IonBadge } from '@ionic/react';
 import React, { useState } from 'react';
 import './Bed.css';
 import { firebase } from '../Utility/Firebase';
@@ -8,89 +8,112 @@ interface BedProps {
   content?: string;
   temp?: number;
   setSelection: CallableFunction;
-  selectedBox: string;
-  setSelectedBox: CallableFunction;
+  availTasks: number;
 }
 
+const Bed: React.FC<BedProps> = props => {
+  const { bedNr, content, setSelection, availTasks } = props;
+  const [showEmptyAlert, setShowEmptyAlert] = useState(false);
+  const [showFullAlert, setShowFullAlert] = useState(false);
+  let boxIllustration = content != null ? 'gardenbox-' + content + ' gardenbox' : 'gardenbox-empty gardenbox';
+  const DOUBLE_CLICK_THRESHOLD = 300;
+  const [touchStart, setTouchStart] = useState<number>(0);
+  let message = 'This garden box contains ' + content + '. <br> Click on okay to empty garden box ' + bedNr + '.';
 
-const Bed: React.FC<BedProps> = ({ bedNr, content, setSelection, selectedBox, setSelectedBox }) => {
-const [sow,setSow] = useState(false);
-const [rootOut,setRootOut] = useState(false);
-let boxIllustration = content != null ? "gardenbox-" + content + " gardenbox" : "gardenbox-empty gardenbox";
+  const touchRelease = () => {
+    const touchEnd = Date.now();
+
+    if (Math.abs(touchEnd - touchStart) >= DOUBLE_CLICK_THRESHOLD) {
+      if (content !== 'empty') { setShowFullAlert(true) }
+      setTouchStart(0);
+    } else {
+      setSelection(bedNr);
+      const taskElement: any = document.getElementById(bedNr + '-tasks-id');
+      if (taskElement !== null) {
+        taskElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
+      }
+      if (content === 'empty') { setShowEmptyAlert(true) }
+      
+      setTouchStart(0);
+    }
+  }
 
   return (
+    <div>
     <IonButton
       className={boxIllustration}
       fill='clear'
       expand='block'
-
-      onClick={() => {
-        setSelection(bedNr);
-        setSelectedBox(bedNr);
-        const taskElement: any = document.getElementById(bedNr + '-tasks-id');
-        if (taskElement !== null) {
-          taskElement.scrollIntoView({ behavior: 'smooth' });
-        }
-        if (content === "empty"){setSow(true)}
-        if (content !== "empty" && selectedBox === bedNr){setRootOut(true)}
-      }}
+      onTouchStart={() => setTouchStart(Date.now())}
+      onTouchEnd={() => touchRelease()}
     >
-      Bed nr: {bedNr}
+      {bedNr}
       <IonAlert
-          isOpen={sow}
-          onDidDismiss={() => setSow(false)}
-          header={'Empty'}
+          isOpen={showEmptyAlert}
+          onDidDismiss={() => setShowEmptyAlert(false)}
+          header={'Plant'}
           subHeader={'Do you want to plant something?'}
           message={'Please select what to plant.'}
-          inputs={[{name:'plantSelection',
-            type:'radio',
-            label:'Peas',
-            value:'peas',
-            checked:true},
-            {name:'plantSelection',
-            type:'radio',
-            label:'Carrots',
-            value:'carrots'},
-            {name:'plantSelection',
-            type:'radio',
-            label:'Squash',
-            value:'squash'},
-            {name:'plantSelection',
-            type:'radio',
-            label:'Potatoes',
-            value:'potatoes'},
-            {name:'plantSelection',
-            type:'radio',
-            label:'Lettuce',
-            value:'lettuce'}
+          inputs={[{
+            name: 'plantSelection',
+            type: 'radio',
+            label: 'Peas',
+            value: 'peas',
+            checked: true},
+            {name: 'plantSelection',
+            type: 'radio',
+            label: 'Carrots',
+            value: 'carrots'},
+            {name: 'plantSelection',
+            type: 'radio',
+            label: 'Squash',
+            value: 'squash'},
+            {name: 'plantSelection',
+            type: 'radio',
+            label: 'Potatoes',
+            value: 'potatoes'},
+            {name: 'plantSelection',
+            type: 'radio',
+            label: 'Lettuce',
+            value: 'lettuce'}
           ]}
-          buttons={[{text:'Cancel',
-            role:'cancel',
-            cssClass:'alert-cancel'
+          buttons={[{
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel'
           },
-          {text:'Plant',
+          {
+            text: 'Plant',
             handler: e => {
-              firebase.updatePlant(bedNr,e)
+              firebase.updatePlant(bedNr, e)
             }
           }]}          
         />
-        <IonAlert
-          isOpen={rootOut}
-          onDidDismiss={() => setRootOut(false)}
-          header={'Root Out'}
-          subHeader={'Removing plant from box'}
-          message={'Are you sure you want to remove the plant from the box?'}
-          buttons={[{text:'Cancel',
-            role:'cancel'},
-            {text:'Remove',
+        <IonAlert 
+          isOpen={showFullAlert}
+          onDidDismiss={() => setShowFullAlert(false)}
+          header='Empty'
+          subHeader='Do you want to empty this garden box?'
+          message={message}
+          buttons={[{
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert.cancel'
+          },
+          {
+            text: 'Okay',
             handler: e => {
-              firebase.updatePlant(bedNr,'empty')
+              firebase.updatePlant(bedNr, 'empty')
             }
-          }]}         
-          />
+          }
+          ]}
+        />
     </IonButton>
-    
+    { availTasks !== 0 ? 
+      (<IonBadge className='badge'> {availTasks} </IonBadge>) 
+      : (null) 
+    }
+    </div>
   );
 };
-
 export default Bed;

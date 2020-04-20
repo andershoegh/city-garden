@@ -1,9 +1,3 @@
-.bed-style-disabled{
-    border-radius: 10px;
-    background: chartreuse;
-    opacity: 50%;
-}
-
 .gardenbox {
   border-radius: 10px;
   background-size: contain;
@@ -45,3 +39,8 @@
   background-image: url(../pics/gardenbox-anders.png);
 }
 
+.badge {
+  position: absolute;
+  right: 5%;
+  top: 15%;
+}

@@ -14,6 +14,7 @@ import './Home.css';
 import { firebase } from '../Utility/Firebase';
 import { SideMenu } from '../components/TasksComponents/SideMenu';
 import Have from './Have';
+import { Link } from 'react-router-dom';
 
 import MyMarquee from '../components/MyMarquee';
 
@@ -22,7 +23,7 @@ export interface infoCard {
   author: string;
 }
 
-const Home: React.FC = () => {
+const Home: React.FC = (props) => {
   const [tasks, setTasks] = useState<firebase.firestore.DocumentData[]>([]);
   const [selection, setSelection] = useState<string>('0');
   const [infoCardTextArray, setInfoCardTextArray] = useState<infoCard[]>([]);
@@ -68,15 +69,17 @@ const Home: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol size='8'>
-              <Have setSelection={setSelection} />
+              <Have setSelection={setSelection} tasks={tasks} />
             </IonCol>
             <IonCol size='4'>
               <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
-              <IonCard className='info-card'>
-                <div style={{ width: '90%' }}>
-                  <MyMarquee infoCardData={infoCardTextArray} />
-                </div>
-              </IonCard>
+              <Link to='/messageboard'>
+                <IonCard className='info-card'>
+                  <div style={{ width: '90%' }}>
+                    <MyMarquee infoCardData={infoCardTextArray} />
+                  </div>
+                </IonCard>
+              </Link>
             </IonCol>
           </IonRow>
         </IonGrid>
