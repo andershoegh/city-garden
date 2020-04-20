@@ -1,5 +1,6 @@
 import React from 'react';
 import Event from './Event';
+import './Event.css';
 import { IonGrid, IonRow, IonCol } from '@ionic/react';
 
 interface EventRepeaterProps {
@@ -19,8 +20,11 @@ export const EventRepeater: React.FC<EventRepeaterProps> = props => {
             </IonCol>
           ))
         ) : (
-          <div>
-            <h2>Seems like there's currently no events available...</h2>
+          <div className='no-events'>
+            <h2>Seems like there are currently no events planned.
+              <br />
+              Click the "+ Event" button to start planning a new event.
+            </h2>
           </div>
         )}
       </IonRow>

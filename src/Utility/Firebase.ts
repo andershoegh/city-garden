@@ -70,6 +70,15 @@ class Firebase {
       .delete();
 
   getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
+
+  createEvent = (title: string, description: string, startTime?: Date, endTime?: Date) => 
+    this.db.collection('events').add({
+      title: title,
+      description: description,
+      startTime: startTime,
+      endTime: endTime,
+      attendees: []
+    });
 }
 
 export const firebase = new Firebase();

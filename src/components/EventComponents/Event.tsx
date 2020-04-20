@@ -1,8 +1,12 @@
 import React from 'react';
 import './Event.css';
 import { timeOutline, personOutline } from 'ionicons/icons';
-import {firebase} from '../../Utility/Firebase'; 
-import { IonCard, IonCardHeader, IonCardContent, IonList, IonIcon } from '@ionic/react';
+import { 
+  IonCard, 
+  IonCardHeader, 
+  IonCardContent, 
+  IonList, 
+  IonIcon } from '@ionic/react';
 
 interface EventProps {
   event: firebase.firestore.DocumentData;
@@ -43,10 +47,13 @@ export const Event: React.FC<EventProps> = props => {
             <span>Attendees</span>
           </div>
           <IonList className='event-list'>
-            {attendees.map((attendee, index) => (
-              <div key={index} className="event-list-item">
+            {attendees.length !== 0 ? 
+              attendees.map((attendee, index) => (
+              <div key={index} className='event-list-item'>
                 {attendee}
-              </div>))}
+              </div>))
+              :
+              <div className='event-list-item'>No one has signed up to attend this event yet</div>}
           </IonList>
         </div>
       </IonCardContent>
