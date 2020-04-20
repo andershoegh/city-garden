@@ -7,7 +7,6 @@ import {
   IonLabel,
   IonList,
   IonItemDivider,
-  IonContent,
 } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import { firebase } from '../../Utility/Firebase';

@@ -10,7 +10,6 @@ import {
   IonTitle,
   IonLabel,
   IonButtons,
-  IonText,
   IonToggle,
 } from '@ionic/react';
 import { firebase } from '../../Utility/Firebase';

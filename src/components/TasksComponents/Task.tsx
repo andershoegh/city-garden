@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  IonButton,
-  IonLabel,
-  IonItemGroup,
-  IonItemDivider,
-  IonIcon,
-  IonAlert,
-  IonItem,
-} from '@ionic/react';
+import { IonButton, IonLabel, IonItemGroup, IonItemDivider, IonIcon, IonAlert } from '@ionic/react';
 import { chevronDownOutline, chevronForwardOutline } from 'ionicons/icons';
 import './Task.css';
 
