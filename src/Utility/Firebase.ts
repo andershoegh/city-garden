@@ -53,6 +53,17 @@ class Firebase {
 
   updatePin = (id: string) => this.db.collection('notes').doc(id);
 
+  getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
+
+  createEvent = (title: string, description: string, startTime?: Date, endTime?: Date) => 
+    this.db.collection('events').add({
+      title: title,
+      description: description,
+      startTime: startTime,
+      endTime: endTime,
+      attendees: []
+    });
+  
   deleteNote = (id: string) => this.db.collection('notes').doc(id).delete();
 
   presentToast = async (err: string) => {

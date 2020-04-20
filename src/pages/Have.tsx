@@ -14,7 +14,6 @@ const Have: React.FC<HaveProps> = props => {
   const sizeRow = '2';
 
   const [beds, setBeds] = useState<firebase.firestore.DocumentData[]>([]);
-  const [selectedBox,setSelectedBox] = useState("");
 
   useEffect(() => {
     const unsub = firebase.getBed().onSnapshot((snapShot) => {
