@@ -42,7 +42,13 @@ const Have: React.FC<HaveProps> = props => {
           key={index}
           offset={bed.id === '19' || bed.id === '21' ? '8' : '0'}
         >
-          <Bed bedNr={bed.id} setSelection={setSelection} content={bed.plant} availTasks={availTasks} />
+          <Bed bedNr={bed.id} 
+            content={bed.plant} 
+            airMoisture={bed.airMoisture}
+            soilMoisture={bed.soilMoisture}
+            soilTemperature={bed.soilTemperature}
+            setSelection={setSelection}
+            availTasks={availTasks} />
         </IonCol>
       })}
     </IonRow>

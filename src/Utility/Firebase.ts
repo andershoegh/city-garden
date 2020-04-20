@@ -38,9 +38,7 @@ class Firebase {
       .doc(id)
       .update({timeToHarvest:null});
     }
-
-
-
+    
     this.db
     .collection('gardenBox')
     .doc(id)
