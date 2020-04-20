@@ -9,7 +9,7 @@ import {
   IonModal,
   IonRefresher,
   IonRefresherContent,
-  IonIcon
+  IonIcon,
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import { firebase } from '../Utility/Firebase';
@@ -34,17 +34,14 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
       dt.setDate(dt.getDate() - 14);
 
       setSubscribe(() =>
-        firebase.getNotes().onSnapshot(snapShot => {
+        firebase.getNotes().onSnapshot((snapShot) => {
           let tempArray: firebase.firestore.DocumentData[];
           tempArray = [];
-          snapShot.forEach(doc => {
+          snapShot.forEach((doc) => {
             if (doc.data().pinned || new Date(doc.data().created.toDate()) >= dt) {
               tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
             } else {
-              firebase.db
-                .collection('notes')
-                .doc(doc.id)
-                .delete();
+              firebase.db.collection('notes').doc(doc.id).delete();
             }
           });
 
@@ -81,11 +78,15 @@ const MessageBoard: React.SFC<MessageBoardProps> = () => {
           </IonButton>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <IonRefresher slot='fixed' onIonRefresh={e => update(e, () => subscribe)}>
+      <IonContent className='page-background'>
+        <IonRefresher slot='fixed' onIonRefresh={(e) => update(e, () => subscribe)}>
           <IonRefresherContent />
         </IonRefresher>
-        <IonModal cssClass='costum-modal' isOpen={modalOpen}>
+        <IonModal
+          cssClass='costum-modal'
+          isOpen={modalOpen}
+          onDidDismiss={() => setModalOpen(false)}
+        >
           <AddNote closeModal={() => setModalOpen(false)} />
         </IonModal>
         <NoteRepeater notes={notes} />
