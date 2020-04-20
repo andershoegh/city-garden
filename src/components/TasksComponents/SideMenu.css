@@ -1,10 +1,12 @@
 .card {
   height: 800px;
+  padding-top: 20px; /*padding-top bestemmer hver langt nede tabsne skal være*/
 }
 
 .segment {
   width: 100%;
   margin: -2% 0 -1% 0;
+  padding-top: 0px;
   height: 55px;
 }
 
@@ -14,6 +16,9 @@
   font-weight: 300;
   vertical-align: auto;
   margin: 0 auto;
+}
+.side-menu-header {
+  padding-top: 0px;
 }
 
 .list {

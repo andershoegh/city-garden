@@ -7,7 +7,7 @@ export interface NoteRepeaterProps {
   notes: firebase.firestore.DocumentData[];
 }
 
-const NoteRepeater: React.SFC<NoteRepeaterProps> = props => {
+const NoteRepeater: React.SFC<NoteRepeaterProps> = (props) => {
   const { notes } = props;
 
   return (
@@ -21,6 +21,7 @@ const NoteRepeater: React.SFC<NoteRepeaterProps> = props => {
                 author={note.author}
                 pinned={note.pinned}
                 id={note.id}
+                created={note.created.toDate()}
                 key={note.id}
               />
             </IonCol>

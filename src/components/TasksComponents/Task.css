@@ -1,5 +1,6 @@
 .task-header {
   padding: 10px 0 10px 15px;
+  border-bottom: 0.5px solid rgb(85, 85, 85);
 }
 
 .ion-icon {
@@ -30,7 +31,8 @@
   color: black;
 }
 
-.task-info-hidden, .line-divider-hidden {
+.task-info-hidden,
+.line-divider-hidden {
   visibility: hidden;
   height: 0;
 }
@@ -43,8 +45,13 @@
   padding-bottom: 20px;
 }
 
-.task-title div, .task-description div {
-  font-size: .8em;
+.task-title div,
+.task-description div {
+  font-size: 0.8em;
   color: rgb(85, 85, 85);
   padding-bottom: 4px;
+}
+
+.task-group {
+  /* scroll-snap-align: start;*/
 }

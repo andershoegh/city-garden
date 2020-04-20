@@ -6,9 +6,9 @@ import {
   IonCardSubtitle,
   IonCardHeader,
   IonIcon,
-  IonAlert
+  IonAlert,
 } from '@ionic/react';
-import { trashOutline } from 'ionicons/icons';
+import { trashOutline, megaphone, megaphoneOutline } from 'ionicons/icons';
 import { firebase } from '../../Utility/Firebase';
 
 export interface NoteProps {
@@ -16,19 +16,23 @@ export interface NoteProps {
   author: string;
   pinned: boolean;
   id: string;
+  created: Date;
 }
 
-const Note: React.SFC<NoteProps> = ({ note, author, pinned, id }) => {
-  const [pin, setPin] = useState<string>(pinned ? 'filled' : 'outline');
+const Note: React.SFC<NoteProps> = ({ note, author, pinned, id, created }) => {
   const [alert, setAlert] = useState<boolean>(false);
-
-  useEffect(() => {
-    setPin(pinned ? 'filled' : 'outline');
-  }, [pinned]);
+  const [unPinAlert, setUnPinAlert] = useState<boolean>(false);
 
   const pinNote = useCallback(() => {
-    firebase.updatePin(id).update({ pinned: !pinned });
-  }, [pinned, id]);
+    const dt = new Date();
+    dt.setDate(dt.getDate() - 14);
+
+    if (pinned && created <= dt) {
+      setUnPinAlert(true);
+    } else {
+      firebase.updatePin(id).update({ pinned: !pinned });
+    }
+  }, [pinned, id, created]);
 
   const deleteTheNote = useCallback(
     (e: any) => {
@@ -42,29 +46,55 @@ const Note: React.SFC<NoteProps> = ({ note, author, pinned, id }) => {
       <IonAlert
         isOpen={alert}
         header={'Delete?'}
-        subHeader={pinned ? 'This note is pinned!' : ''}
+        subHeader={pinned ? 'This note is an announcement!' : ''}
         message={'Are you sure you want to delete this note?'}
+        onDidDismiss={() => setAlert(false)}
         buttons={[
           {
             text: 'Cancel',
             handler: () => {
               setAlert(false);
-            }
+            },
           },
           {
             text: 'Delete',
             handler: () => {
               setAlert(false);
               deleteTheNote(id);
-            }
-          }
+            },
+          },
+        ]}
+      />
+
+      <IonAlert
+        isOpen={unPinAlert}
+        header={'Delete?'}
+        subHeader={'This note is an announcement!'}
+        message={
+          'This note will be deleted if you remove it as an announcement. Are you sure you want to deletee this announcement?'
+        }
+        onDidDismiss={() => setUnPinAlert(false)}
+        buttons={[
+          {
+            text: 'Cancel',
+            handler: () => {
+              setUnPinAlert(false);
+            },
+          },
+          {
+            text: 'Delete',
+            handler: () => {
+              setUnPinAlert(false);
+              deleteTheNote(id);
+            },
+          },
         ]}
       />
 
       <IonCard>
         <IonCardHeader>
           <IonIcon
-            src={'/assets/CostumIcons/pushpin-' + pin + '.svg'}
+            icon={pinned ? megaphone : megaphoneOutline}
             className='pin-icon'
             onClick={pinNote}
           ></IonIcon>

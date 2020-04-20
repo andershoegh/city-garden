@@ -13,23 +13,20 @@ interface BedProps {
   setSelection: CallableFunction;
 }
 
-const Bed: React.FC<BedProps> = ({ bedNr, indhold, info, opgave, taget, style, setSelection }) => {
+const Bed: React.FC<BedProps> = ({ bedNr, setSelection }) => {
+  const click = () => {
+    const element = document.getElementById(bedNr + '-tasks-id');
+    const parent = document.getElementById('side-menu-list');
+    if (element !== null && parent !== null) {
+      setSelection(bedNr);
+      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
+    }
+  };
+
   return (
-    <IonButton
-      className='bed-style-primary'
-      fill='clear'
-      expand='block'
-      onClick={() => {
-        setSelection(bedNr);
-        const taskElement: any = document.getElementById(bedNr + '-tasks-id');
-        if (taskElement !== null) {
-          taskElement.scrollIntoView({ behavior: 'smooth' });
-        }
-      }}
-    >
+    <IonButton className='bed-style-primary' fill='clear' expand='block' onClick={click}>
       Bed nr: {bedNr}
     </IonButton>
   );
 };
-
 export default Bed;

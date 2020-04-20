@@ -9,7 +9,9 @@ import {
   IonToolbar,
   IonTitle,
   IonLabel,
-  IonButtons
+  IonButtons,
+  IonText,
+  IonToggle,
 } from '@ionic/react';
 import { firebase } from '../../Utility/Firebase';
 
@@ -17,19 +19,24 @@ export interface AddNoteProps {
   closeModal: CallableFunction;
 }
 
-const AddNote: React.SFC<AddNoteProps> = props => {
+const AddNote: React.SFC<AddNoteProps> = (props) => {
   const { closeModal } = props;
   const [author, setAuthor] = useState<string>('');
   const [text, setText] = useState<string>('');
+  const [announcement, setAnnouncement] = useState<boolean>(false);
+
   const addNewNote = (e: FormEvent) => {
     e.preventDefault();
     firebase
-      .createNote(author, text)
-      .then(msg => {
-        console.log(msg);
+      .createNote(author, text, announcement)
+      .then((msg) => {
         closeModal();
       })
-      .catch(err => console.log(err));
+      .catch((err) =>
+        firebase.presentToast(
+          'Something went wrong. We were unfortunately not able to save your note in the system. Please try again... If you see this message again, please contact the developers.'
+        )
+      );
   };
 
   return (
@@ -49,7 +56,7 @@ const AddNote: React.SFC<AddNoteProps> = props => {
               <IonInput
                 value={author}
                 required={true}
-                onIonChange={e => setAuthor(e.detail.value!)}
+                onIonChange={(e) => setAuthor(e.detail.value!)}
               />
             </IonItem>
           </div>
@@ -64,13 +71,20 @@ const AddNote: React.SFC<AddNoteProps> = props => {
                 maxlength={215}
                 value={text}
                 required={true}
-                onIonChange={e => setText(e.detail.value!)}
+                onIonChange={(e) => setText(e.detail.value!)}
               />
             </div>
           </IonItem>
 
           <IonToolbar>
-            <IonButtons slot='end' className='ion-padding tester'>
+            <IonItem slot='start'>
+              <IonLabel className=''>Is this an Announcement?</IonLabel>
+              <IonToggle
+                value='announcement'
+                onIonChange={(e) => setAnnouncement(e.detail.checked)}
+              />
+            </IonItem>
+            <IonButtons slot='end' className='ion-padding'>
               <IonButton onClick={() => closeModal()} color='danger' fill='solid'>
                 Close
               </IonButton>
