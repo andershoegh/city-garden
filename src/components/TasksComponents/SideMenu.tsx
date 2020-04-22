@@ -73,10 +73,10 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
           key='segment'
           onIonChange={(e) => (e.detail.value === 'taken' ? toggleTab(true) : toggleTab(false))}
         >
-          <IonSegmentButton mode='ios' value='available' defaultChecked>
+          <IonSegmentButton value='available' defaultChecked>
             <IonLabel>Available</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton mode='ios' value='taken'>
+          <IonSegmentButton value='taken'>
             <IonLabel>Taken</IonLabel>
           </IonSegmentButton>
         </IonSegment>
