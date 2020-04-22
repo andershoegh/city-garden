@@ -7,16 +7,12 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonCard,
 } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import { firebase } from '../Utility/Firebase';
 import { SideMenu } from '../components/TasksComponents/SideMenu';
 import Have from './Have';
-import { Link } from 'react-router-dom';
-
-import MyMarquee from '../components/MyMarquee';
 
 export interface infoCard {
   note: string;
@@ -26,7 +22,6 @@ export interface infoCard {
 const Home: React.FC = (props) => {
   const [tasks, setTasks] = useState<firebase.firestore.DocumentData[]>([]);
   const [selection, setSelection] = useState<string>('0');
-  const [infoCardTextArray, setInfoCardTextArray] = useState<infoCard[]>([]);
 
   useEffect(() => {
     const unsub = firebase.getTasks().onSnapshot((snapShot) => {
@@ -40,21 +35,8 @@ const Home: React.FC = (props) => {
       setTasks(tempArray);
     });
 
-    const unsubNotes = firebase.db
-      .collection('notes')
-      .where('pinned', '==', true)
-      .onSnapshot((snapshot) => {
-        let tempArray: infoCard[] = [];
-        snapshot.forEach(
-          (doc) =>
-            (tempArray = [...tempArray, { note: doc.data().note, author: doc.data().author }])
-        );
-        setInfoCardTextArray(tempArray);
-      });
-
     return () => {
       unsub();
-      unsubNotes();
     };
   }, []);
 
@@ -65,10 +47,14 @@ const Home: React.FC = (props) => {
           <IonTitle>Garden</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent style={{ height: '100%' }} className='page-background'>
-        <IonGrid>
+      <IonContent
+        style={{ height: '100%', display: 'flex', alignItems: 'center' }}
+        className='page-background'
+        slot='fixed'
+      >
+        <IonGrid slot='fixed'>
           <IonRow>
-            <IonCol size='8'>
+            <IonCol size='8' style={{ alignSelf: 'center' }}>
               <Have setSelection={setSelection} tasks={tasks} />
             </IonCol>
             <IonCol size='4'>
