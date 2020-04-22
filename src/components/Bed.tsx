@@ -40,32 +40,32 @@ const Bed: React.FC<BedProps> = props => {
     }
   }
 
-  useEffect(() => {
-    firebase.db.collection('plants').doc(content).onSnapshot(snapshot => {
-    if(soilMoisture > snapshot.get('soilMoisture')){
-      console.log('useEffect with soil')
-      firebase.db.collection('alltasks').where('gardenBoxId','==',bedNr).where('taskTemplateId','==','watering').onSnapshot(snapShot => {
-        if(snapShot.size === 0){
-          firebase.db
-            .collection("alltasks")
-            .doc()
-            .set({
-              created: firebase.firestore.Timestamp.fromDate(new Date()),
-              finished: false,
-              gardenBoxId:bedNr,
-              taskTaken: false,
-              taskTemplateId:'watering'
-            })
-            .then(function() {
-              console.log("Document in Firebase = OK!");
-            });
-        }else{
-          console.log('fandt intet');
-        }
-      })
-    }
-  })
-  }, [soilMoisture]);
+  // useEffect(() => {
+  //   firebase.db.collection('plants').doc(content).onSnapshot(snapshot => {
+  //   if(soilMoisture > snapshot.get('soilMoisture')){
+  //     console.log('useEffect with soil')
+  //     firebase.db.collection('alltasks').where('gardenBoxId','==',bedNr).where('taskTemplateId','==','watering').onSnapshot(snapShot => {
+  //       if(snapShot.size === 0){
+  //         firebase.db
+  //           .collection("alltasks")
+  //           .doc()
+  //           .set({
+  //             created: firebase.firestore.Timestamp.fromDate(new Date()),
+  //             finished: false,
+  //             gardenBoxId:bedNr,
+  //             taskTaken: false,
+  //             taskTemplateId:'watering'
+  //           })
+  //           .then(function() {
+  //             console.log("Document in Firebase = OK!");
+  //           });
+  //       }else{
+  //         console.log('fandt intet');
+  //       }
+  //     })
+  //   }
+  // })
+  // }, [soilMoisture]);
 
   return (
     <div>
