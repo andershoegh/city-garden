@@ -65,7 +65,7 @@ const Home: React.FC = (props) => {
           <IonTitle>Garden</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent style={{ height: '100%' } } className='page-background'>
+      <IonContent style={{ height: '100%' }} className='page-background'>
         <IonGrid>
           <IonRow>
             <IonCol size='8'>
@@ -73,13 +73,6 @@ const Home: React.FC = (props) => {
             </IonCol>
             <IonCol size='4'>
               <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
-              <Link to='/messageboard'>
-                <IonCard className='info-card'>
-                  <div style={{ width: '90%' }}>
-                    <MyMarquee infoCardData={infoCardTextArray} />
-                  </div>
-                </IonCard>
-              </Link>
             </IonCol>
           </IonRow>
         </IonGrid>
