@@ -78,7 +78,7 @@ class Firebase {
 
   getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
 
-  createEvent = (title: string, description: string, startTime?: Date, endTime?: Date) => 
+  createEvent = (title: string, description: string, startTime: Date, endTime: Date) => 
     this.db.collection('events').add({
       title: title,
       description: description,
