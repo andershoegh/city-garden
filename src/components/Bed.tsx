@@ -54,7 +54,7 @@ const Bed: React.FC<BedProps> = props => {
               finished: false,
               gardenBoxId:bedNr,
               taskTaken: false,
-              taskTemplateId:'vandning'
+              taskTemplateId:'watering'
             })
             .then(function() {
               console.log("Document in Firebase = OK!");
