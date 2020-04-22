@@ -24,7 +24,7 @@
 
 .task-info {
   padding: 20px 20px 20px 30px;
-  height: 200px;
+  height: 220px;
   color: black;
   overflow: hidden;
   transition: height 0.3s ease-in-out, padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
