@@ -6,7 +6,8 @@ import {
   IonTabBar,
   IonIcon,
   IonPage,
-  IonApp
+  IonApp,
+  IonRippleEffect,
 } from '@ionic/react';
 import React from 'react';
 import { Redirect, Route } from 'react-router';
@@ -36,14 +37,19 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
               <IonTabButton tab='garden' href='/garden'>
                 <IonIcon icon={leafOutline}></IonIcon>
                 <IonLabel>Garden</IonLabel>
+                <IonRippleEffect />
               </IonTabButton>
+
               <IonTabButton tab='messageboard' href='/messageboard'>
                 <IonIcon icon={clipboardOutline} />
                 <IonLabel>Message board</IonLabel>
+                <IonRippleEffect />
               </IonTabButton>
+
               <IonTabButton tab='events' href='/events'>
                 <IonIcon icon={calendarOutline} />
                 <IonLabel>Events</IonLabel>
+                <IonRippleEffect />
               </IonTabButton>
             </IonTabBar>
           </IonTabs>
