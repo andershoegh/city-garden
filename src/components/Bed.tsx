@@ -1,18 +1,20 @@
 import { IonButton, IonAlert, IonBadge } from '@ionic/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Bed.css';
 import { firebase } from '../Utility/Firebase';
 
 interface BedProps {
   bedNr: string;
   content?: string;
-  temp?: number;
+  airMoisture: number;
+  soilMoisture: number;
+  soilTemperature: number;
   setSelection: CallableFunction;
   availTasks: number;
 }
 
 const Bed: React.FC<BedProps> = props => {
-  const { bedNr, content, setSelection, availTasks } = props;
+  const { bedNr, content, airMoisture, soilMoisture, soilTemperature, setSelection, availTasks } = props;
   const [showEmptyAlert, setShowEmptyAlert] = useState(false);
   const [showFullAlert, setShowFullAlert] = useState(false);
   let boxIllustration = content != null ? 'gardenbox-' + content + ' gardenbox' : 'gardenbox-empty gardenbox';
@@ -37,6 +39,33 @@ const Bed: React.FC<BedProps> = props => {
       setTouchStart(0);
     }
   }
+
+  useEffect(() => {
+    firebase.db.collection('plants').doc(content).onSnapshot(snapshot => {
+    if(soilMoisture > snapshot.get('soilMoisture')){
+      console.log('useEffect with soil')
+      firebase.db.collection('alltasks').where('gardenBoxId','==',bedNr).where('taskTemplateId','==','vandning').onSnapshot(snapShot => {
+        if(snapShot.size === 0){
+          firebase.db
+            .collection("alltasks")
+            .doc()
+            .set({
+              created: firebase.firestore.Timestamp.fromDate(new Date()),
+              finished: false,
+              gardenBoxId:bedNr,
+              taskTaken: false,
+              taskTemplateId:'vandning'
+            })
+            .then(function() {
+              console.log("Document in Firebase = OK!");
+            });
+        }else{
+          console.log('fandt intet');
+        }
+      })
+    }
+  })
+  }, [soilMoisture]);
 
   return (
     <div>

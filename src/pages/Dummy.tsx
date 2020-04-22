@@ -11,7 +11,8 @@ import {
   IonItem,
   IonTitle,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonDatetime,
 } from "@ionic/react";
 import "./Dummy.css";
 import { firebase } from "../Utility/Firebase";
@@ -27,6 +28,9 @@ export interface IDummyData {
   taskDescription: string;
   taskTitle: string;
   chosenTaskTemplate: string;
+  lastWeeding: string;
+  lastWatered: string;
+  lastFertilized: string;
 }
 
 export interface ITemplateArray {
@@ -43,7 +47,10 @@ const Dummy: React.SFC = () => {
     soilTemperature: "",
     taskDescription: "",
     taskTitle: "",
-    chosenTaskTemplate: ""
+    chosenTaskTemplate: "",
+    lastWeeding: "",
+    lastWatered: "",
+    lastFertilized: ""
   });
 
   const [taskTemplateArray, setTaskTemplateArray] = useState<
@@ -121,7 +128,10 @@ const Dummy: React.SFC = () => {
         {
           airMoisture: state.airMoisture,
           soilMoisture: state.soilMoisture,
-          soilTemperature: state.soilTemperature
+          soilTemperature: state.soilTemperature,
+          lastWeeding: new Date(state.lastWeeding),
+          lastWatered: new Date(state.lastWatered),
+          lastFertilized: new Date(state.lastFertilized)
         },
         { merge: true }
       )
@@ -297,6 +307,34 @@ const Dummy: React.SFC = () => {
                   className="ion-text-right ion-padding-top"
                 ></IonInput>
               </IonItem>
+              <IonItem>
+                <IonLabel>Last weeding</IonLabel>
+                <IonDatetime
+                  id="lastWeeding"
+                  displayFormat="MM DD YYYY"
+                  placeholder="Please select date"
+                  value={state.lastWeeding}
+                  onIonChange={handleChange}
+                  className="ion-text-right ion-padding-top"/>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Last watered</IonLabel>
+                <IonDatetime
+                  id="lastWatered"
+                  displayFormat="MM DD YYYY"
+                  placeholder="Please select date"
+                  value={state.lastWatered}
+                  onIonChange={handleChange}/>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Last Fertilized</IonLabel>
+                <IonDatetime
+                    id="lastFertilized"
+                    displayFormat="MM DD YYYY"
+                    placeholder="Please select date"
+                    value={state.lastFertilized}
+                    onIonChange={handleChange}/>
+                </IonItem>
               <IonButton
                 expand="block"
                 className="ion-margin"
