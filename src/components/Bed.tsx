@@ -44,7 +44,7 @@ const Bed: React.FC<BedProps> = props => {
     firebase.db.collection('plants').doc(content).onSnapshot(snapshot => {
     if(soilMoisture > snapshot.get('soilMoisture')){
       console.log('useEffect with soil')
-      firebase.db.collection('alltasks').where('gardenBoxId','==',bedNr).where('taskTemplateId','==','vandning').onSnapshot(snapShot => {
+      firebase.db.collection('alltasks').where('gardenBoxId','==',bedNr).where('taskTemplateId','==','watering').onSnapshot(snapShot => {
         if(snapShot.size === 0){
           firebase.db
             .collection("alltasks")
