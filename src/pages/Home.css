@@ -21,7 +21,7 @@ ion-content {
   height: 23vh;
   width: auto;
   top: 44%;
-  left: 20px;
+  left: 10%;
 }
 
 @keyframes marquee {
