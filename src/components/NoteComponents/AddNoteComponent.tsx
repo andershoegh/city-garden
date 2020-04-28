@@ -29,6 +29,7 @@ const AddNote: React.SFC<AddNoteProps> = (props) => {
     firebase
       .createNote(author, text, announcement)
       .then((msg) => {
+        firebase.presentToast('Your note has successfully been added to the message board.');
         closeModal();
       })
       .catch((err) =>

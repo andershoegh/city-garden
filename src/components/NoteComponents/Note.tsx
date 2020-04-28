@@ -36,7 +36,12 @@ const Note: React.SFC<NoteProps> = ({ note, author, pinned, id, created }) => {
 
   const deleteTheNote = useCallback(
     (e: any) => {
-      firebase.deleteNote(id);
+      firebase
+        .deleteNote(id)
+        .then((msg) => {
+          firebase.presentToast('The note has been successfully deleted.');
+        })
+        .catch((err) => firebase.presentToast('An error occurred. the note has NOT been deleted.'));
     },
     [id]
   );

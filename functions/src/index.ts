@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 const admin = require('firebase-admin');
 admin.initializeApp();
+
 //firestore trigger to delete tasks
 exports.deleteTasks = functions.firestore
   .document('/alltasks/{userId}')
@@ -14,6 +15,12 @@ exports.deleteTasks = functions.firestore
       return null;
     }
   });
+
+exports.autoTest = functions.pubsub.schedule('* * * * *').onRun((context) => {
+  console.log('this runs every minute');
+  console.log(context);
+  return admin.collection('logs').add({ time: admin.firestore.Timestamp.now() });
+});
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
