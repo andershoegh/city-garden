@@ -1,32 +1,33 @@
 import React, { FormEvent, useState } from 'react';
 import { firebase } from '../../Utility/Firebase';
 import './AddEvent.css';
-import { 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
-  IonContent, 
-  IonItem, 
-  IonLabel, 
-  IonInput, 
-  IonTextarea, 
-  IonDatetime, 
-  IonButtons, 
-  IonButton } from '@ionic/react';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonTextarea,
+  IonDatetime,
+  IonButtons,
+  IonButton,
+} from '@ionic/react';
 
 export interface AddEventProps {
   closeModal: CallableFunction;
 }
 
-const AddEvent: React.FC<AddEventProps> = props => {
+const AddEvent: React.FC<AddEventProps> = (props) => {
   const { closeModal } = props;
-  
-  const year = Intl.DateTimeFormat('en-GB', {year: 'numeric'}).format(Date.now());
-  const month = Intl.DateTimeFormat('en-GB', {month: '2-digit'}).format(Date.now());
-  const day = Intl.DateTimeFormat('en-GB', {day: '2-digit'}).format(Date.now());
+
+  const year = Intl.DateTimeFormat('en-GB', { year: 'numeric' }).format(Date.now());
+  const month = Intl.DateTimeFormat('en-GB', { month: '2-digit' }).format(Date.now());
+  const day = Intl.DateTimeFormat('en-GB', { day: '2-digit' }).format(Date.now());
   const minDate = year + '-' + month + '-' + day;
   const maxDate = parseInt(year) + 2 + '-' + month + '-' + day;
-  
+
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [date, setDate] = useState<string>('');
@@ -37,14 +38,20 @@ const AddEvent: React.FC<AddEventProps> = props => {
     e.preventDefault();
     firebase
       .createEvent(title, description, new Date(startTime), new Date(endTime))
-      .then(msg => {
-        console.log(msg);
+      .then((msg) => {
+        firebase.presentToast(
+          'You have successfully created the event, start inviting your friends!'
+        );
         closeModal();
       })
-      .catch(err => console.log(err))
-  }
+      .catch((err) =>
+        firebase.presentToast(
+          'An error has occurred! The event could NOT be created, please try again.'
+        )
+      );
+  };
 
-  const newDate = (newDate: string) => {   
+  const newDate = (newDate: string) => {
     if (startTime !== '') {
       let tempStartTime = startTime.replace(startTime.split('T')[0], newDate.split('T')[0]);
       setStartTime(tempStartTime);
@@ -57,7 +64,7 @@ const AddEvent: React.FC<AddEventProps> = props => {
     }
 
     setDate(newDate);
-  }
+  };
 
   const newStart = (newStartTime: string) => {
     setStartTime(newStartTime);
@@ -71,16 +78,14 @@ const AddEvent: React.FC<AddEventProps> = props => {
         setEndTime(endTime.replace(endTime.split('T')[1].split('+')[0].split('.')[0], time));
       }
     }
-  }
+  };
 
   return (
     <>
       <IonHeader>
         <IonToolbar>
           <IonTitle>
-            <h2 className='ion-padding'>
-              New event
-            </h2>
+            <h2 className='ion-padding'>New event</h2>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -88,33 +93,31 @@ const AddEvent: React.FC<AddEventProps> = props => {
         <form onSubmit={addNewEvent}>
           <div className='costum-item'>
             <IonItem>
-              <IonLabel position='floating'>
-                Title
-              </IonLabel>
+              <IonLabel position='floating'>Title</IonLabel>
               <IonInput
                 value={title}
                 required={true}
-                onIonChange={e => setTitle(e.detail.value!)}
+                onIonChange={(e) => setTitle(e.detail.value!)}
               />
             </IonItem>
             <IonItem lines='none'>
               <IonLabel position='floating'>Date</IonLabel>
-              <IonDatetime 
+              <IonDatetime
                 placeholder='Select the date'
                 displayFormat='DDD D/M/YYYY'
                 min={minDate}
                 max={maxDate}
                 value={date}
-                onIonChange={e => newDate(e.detail.value!)}
+                onIonChange={(e) => newDate(e.detail.value!)}
               />
             </IonItem>
             <IonItem lines='none'>
               <IonLabel position='floating'>Start time</IonLabel>
-              <IonDatetime 
+              <IonDatetime
                 placeholder='Select starting time'
                 displayFormat='HH:mm'
                 value={startTime}
-                onIonChange={e => newStart(e.detail.value!)}
+                onIonChange={(e) => newStart(e.detail.value!)}
               />
             </IonItem>
             <IonItem>
@@ -124,7 +127,7 @@ const AddEvent: React.FC<AddEventProps> = props => {
                 displayFormat='HH:mm'
                 min={minEndTime}
                 value={endTime}
-                onIonChange={e => setEndTime(e.detail.value!)}
+                onIonChange={(e) => setEndTime(e.detail.value!)}
               />
             </IonItem>
             <IonItem lines='none'>
@@ -137,10 +140,14 @@ const AddEvent: React.FC<AddEventProps> = props => {
                   maxlength={215}
                   value={description}
                   required={true}
-                  onIonChange={e => setDescription(e.detail.value!)}
+                  onIonChange={(e) => setDescription(e.detail.value!)}
                 />
               </div>
-              <div className={description.length < 215 ? 'description-length' : 'description-length red'}>
+              <div
+                className={
+                  description.length < 215 ? 'description-length' : 'description-length red'
+                }
+              >
                 {description.length}/215
               </div>
             </IonItem>
@@ -160,6 +167,6 @@ const AddEvent: React.FC<AddEventProps> = props => {
       </IonContent>
     </>
   );
-}
+};
 
 export default AddEvent;

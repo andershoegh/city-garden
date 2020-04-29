@@ -16,6 +16,7 @@ exports.deleteTasks = functions.firestore
         return null;
     }
 });
+
 const db = admin.firestore();
 const tasks = db.collection('alltasks');
 exports.updateWateringTask = functions.firestore

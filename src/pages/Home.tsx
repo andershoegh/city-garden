@@ -52,6 +52,7 @@ const Home: React.FC = (props) => {
         className='page-background'
         slot='fixed'
       >
+        <img alt='bonfire' src={require('../pics/garden-bonfire.png')} className='bonfire-img' />
         <IonGrid slot='fixed'>
           <IonRow>
             <IonCol size='8' style={{ alignSelf: 'center' }}>

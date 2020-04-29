@@ -19,7 +19,6 @@ exports.deleteTasks = functions.firestore
 const db = admin.firestore();
 const tasks = db.collection('alltasks');
 
-
   exports.updateWateringTask = functions.firestore
   .document('/gardenBox/{boxId}')
   .onUpdate((snap:any, context:any) => {

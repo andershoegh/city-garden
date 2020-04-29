@@ -16,6 +16,14 @@ ion-content {
   padding: 10px 0px;
 }
 
+.bonfire-img {
+  position: absolute;
+  height: 23vh;
+  width: auto;
+  top: 44%;
+  left: 10%;
+}
+
 @keyframes marquee {
   0% {
     transform: translate(0, 0);
