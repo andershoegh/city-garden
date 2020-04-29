@@ -7,12 +7,12 @@ import {
   IonLabel,
   IonList,
   IonItemDivider,
-} from "@ionic/react";
-import React, { useState, useEffect } from "react";
-import { firebase } from "../../Utility/Firebase";
-import "./SideMenu.css";
-import Task from "./Task";
-import HelpTask from "./HelpTask";
+} from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import { firebase } from '../../Utility/Firebase';
+import './SideMenu.css';
+import Task from './Task';
+import HelpTask from './HelpTask';
 
 export interface SideMenuProps {
   tasks: firebase.firestore.DocumentData[];
@@ -22,12 +22,10 @@ export interface SideMenuProps {
 
 export const SideMenu: React.FC<SideMenuProps> = (props) => {
   const { tasks, selection, setSelection } = props;
-  const [taskDescriptions, setTaskDescriptions] = useState<
-    firebase.firestore.DocumentData[]
-  >([]);
+  const [taskDescriptions, setTaskDescriptions] = useState<firebase.firestore.DocumentData[]>([]);
   const [showTaken, setShowTaken] = useState<boolean>(false);
-  const [tabChosen, setTabChosen] = useState<string>("available");
-  let priorBoxId = "0";
+  const [tabChosen, setTabChosen] = useState<string>('available');
+  let priorBoxId = '0';
 
   useEffect(() => {
     const unsub = firebase.getTaskDescription().onSnapshot((snapShot) => {
@@ -45,8 +43,8 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
   }, []);
 
   const toggleTab = (show: boolean) => {
-    setSelection("0");
-    setTabChosen(show ? "taken" : "available");
+    setSelection('0');
+    setTabChosen(show ? 'taken' : 'available');
     setShowTaken(show);
   };
 
@@ -61,10 +59,10 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
     helpNeeded: boolean
   ) => {
     switch (update) {
-      case "toggleTaken":
+      case 'toggleTaken':
         firebase.updateTaskTaken(taskId, !takenStatus, helpNeeded);
         break;
-      case "setFinished":
+      case 'setFinished':
         firebase.setTaskFinished(taskId, true);
         break;
       default:
@@ -73,33 +71,29 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
   };
 
   return (
-    <IonCard className="card">
-      <IonCardHeader className="side-menu-header">
+    <IonCard className='card'>
+      <IonCardHeader className='side-menu-header'>
         <IonSegment
-          className="segment"
+          className='segment'
           value={tabChosen}
-          key="segment"
-          onIonChange={(e) =>
-            e.detail.value === "taken" ? toggleTab(true) : toggleTab(false)
-          }
+          key='segment'
+          onIonChange={(e) => (e.detail.value === 'taken' ? toggleTab(true) : toggleTab(false))}
         >
-          <IonSegmentButton mode="ios" value="available" defaultChecked>
+          <IonSegmentButton mode='ios' value='available' defaultChecked>
             <IonLabel>Available</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton mode="ios" value="taken">
+          <IonSegmentButton mode='ios' value='taken'>
             <IonLabel>Taken</IonLabel>
           </IonSegmentButton>
         </IonSegment>
       </IonCardHeader>
 
-      <IonCardContent className="list" id="side-menu-list">
+      <IonCardContent className='list' id='side-menu-list'>
         <IonItemDivider sticky={true}>
-          <div className="sticky-header">
-            {tasks.filter(
-              (task) => !task.finished && task.taskTaken === showTaken
-            ).length
-              ? "These garden boxes need your help!"
-              : "Noone is working on anything"}
+          <div className='sticky-header'>
+            {tasks.filter((task) => !task.finished && task.taskTaken === showTaken).length
+              ? 'These garden boxes need your help!'
+              : 'Noone is working on anything'}
           </div>
         </IonItemDivider>
 
@@ -117,7 +111,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               }
               return (
                 <Task
-                  key={index}
+                  key={task.id}
                   task={task}
                   taskDescription={taskDescriptions}
                   showTaken={showTaken}

@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  IonButton,
-  IonLabel,
-  IonItemGroup,
-  IonItemDivider,
-  IonIcon,
-  IonAlert,
-} from "@ionic/react";
-import { chevronDownOutline, chevronForwardOutline } from "ionicons/icons";
-import "./Task.css";
+import React, { useState, useEffect, useCallback } from 'react';
+import { IonButton, IonLabel, IonItemGroup, IonItemDivider, IonIcon, IonAlert } from '@ionic/react';
+import { chevronDownOutline, chevronForwardOutline } from 'ionicons/icons';
+import './Task.css';
 
 export interface TaskProps {
   task: firebase.firestore.DocumentData;
@@ -22,20 +15,9 @@ export interface TaskProps {
 }
 
 export const Task: React.FC<TaskProps> = (props) => {
-  const {
-    task,
-    showTaken,
-    index,
-    isOpen,
-    toggleOpen,
-    toggleTask,
-    newTab,
-  } = props;
-  const taskDescription = props.taskDescription.filter(
-    (t) => t.id === task.taskTemplateId
-  );
+  const { task, showTaken, index, isOpen, toggleOpen, toggleTask, newTab } = props;
+  const taskDescription = props.taskDescription.filter((t) => t.id === task.taskTemplateId);
 
-  const [checked, setChecked] = useState<boolean>(false);
   const [toggle, setToggle] = useState(false);
   const [iconToggle, setIconToggle] = useState(chevronForwardOutline);
   const [alerts, setAlerts] = useState({
@@ -44,35 +26,37 @@ export const Task: React.FC<TaskProps> = (props) => {
     finish: false,
   });
 
-  const alertButtons = {
+  const [alertButtons, setAlertButtons] = useState({
     cancel: {
-      text: "Cancel",
+      text: 'Cancel',
       handler: () => {
         setAlerts({ take: false, leave: false, finish: false });
       },
     },
     takeTask: {
-      text: "Assign me",
-      handler: () => {
+      text: 'Assign me',
+      handler: (data: any[]) => {
+        const helpNeeded = data.includes('helpNeeded');
+        console.log(helpNeeded);
         setAlerts((prevState) => ({ ...prevState, take: false }));
-        toggleTask(task.id, "toggleTaken", task.taskTaken, checked);
+        toggleTask(task.id, 'toggleTaken', task.taskTaken, helpNeeded);
       },
     },
     leaveTask: {
-      text: "Unassign me",
+      text: 'Unassign me',
       handler: () => {
         setAlerts((prevState) => ({ ...prevState, leave: false }));
-        toggleTask(task.id, "toggleTaken", task.taskTaken);
+        toggleTask(task.id, 'toggleTaken', task.taskTaken, false);
       },
     },
     finishTask: {
-      text: "Finish",
+      text: 'Finish',
       handler: () => {
         setAlerts((prevState) => ({ ...prevState, finish: false }));
-        toggleTask(task.id, "setFinished", task.taskTaken);
+        toggleTask(task.id, 'setFinished', task.taskTaken, false);
       },
     },
-  };
+  });
 
   useEffect(() => {
     if (isOpen === task.gardenBoxId) {
@@ -86,7 +70,7 @@ export const Task: React.FC<TaskProps> = (props) => {
 
   const toggleInfo = () => {
     if (isOpen === task.gardenBoxId) {
-      toggleOpen("0");
+      toggleOpen('0');
     } else {
       toggleOpen(task.gardenBoxId);
     }
@@ -96,25 +80,16 @@ export const Task: React.FC<TaskProps> = (props) => {
     <>
       <IonAlert
         isOpen={alerts.take}
-        header={"Take Task"}
+        header={'Take Task'}
         message={
-          "Do you want to assign yourself to the task of: " +
-          taskDescription[0].taskTitle +
-          "?"
+          'Do you want to assign yourself to the task of: ' + taskDescription[0].taskTitle + '?'
         }
         inputs={[
           {
-            name: "helpCheckbox",
-            type: "checkbox",
-            label: "Do you need help?",
-            checked: checked,
-            handler: () => {
-              setChecked((prevCheck) => {
-                console.log(checked, prevCheck, !prevCheck);
-                return !prevCheck;
-              });
-              console.log(checked);
-            },
+            name: 'helpCheckbox',
+            type: 'checkbox',
+            label: 'Do you need help?',
+            value: 'helpNeeded',
           },
         ]}
         buttons={[alertButtons.cancel, alertButtons.takeTask]}
@@ -122,76 +97,61 @@ export const Task: React.FC<TaskProps> = (props) => {
 
       <IonAlert
         isOpen={alerts.leave}
-        header={"Leave Task"}
-        message={
-          "Do you want to leave the task of: " +
-          taskDescription[0].taskTitle +
-          "?"
-        }
+        header={'Leave Task'}
+        message={'Do you want to leave the task of: ' + taskDescription[0].taskTitle + '?'}
         buttons={[alertButtons.cancel, alertButtons.leaveTask]}
       />
 
       <IonAlert
         isOpen={alerts.finish}
-        header={"Finish Task"}
-        message={
-          "Did you finish the task of: " + taskDescription[0].taskTitle + "?"
-        }
+        header={'Finish Task'}
+        message={'Did you finish the task of: ' + taskDescription[0].taskTitle + '?'}
         buttons={[alertButtons.cancel, alertButtons.finishTask]}
       />
-      <IonItemGroup className="task-group" id={task.gardenBoxId + "-tasks-id"}>
+      <IonItemGroup className='task-group' id={task.gardenBoxId + '-tasks-id'}>
         {newTab ? (
-          <IonItemDivider className="task-header" onClick={() => toggleInfo()}>
+          <IonItemDivider className='task-header' onClick={() => toggleInfo()}>
             <IonLabel>Garden box {task.gardenBoxId}</IonLabel>
-            <div className="icon-box">
+            <div className='icon-box'>
               <IonIcon icon={iconToggle} />
             </div>
           </IonItemDivider>
         ) : (
-          <div className={toggle ? "line-divider" : "line-divider-hidden"} />
+          <div className={toggle ? 'line-divider' : 'line-divider-hidden'} />
         )}
         {taskDescription.map((taskDescription) => (
-          <IonItemGroup
-            key={index}
-            className={toggle ? "task-info" : "task-info-hidden"}
-          >
-            <div className="task-title">
+          <IonItemGroup key={index} className={toggle ? 'task-info' : 'task-info-hidden'}>
+            <div className='task-title'>
               <div> Task </div>
               <p> {taskDescription.taskTitle} </p>
             </div>
-            <div className="task-description">
+            <div className='task-description'>
               <div> Description </div>
               <p> {taskDescription.taskDescription} </p>
             </div>
             {showTaken ? (
-              <div className="btn-div">
+              <div className='btn-div'>
                 <IonButton
-                  className="task-btn"
-                  color="warning"
-                  onClick={() =>
-                    setAlerts((prevState) => ({ ...prevState, leave: true }))
-                  }
+                  className='task-btn'
+                  color='warning'
+                  onClick={() => setAlerts((prevState) => ({ ...prevState, leave: true }))}
                 >
                   Unassign me
                 </IonButton>
                 <IonButton
-                  className="task-btn"
-                  color="success"
-                  onClick={() =>
-                    setAlerts((prevState) => ({ ...prevState, finish: true }))
-                  }
+                  className='task-btn'
+                  color='success'
+                  onClick={() => setAlerts((prevState) => ({ ...prevState, finish: true }))}
                 >
                   Finish
                 </IonButton>
               </div>
             ) : (
-              <div className="btn-div">
+              <div className='btn-div'>
                 <IonButton
-                  className="task-btn"
-                  color="success"
-                  onClick={() =>
-                    setAlerts((prevState) => ({ ...prevState, take: true }))
-                  }
+                  className='task-btn'
+                  color='success'
+                  onClick={() => setAlerts((prevState) => ({ ...prevState, take: true }))}
                 >
                   Assign me
                 </IonButton>
