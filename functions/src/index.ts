@@ -16,15 +16,35 @@ exports.deleteTasks = functions.firestore
     }
   });
 
-exports.autoTest = functions.pubsub.schedule('* * * * *').onRun((context) => {
-  console.log('this runs every minute');
-  console.log(context);
-  return admin.collection('logs').add({ time: admin.firestore.Timestamp.now() });
-});
+const db = admin.firestore();
+const tasks = db.collection('alltasks');
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+  exports.updateWateringTask = functions.firestore
+  .document('/gardenBox/{boxId}')
+  .onUpdate((snap:any, context:any) => {
+    const dataBefore = snap.before.data();
+    const dataAfter = snap.after.data();
+    const boxId = snap.after.id;
+    const currentDate = new Date().getDate();
+    const lastWaterDate = new Date(dataBefore.lastWatered.toDate()).getDate();
+    const box = tasks.where('gardenBoxId','==',boxId);
+    const waterTask = box.where('taskTemplateId','==','watering');
+    
+    if (dataAfter.soilMoisture < 80 && currentDate !== lastWaterDate){
+      waterTask.get().then((snapshot:any) => {
+        if(snapshot.empty){ 
+          return tasks.add({
+            created: new Date(),
+            finished: false,
+            gardenBoxId: boxId,
+            taskTaken: false,
+            taskTemplateId: "watering"});
+        }else{
+          console.log("There is already a task");
+        }        
+      })
+      return 0;
+    }else{
+      return null;
+    }
+  });
