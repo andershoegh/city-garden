@@ -22,9 +22,9 @@ export interface IDummyData {
   gardenBoxId: string;
   gardenBoxArray: firebase.firestore.DocumentData[];
   taskTemplateId: string;
-  airMoisture: string;
-  soilMoisture: string;
-  soilTemperature: string;
+  airMoisture: number;
+  soilMoisture: number;
+  soilTemperature: number;
   taskDescription: string;
   taskTitle: string;
   chosenTaskTemplate: string;
@@ -42,9 +42,9 @@ const Dummy: React.SFC = () => {
     gardenBoxId: "",
     gardenBoxArray: [],
     taskTemplateId: "",
-    airMoisture: "",
-    soilMoisture: "",
-    soilTemperature: "",
+    airMoisture: 0,
+    soilMoisture: 0,
+    soilTemperature: 0,
     taskDescription: "",
     taskTitle: "",
     chosenTaskTemplate: "",
@@ -126,9 +126,9 @@ const Dummy: React.SFC = () => {
     return gardenBox
       .set(
         {
-          airMoisture: state.airMoisture,
-          soilMoisture: state.soilMoisture,
-          soilTemperature: state.soilTemperature,
+          airMoisture: Number(state.airMoisture),
+          soilMoisture: Number(state.soilMoisture),
+          soilTemperature: Number(state.soilTemperature),
           lastWeeding: new Date(state.lastWeeding),
           lastWatered: new Date(state.lastWatered),
           lastFertilized: new Date(state.lastFertilized)
