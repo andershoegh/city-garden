@@ -1,0 +1,20 @@
+.sign-up-message {
+  display: block;
+  margin: 10% 5%;
+}
+
+.text-input {
+  width: 85vw;
+  display: inline-block;
+  margin: 0 0 5% 7.5%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 4%;
+}
+
+.buttons .ion--button {
+  margin-right: 20px;
+}

@@ -48,7 +48,11 @@ const Events: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className='page-background'>
-        <IonModal isOpen={modalOpen}>
+        <IonModal
+          isOpen={modalOpen}
+          onDidDismiss={() => setModalOpen(false)}
+          cssClass='event-modal'
+        >
           <AddEvent closeModal={() => setModalOpen(false)} />
         </IonModal>
         <EventRepeater events={events} />

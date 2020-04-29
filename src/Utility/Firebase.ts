@@ -16,34 +16,24 @@ class Firebase {
 
   getBed = () => this.db.collection('gardenBox');
 
-  updatePlant = (id:string, plant:string) => {
+  updatePlant = (id: string, plant: string) => {
     const dt = new Date();
 
-    if(plant !== 'empty'){
+    if (plant !== 'empty') {
       this.db
-      .collection('plants')
-      .doc(plant)
-      .onSnapshot(snapShot => {
-        console.log(snapShot.get('weeksToHarvest'))
-        dt.setDate(dt.getDate() + snapShot.get('weeksToHarvest'));
+        .collection('plants')
+        .doc(plant)
+        .onSnapshot((snapShot) => {
+          console.log(snapShot.get('weeksToHarvest'));
+          dt.setDate(dt.getDate() + snapShot.get('weeksToHarvest'));
 
-        this.db
-        .collection('gardenBox')
-        .doc(id)
-        .update({timeToHarvest:dt});
-    })}
-    else{
-      this.db
-      .collection('gardenBox')
-      .doc(id)
-      .update({timeToHarvest:null});
+          this.db.collection('gardenBox').doc(id).update({ timeToHarvest: dt });
+        });
+    } else {
+      this.db.collection('gardenBox').doc(id).update({ timeToHarvest: null });
     }
-    
-    this.db
-    .collection('gardenBox')
-    .doc(id)
-    .update({plant:plant, 
-      sowTime:new Date()});
+
+    this.db.collection('gardenBox').doc(id).update({ plant: plant, sowTime: new Date() });
   };
 
   getTypes = () => firebase;
@@ -78,15 +68,22 @@ class Firebase {
 
   getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
 
-  createEvent = (title: string, description: string, startTime: Date, endTime: Date) => 
+  createEvent = (
+    title: string,
+    organizer: string,
+    description: string,
+    startTime: Date,
+    endTime: Date
+  ) =>
     this.db.collection('events').add({
-      title: title,
-      description: description,
-      startTime: startTime,
-      endTime: endTime,
-      attendees: []
+      title,
+      organizer,
+      description,
+      startTime,
+      endTime,
+      attendees: [],
     });
-  
+
   deleteNote = (id: string) => this.db.collection('notes').doc(id).delete();
 
   presentToast = async (err: string) => {
@@ -97,6 +94,14 @@ class Firebase {
     document.body.appendChild(toast);
     return toast.present();
   };
+
+  eventSignUp = (id: string, name: string) =>
+    this.db
+      .collection('events')
+      .doc(id)
+      .update({
+        attendees: firebase.firestore.FieldValue.arrayUnion(name),
+      });
 }
 
 export const firebase = new Firebase();
