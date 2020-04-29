@@ -93,7 +93,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
           <div className='sticky-header'>
             {tasks.filter((task) => !task.finished && task.taskTaken === showTaken).length
               ? 'These garden boxes need your help!'
-              : 'Noone is working on anything'}
+              : 'No one is working on anything'}
           </div>
         </IonItemDivider>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonButton, IonLabel, IonItemGroup, IonItemDivider, IonIcon, IonAlert } from '@ionic/react';
 import { chevronDownOutline, chevronForwardOutline } from 'ionicons/icons';
 import './Task.css';
@@ -26,7 +26,7 @@ export const Task: React.FC<TaskProps> = (props) => {
     finish: false,
   });
 
-  const [alertButtons, setAlertButtons] = useState({
+  const alertButtons = {
     cancel: {
       text: 'Cancel',
       handler: () => {
@@ -56,7 +56,7 @@ export const Task: React.FC<TaskProps> = (props) => {
         toggleTask(task.id, 'setFinished', task.taskTaken, false);
       },
     },
-  });
+  };
 
   useEffect(() => {
     if (isOpen === task.gardenBoxId) {
