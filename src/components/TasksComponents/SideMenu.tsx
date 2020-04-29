@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { firebase } from "../../Utility/Firebase";
 import "./SideMenu.css";
 import Task from "./Task";
+import HelpTask from "./HelpTask";
 
 export interface SideMenuProps {
   tasks: firebase.firestore.DocumentData[];
@@ -53,10 +54,15 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
     setSelection(id);
   };
 
-  const toggleTask = (taskId: string, update: string, takenStatus: boolean) => {
+  const toggleTask = (
+    taskId: string,
+    update: string,
+    takenStatus: boolean,
+    helpNeeded: boolean
+  ) => {
     switch (update) {
       case "toggleTaken":
-        firebase.updateTaskTaken(taskId, !takenStatus);
+        firebase.updateTaskTaken(taskId, !takenStatus, helpNeeded);
         break;
       case "setFinished":
         firebase.setTaskFinished(taskId, true);
@@ -96,6 +102,11 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               : "Noone is working on anything"}
           </div>
         </IonItemDivider>
+
+        <IonList>
+          <HelpTask></HelpTask>
+        </IonList>
+
         <IonList>
           {tasks
             .filter((task) => !task.finished && task.taskTaken === showTaken)

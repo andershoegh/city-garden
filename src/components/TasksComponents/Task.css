@@ -15,6 +15,16 @@
   padding-top: 5%;
 }
 
+.subtitle {
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.heading-subtitle {
+  justify-content: center;
+}
+
 .line-divider {
   height: 1px;
   width: 90%;
@@ -27,8 +37,8 @@
   height: 220px;
   color: black;
   overflow: hidden;
-  transition: height 0.3s ease-in-out, padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
-
+  transition: height 0.3s ease-in-out, padding-top 0.3s ease-in-out,
+    padding-bottom 0.3s ease-in-out;
 }
 
 .task-info-hidden,

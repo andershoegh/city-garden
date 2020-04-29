@@ -1,8 +1,8 @@
-import app from 'firebase/app';
-import 'firebase/database';
-import 'firebase/firestore';
-import 'firebase/auth';
-import { firebaseConfig } from './FirebaseConfig';
+import app from "firebase/app";
+import "firebase/database";
+import "firebase/firestore";
+import "firebase/auth";
+import { firebaseConfig } from "./FirebaseConfig";
 
 class Firebase {
   db: firebase.firestore.Firestore;
@@ -14,83 +14,86 @@ class Firebase {
     this.firestore = app.firestore;
   }
 
-  getBed = () => this.db.collection('gardenBox');
+  getBed = () => this.db.collection("gardenBox");
 
-  updatePlant = (id:string, plant:string) => {
+  updatePlant = (id: string, plant: string) => {
     const dt = new Date();
 
-    if(plant !== 'empty'){
+    if (plant !== "empty") {
       this.db
-      .collection('plants')
-      .doc(plant)
-      .onSnapshot(snapShot => {
-        console.log(snapShot.get('weeksToHarvest'))
-        dt.setDate(dt.getDate() + snapShot.get('weeksToHarvest'));
+        .collection("plants")
+        .doc(plant)
+        .onSnapshot((snapShot) => {
+          console.log(snapShot.get("weeksToHarvest"));
+          dt.setDate(dt.getDate() + snapShot.get("weeksToHarvest"));
 
-        this.db
-        .collection('gardenBox')
-        .doc(id)
-        .update({timeToHarvest:dt});
-    })}
-    else{
-      this.db
-      .collection('gardenBox')
-      .doc(id)
-      .update({timeToHarvest:null});
+          this.db.collection("gardenBox").doc(id).update({ timeToHarvest: dt });
+        });
+    } else {
+      this.db.collection("gardenBox").doc(id).update({ timeToHarvest: null });
     }
-    
+
     this.db
-    .collection('gardenBox')
-    .doc(id)
-    .update({plant:plant, 
-      sowTime:new Date()});
+      .collection("gardenBox")
+      .doc(id)
+      .update({ plant: plant, sowTime: new Date() });
   };
 
   getTypes = () => firebase;
 
-  getNotes = () => this.db.collection('notes').orderBy('pinned', 'desc').orderBy('created', 'desc');
+  getNotes = () =>
+    this.db
+      .collection("notes")
+      .orderBy("pinned", "desc")
+      .orderBy("created", "desc");
 
   createNote = (author: string, text: string, announcement: boolean) =>
-    this.db.collection('notes').add({
+    this.db.collection("notes").add({
       author: author,
       note: text,
       created: new Date(),
       pinned: announcement,
     });
 
-  getTasks = () => this.db.collection('alltasks').orderBy('gardenBoxId', 'asc');
+  getTasks = () => this.db.collection("alltasks").orderBy("gardenBoxId", "asc");
 
-  updateTaskTaken = (id: string, taskTaken: boolean) => {
-    this.db.collection('alltasks').doc(id).update({
-      taskTaken: taskTaken,
+  updateTaskTaken = (id: string, taskTaken: boolean, helpNeeded: boolean) => {
+    this.db.collection("alltasks").doc(id).update({
+      taskTaken,
+      helpNeeded,
     });
   };
 
   setTaskFinished = (id: string, finished: boolean) => {
-    this.db.collection('alltasks').doc(id).update({
+    this.db.collection("alltasks").doc(id).update({
       finished: finished,
     });
   };
 
-  getTaskDescription = () => this.db.collection('taskTemplate');
+  getTaskDescription = () => this.db.collection("taskTemplate");
 
-  updatePin = (id: string) => this.db.collection('notes').doc(id);
+  updatePin = (id: string) => this.db.collection("notes").doc(id);
 
-  getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
+  getEvents = () => this.db.collection("events").orderBy("startTime", "asc");
 
-  createEvent = (title: string, description: string, startTime: Date, endTime: Date) => 
-    this.db.collection('events').add({
+  createEvent = (
+    title: string,
+    description: string,
+    startTime: Date,
+    endTime: Date
+  ) =>
+    this.db.collection("events").add({
       title: title,
       description: description,
       startTime: startTime,
       endTime: endTime,
-      attendees: []
+      attendees: [],
     });
-  
-  deleteNote = (id: string) => this.db.collection('notes').doc(id).delete();
+
+  deleteNote = (id: string) => this.db.collection("notes").doc(id).delete();
 
   presentToast = async (err: string) => {
-    const toast = document.createElement('ion-toast');
+    const toast = document.createElement("ion-toast");
     toast.message = err;
     toast.duration = 5000;
 
