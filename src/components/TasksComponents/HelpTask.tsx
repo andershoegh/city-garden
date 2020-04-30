@@ -3,9 +3,13 @@ import React from "react";
 import "./Task.css";
 import { personOutline, cubeOutline, briefcaseOutline } from "ionicons/icons";
 
-export interface HelpTaskProps {}
+export interface HelpTaskProps {
+  taskTemplateId: String;
+  gardenBoxId: String;
+}
 
-const HelpTask: React.SFC<HelpTaskProps> = () => {
+const HelpTask: React.SFC<HelpTaskProps> = (props) => {
+  const { taskTemplateId, gardenBoxId } = props;
   return (
     <IonCard>
       <IonCardHeader>
@@ -18,7 +22,7 @@ const HelpTask: React.SFC<HelpTaskProps> = () => {
             size="large"
             className="ion-padding-end"
           ></IonIcon>
-          Watering
+          {taskTemplateId}
         </IonCardSubtitle>
         <IonCardSubtitle className="subtitle">
           <IonIcon
@@ -34,7 +38,7 @@ const HelpTask: React.SFC<HelpTaskProps> = () => {
             size="large"
             className="ion-padding-end"
           ></IonIcon>
-          Garden box number
+          Garden box: {gardenBoxId}
         </IonCardSubtitle>
       </IonCardHeader>
     </IonCard>
