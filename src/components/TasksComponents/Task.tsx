@@ -67,7 +67,7 @@ export const Task: React.FC<TaskProps> = (props) => {
         setAlerts((prevState) => ({
           ...prevState,
           take: false,
-          inputName: true,
+          inputName: helpNeeded,
         }));
         toggleTask(task.id, "toggleTaken", task.taskTaken, helpNeeded);
       },
@@ -79,10 +79,10 @@ export const Task: React.FC<TaskProps> = (props) => {
         toggleTask(task.id, "toggleTaken", task.taskTaken, false);
       },
     },
-    inputName: {
+    nameInput: {
       text: "OK",
       handler: () => {
-        //setAlerts((prevState) => ({ ...prevState, inputName: false }));
+        setAlerts((prevState) => ({ ...prevState, inputName: false }));
         helpName(task.id, task.helpName);
       },
     },
@@ -93,10 +93,6 @@ export const Task: React.FC<TaskProps> = (props) => {
         toggleTask(task.id, "setFinished", task.taskTaken, false);
       },
     },
-  };
-
-  const inputNameForHelp = () => {
-    setAlerts((prevState) => ({ ...prevState, inputName: true }));
   };
 
   useEffect(() => {
@@ -135,7 +131,6 @@ export const Task: React.FC<TaskProps> = (props) => {
             value: "helpNeeded",
           },
         ]}
-        onWillDismiss={inputNameForHelp}
         buttons={[alertButtons.cancel, alertButtons.takeTask]}
       />
 
@@ -150,6 +145,7 @@ export const Task: React.FC<TaskProps> = (props) => {
             value: "helpName",
           },
         ]}
+        buttons={[alertButtons.cancel, alertButtons.nameInput]}
       ></IonAlert>
 
       <IonAlert
