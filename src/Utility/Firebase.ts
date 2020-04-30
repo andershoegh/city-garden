@@ -70,6 +70,12 @@ class Firebase {
     });
   };
 
+  setHelpName = (id: string, needsHelp: string) => {
+    this.db.collection("alltasks").doc(id).update({
+      needsHelp,
+    });
+  };
+
   getTaskDescription = () => this.db.collection("taskTemplate");
 
   updatePin = (id: string) => this.db.collection("notes").doc(id);
