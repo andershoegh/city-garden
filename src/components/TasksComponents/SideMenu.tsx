@@ -72,6 +72,10 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
     }
   };
 
+  const insertHelpName = (taskId: string, helpName: string) => {
+    firebase.setHelpName(taskId, helpName);
+  };
+
   return (
     <IonCard className="card">
       <IonCardHeader className="side-menu-header">
@@ -111,6 +115,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               return (
                 <HelpTask
                   key={task.id}
+                  helpName={task.needsHelp}
                   taskTemplateId={task.taskTemplateId}
                   gardenBoxId={task.gardenBoxId}
                 ></HelpTask>
@@ -130,6 +135,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
                 <Task
                   key={task.id}
                   task={task}
+                  helpName={insertHelpName}
                   taskDescription={taskDescriptions}
                   showTaken={showTaken}
                   index={index}

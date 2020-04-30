@@ -6,10 +6,11 @@ import { personOutline, cubeOutline, briefcaseOutline } from "ionicons/icons";
 export interface HelpTaskProps {
   taskTemplateId: String;
   gardenBoxId: String;
+  helpName: string;
 }
 
 const HelpTask: React.SFC<HelpTaskProps> = (props) => {
-  const { taskTemplateId, gardenBoxId } = props;
+  const { taskTemplateId, gardenBoxId, helpName } = props;
   return (
     <IonCard>
       <IonCardHeader>
@@ -30,7 +31,7 @@ const HelpTask: React.SFC<HelpTaskProps> = (props) => {
             size="large"
             className="ion-padding-end"
           ></IonIcon>
-          Person who needs help
+          {helpName}
         </IonCardSubtitle>
         <IonCardSubtitle className="subtitle">
           <IonIcon
