@@ -27,6 +27,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
   >([]);
   const [showTaken, setShowTaken] = useState<boolean>(false);
   const [tabChosen, setTabChosen] = useState<string>("available");
+  const [helpName, setHelpName] = useState<string>("No name");
   let priorBoxId = "0";
 
   useEffect(() => {
@@ -70,6 +71,10 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
       default:
         break;
     }
+  };
+
+  const insertHelpName = (taskId: string, helpName: string) => {
+    firebase.setHelpName(taskId, helpName);
   };
 
   return (
@@ -130,6 +135,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
                 <Task
                   key={task.id}
                   task={task}
+                  helpName={task.helpName}
                   taskDescription={taskDescriptions}
                   showTaken={showTaken}
                   index={index}
