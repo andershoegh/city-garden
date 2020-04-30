@@ -19,9 +19,14 @@ exports.deleteTasks = functions.firestore
 
       case 'weeding':
         gardenBox.doc(data.gardenBoxId).update({lastWeeding: new Date()});
+        break;
 
+      case 'harvesting':
+        gardenBox.doc(data.gardenBoxId).update({plant:'empty', timeToHarvest: null});
+        break;
+      
       default:
-        console.log("Task update not implemented yet");
+        console.log("Task update not implemented yet or just deleting");
         break;
     }
     if (data.finished) {
@@ -161,14 +166,14 @@ exports.updateHarvestTask = functions.firestore
 .onUpdate((snap:any, context:any) => {
   const dataAfter = snap.after.data();
   const boxId = snap.after.id;
-  const harvestMonth = new Date(dataAfter.timeToHarvest.toDate).getMonth();
+  const harvestMonth = new Date(dataAfter.timeToHarvest.toDate()).getMonth();
   const currentMonth = new Date().getMonth();
-  const harvestDate = new Date(dataAfter.timeToHarvest.toDate).getDate();
+  const harvestDate = new Date(dataAfter.timeToHarvest.toDate()).getDate();
   const currentDate = new Date().getDate();
   const box = tasks.where('gardenBoxId','==',boxId);
   const harvestingTask = box.where('taskTemplateId','==','harvesting');
 
-  if(harvestMonth === currentMonth && harvestDate === currentDate && dataAfter.plant === 'empty'){
+  if(harvestMonth === currentMonth && harvestDate === currentDate && dataAfter.plant !== 'empty'){
     harvestingTask.get().then((snapshot:any) => {
       if(snapshot.empty){
         console.log("Adding harvesting task to box: "+boxId);
