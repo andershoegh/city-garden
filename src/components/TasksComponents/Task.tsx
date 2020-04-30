@@ -145,7 +145,6 @@ export const Task: React.FC<TaskProps> = (props) => {
             name: "needsHelp",
             type: "text",
             id: "helpName",
-            value: "helpName",
           },
         ]}
         buttons={[alertButtons.cancel, alertButtons.nameInput]}
