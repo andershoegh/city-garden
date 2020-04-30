@@ -9,7 +9,6 @@ import {
   IonIcon,
   IonButton,
   IonModal,
-  IonItem,
 } from '@ionic/react';
 import EventSignUp from './EventSignUp';
 
@@ -45,7 +44,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
   return (
     <>
-      <IonModal isOpen={openSignUp}>
+      <IonModal isOpen={openSignUp} onDidDismiss={() => setOpenSignUp(false)}>
         <EventSignUp event={event.title} id={event.id} closeModal={() => setOpenSignUp(false)} />
       </IonModal>
       <IonCard className='event-card'>
@@ -70,7 +69,7 @@ export const Event: React.FC<EventProps> = (props) => {
               <span>Attendees</span>
               <IonList className='event-list'>
                 {attendees.length !== 0 ? (
-                  attendees.map((attendee, index) => (
+                  attendees.map((attendee: string, index: number) => (
                     <div key={index} className='event-list-item'>
                       {attendee}
                     </div>
