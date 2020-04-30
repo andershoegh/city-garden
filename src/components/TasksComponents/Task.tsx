@@ -42,6 +42,7 @@ export const Task: React.FC<TaskProps> = (props) => {
     leave: false,
     finish: false,
   });
+
   const alertButtons = {
     cancel: {
       text: "Cancel",
@@ -51,23 +52,24 @@ export const Task: React.FC<TaskProps> = (props) => {
     },
     takeTask: {
       text: "Assign me",
-      handler: () => {
+      handler: (data: any[]) => {
+        const helpNeeded = data.includes("helpNeeded");
         setAlerts((prevState) => ({ ...prevState, take: false }));
-        toggleTask(task.id, "toggleTaken", task.taskTaken);
+        toggleTask(task.id, "toggleTaken", task.taskTaken, helpNeeded);
       },
     },
     leaveTask: {
       text: "Unassign me",
       handler: () => {
         setAlerts((prevState) => ({ ...prevState, leave: false }));
-        toggleTask(task.id, "toggleTaken", task.taskTaken);
+        toggleTask(task.id, "toggleTaken", task.taskTaken, false);
       },
     },
     finishTask: {
       text: "Finish",
       handler: () => {
         setAlerts((prevState) => ({ ...prevState, finish: false }));
-        toggleTask(task.id, "setFinished", task.taskTaken);
+        toggleTask(task.id, "setFinished", task.taskTaken, false);
       },
     },
   };
@@ -100,8 +102,17 @@ export const Task: React.FC<TaskProps> = (props) => {
           taskDescription[0].taskTitle +
           "?"
         }
+        inputs={[
+          {
+            name: "helpCheckbox",
+            type: "checkbox",
+            label: "Check here if you'd like help",
+            value: "helpNeeded",
+          },
+        ]}
         buttons={[alertButtons.cancel, alertButtons.takeTask]}
       />
+
       <IonAlert
         isOpen={alerts.leave}
         header={"Leave Task"}
@@ -112,6 +123,7 @@ export const Task: React.FC<TaskProps> = (props) => {
         }
         buttons={[alertButtons.cancel, alertButtons.leaveTask]}
       />
+
       <IonAlert
         isOpen={alerts.finish}
         header={"Finish Task"}

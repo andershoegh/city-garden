@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { firebase } from "../../Utility/Firebase";
 import "./SideMenu.css";
 import Task from "./Task";
+import HelpTask from "./HelpTask";
 
 export interface SideMenuProps {
   tasks: firebase.firestore.DocumentData[];
@@ -53,10 +54,15 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
     setSelection(id);
   };
 
-  const toggleTask = (taskId: string, update: string, takenStatus: boolean) => {
+  const toggleTask = (
+    taskId: string,
+    update: string,
+    takenStatus: boolean,
+    helpNeeded: boolean
+  ) => {
     switch (update) {
       case "toggleTaken":
-        firebase.updateTaskTaken(taskId, !takenStatus);
+        firebase.updateTaskTaken(taskId, !takenStatus, helpNeeded);
         break;
       case "setFinished":
         firebase.setTaskFinished(taskId, true);
@@ -93,9 +99,25 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               (task) => !task.finished && task.taskTaken === showTaken
             ).length
               ? "These garden boxes need your help!"
-              : "Noone is working on anything"}
+              : "No one is working on anything"}
           </div>
         </IonItemDivider>
+
+        {/* Help tasks */}
+        <IonList>
+          {tasks
+            .filter((task) => task.helpNeeded)
+            .map((task, index) => {
+              return (
+                <HelpTask
+                  key={task.id}
+                  taskTemplateId={task.taskTemplateId}
+                  gardenBoxId={task.gardenBoxId}
+                ></HelpTask>
+              );
+            })}
+        </IonList>
+
         <IonList>
           {tasks
             .filter((task) => !task.finished && task.taskTaken === showTaken)
@@ -106,7 +128,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               }
               return (
                 <Task
-                  key={index}
+                  key={task.id}
                   task={task}
                   taskDescription={taskDescriptions}
                   showTaken={showTaken}
