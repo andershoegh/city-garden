@@ -43,10 +43,8 @@ export const Task: React.FC<TaskProps> = (props) => {
     take: false,
     leave: false,
     finish: false,
-    inputName: false,
+    needsHelp: false,
   });
-
-  console.log(alerts);
 
   const alertButtons = {
     cancel: {
@@ -56,7 +54,7 @@ export const Task: React.FC<TaskProps> = (props) => {
           take: false,
           leave: false,
           finish: false,
-          inputName: false,
+          needsHelp: false,
         });
       },
     },
@@ -67,9 +65,11 @@ export const Task: React.FC<TaskProps> = (props) => {
         setAlerts((prevState) => ({
           ...prevState,
           take: false,
-          inputName: helpNeeded,
+          needsHelp: helpNeeded,
         }));
-        toggleTask(task.id, "toggleTaken", task.taskTaken, helpNeeded);
+        if (!helpNeeded) {
+          toggleTask(task.id, "toggleTaken", task.taskTaken, helpNeeded);
+        }
       },
     },
     leaveTask: {
@@ -81,9 +81,11 @@ export const Task: React.FC<TaskProps> = (props) => {
     },
     nameInput: {
       text: "OK",
-      handler: () => {
-        setAlerts((prevState) => ({ ...prevState, inputName: false }));
-        helpName(task.id, task.helpName);
+      handler: (data: any) => {
+        const helpNeeded = true;
+        setAlerts((prevState) => ({ ...prevState, needsHelp: false }));
+        helpName(task.id, data.needsHelp);
+        toggleTask(task.id, "toggleTaken", task.taskTaken, helpNeeded);
       },
     },
     finishTask: {
@@ -135,13 +137,14 @@ export const Task: React.FC<TaskProps> = (props) => {
       />
 
       <IonAlert
-        isOpen={alerts.inputName}
+        isOpen={alerts.needsHelp}
         header={"What's your name?"}
         message={"This will make it easier for others to find and help you"}
         inputs={[
           {
-            name: "nameInput",
+            name: "needsHelp",
             type: "text",
+            id: "helpName",
             value: "helpName",
           },
         ]}

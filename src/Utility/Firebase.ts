@@ -70,9 +70,9 @@ class Firebase {
     });
   };
 
-  setHelpName = (id: string, helpName: string) => {
+  setHelpName = (id: string, needsHelp: string) => {
     this.db.collection("alltasks").doc(id).update({
-      inputName: helpName,
+      needsHelp,
     });
   };
 
