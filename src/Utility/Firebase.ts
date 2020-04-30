@@ -25,7 +25,7 @@ class Firebase {
         .doc(plant)
         .onSnapshot((snapShot) => {
           console.log(snapShot.get("weeksToHarvest"));
-          dt.setDate(dt.getDate() + snapShot.get("weeksToHarvest"));
+          dt.setDate(dt.getDate() + (snapShot.get("weeksToHarvest")*7));
 
           this.db.collection("gardenBox").doc(id).update({ timeToHarvest: dt });
         });
@@ -36,7 +36,7 @@ class Firebase {
     this.db
       .collection("gardenBox")
       .doc(id)
-      .update({ plant: plant, sowTime: new Date() });
+      .update({ plant: plant, sowTime:dt, lastFertilized:dt, lastWatered:dt, lastWeeding:dt});
   };
 
   getTypes = () => firebase;
