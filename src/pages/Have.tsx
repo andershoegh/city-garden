@@ -11,9 +11,8 @@ interface HaveProps {
 
 const Have: React.FC<HaveProps> = props => {
   const { setSelection, tasks } = props;
-  const sizeRow = '2';
-
   const [beds, setBeds] = useState<firebase.firestore.DocumentData[]>([]);
+  const sizeRow = '2';
 
   useEffect(() => {
     const unsub = firebase.getBed().onSnapshot((snapShot) => {

@@ -14,7 +14,26 @@ class Firebase {
     this.firestore = app.firestore;
   }
 
+  getTypes = () => firebase;
+
+  presentToast = async (err: string) => {
+    const toast = document.createElement('ion-toast');
+    toast.message = err;
+    toast.duration = 5000;
+
+    document.body.appendChild(toast);
+    return toast.present();
+  };
+
+
+  // BED
+
   getBed = () => this.db.collection('gardenBox');
+
+
+  // PLANT
+
+  getPlants = () => this.db.collection('plants');
 
   updatePlant = (id:string, plant:string) => {
     const dt = new Date();
@@ -25,9 +44,9 @@ class Firebase {
       .doc(plant)
       .onSnapshot(snapShot => {
         console.log(snapShot.get('weeksToHarvest'))
-        dt.setDate(dt.getDate() + snapShot.get('weeksToHarvest'));
+        dt.setDate(new Date().getDate() + (snapShot.get('weeksToHarvest') * 7));
 
-        this.db
+      this.db
         .collection('gardenBox')
         .doc(id)
         .update({timeToHarvest:dt});
@@ -42,11 +61,33 @@ class Firebase {
     this.db
     .collection('gardenBox')
     .doc(id)
-    .update({plant:plant, 
-      sowTime:new Date()});
+    .update({
+      plant:plant, 
+      sowTime:new Date(),
+      lastFertilized: new Date(),
+      lastWatered: new Date(),
+      lastWeeding: new Date()
+    });
   };
 
-  getTypes = () => firebase;
+  // TIPS
+
+  createPlantTip = (plant: string, tip: string) => this.db
+    .collection('plants')
+    .doc(plant)
+    .update({
+      tips: firebase.firestore.FieldValue.arrayUnion(tip)
+  });
+
+  deleteTip = (plant: string, tip: string) => this.db
+    .collection('plants')
+    .doc(plant)
+    .update({
+      tips: firebase.firestore.FieldValue.arrayRemove(tip)
+  });
+
+
+  // NOTES
 
   getNotes = () => this.db.collection('notes').orderBy('pinned', 'desc').orderBy('created', 'desc');
 
@@ -57,6 +98,13 @@ class Firebase {
       created: new Date(),
       pinned: announcement,
     });
+
+  updatePin = (id: string) => this.db.collection('notes').doc(id);
+
+  deleteNote = (id: string) => this.db.collection('notes').doc(id).delete();
+
+
+  // TASKS
 
   getTasks = () => this.db.collection('alltasks').orderBy('gardenBoxId', 'asc');
 
@@ -74,7 +122,8 @@ class Firebase {
 
   getTaskDescription = () => this.db.collection('taskTemplate');
 
-  updatePin = (id: string) => this.db.collection('notes').doc(id);
+
+  // EVENTS
 
   getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
 
@@ -86,17 +135,6 @@ class Firebase {
       endTime: endTime,
       attendees: []
     });
-  
-  deleteNote = (id: string) => this.db.collection('notes').doc(id).delete();
-
-  presentToast = async (err: string) => {
-    const toast = document.createElement('ion-toast');
-    toast.message = err;
-    toast.duration = 5000;
-
-    document.body.appendChild(toast);
-    return toast.present();
-  };
 }
 
 export const firebase = new Firebase();
