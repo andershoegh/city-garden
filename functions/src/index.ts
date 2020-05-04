@@ -17,8 +17,16 @@ exports.deleteTasks = functions.firestore
         gardenBox.doc(data.gardenBoxId).update({lastFertilized:new Date()});
         break;
 
+      case 'weeding':
+        gardenBox.doc(data.gardenBoxId).update({lastWeeding: new Date()});
+        break;
+
+      case 'harvesting':
+        gardenBox.doc(data.gardenBoxId).update({plant:'empty', timeToHarvest: null});
+        break;
+      
       default:
-        console.log("Task update not implemented yet");
+        console.log("Task update not implemented yet or just deleting");
         break;
     }
     if (data.finished) {
@@ -42,9 +50,10 @@ exports.updateWateringTask = functions.firestore
   const box = tasks.where('gardenBoxId','==',boxId);
   const waterTask = box.where('taskTemplateId','==','watering');
   
-  if (dataAfter.soilMoisture < 80 && currentDate !== lastWaterDate){
+  if (dataAfter.soilMoisture < 80 && currentDate !== lastWaterDate && dataAfter.plant !== 'empty'){
     waterTask.get().then((snapshot:any) => {
       if(snapshot.empty){ 
+        console.log("Adding watering task to box: "+boxId)
         return tasks.add({
           created: new Date(),
           finished: false,
@@ -75,13 +84,13 @@ exports.updateFertilizerTask = functions.firestore
   const dataAfter = snap.after.data();
   const boxId = snap.after.id;
   const currentMonth = new Date().getMonth();
-  const currentDay = new Date().getDate();
+  const currentDate = new Date().getDate();
   const lastFertilizedMonth = new Date(dataAfter.lastFertilized.toDate()).getMonth();
-  const lastFertilizedDay = new Date(dataAfter.lastFertilized.toDate()).getDate();
+  const lastFertilizedDate = new Date(dataAfter.lastFertilized.toDate()).getDate();
   const box = tasks.where('gardenBoxId','==',boxId);
   const fertilizerTask = box.where('taskTemplateId','==','fertilizing');
 
-  if(currentMonth !== lastFertilizedMonth && currentDay >= lastFertilizedDay){
+  if(currentMonth !== lastFertilizedMonth && currentDate >= lastFertilizedDate && dataAfter.plant !== 'empty'){
     fertilizerTask.get().then((snapshot:any) => {
       if(snapshot.empty){
         console.log('Add fertilizer task to bed: '+boxId);
@@ -92,13 +101,37 @@ exports.updateFertilizerTask = functions.firestore
           taskTaken: false,
           taskTemplateId: 'fertilizing'
         });
-        return 0;
-      }else{
-        return null;
       }
     })
-  }else{
-    return null;
+  }
+  return 0;
+})
+
+exports.updateWeedingTask = functions.firestore
+.document('/gardenBox/{boxId}')
+.onUpdate((snap:any, context:any) => {
+  const dataAfter = snap.after.data();
+  const boxId = snap.after.id;
+  const lastWeedingDate = new Date(dataAfter.lastWeeding.toDate()).getDate();
+  const currentDate = new Date().getDate();
+  const lastWeedingDay = new Date(dataAfter.lastWeeding.toDate()).getDay();
+  const currentDay = new Date().getDay();
+  const box = tasks.where('gardenBoxId','==',boxId);
+  const weedingTask = box.where('taskTemplateId','==','weeding');
+
+  if(lastWeedingDate !== currentDate && currentDay === lastWeedingDay && dataAfter.plant !== 'empty'){
+    weedingTask.get().then((snapshot:any) => {
+      if(snapshot.empty){
+        console.log("Adding weeding task to box: "+boxId);
+        return tasks.add({
+          created: new Date(),
+          finished: false,
+          gardenBoxId: boxId,
+          taskTaken: false,
+          taskTemplateId: 'weeding'
+        });
+      }
+    })
   }
   return 0;
 })
@@ -108,15 +141,51 @@ exports.updateSowTask = functions.firestore
 .onUpdate((snap:any, context:any) => {
   const dataAfter = snap.after.data();
   const boxId = snap.after.id;
+  const box = tasks.where('gardenBoxId','==',boxId);
+  const sowingTask = box.where('taskTemplateId','==','sowing');
 
   if(dataAfter.plant === 'empty'){
-    return tasks.add({
-      created: new Date(),
-      finished: false,
-      gardenBoxId: boxId,
-      taskTaken: false,
-      taskTemplateId: 'sowing'
-    });
+    sowingTask.get().then((snapshot:any) =>{
+      if(snapshot.empty){
+        console.log("Adding sowing task to box: "+boxId);
+        return tasks.add({
+          created: new Date(),
+          finished: false,
+          gardenBoxId: boxId,
+          taskTaken: false,
+          taskTemplateId: 'sowing'
+        });
+      }      
+    }) 
+  }
+  return 0;
+})
+
+exports.updateHarvestTask = functions.firestore
+.document('/gardenBox/{boxId}')
+.onUpdate((snap:any, context:any) => {
+  const dataAfter = snap.after.data();
+  const boxId = snap.after.id;
+  const harvestMonth = new Date(dataAfter.timeToHarvest.toDate()).getMonth();
+  const currentMonth = new Date().getMonth();
+  const harvestDate = new Date(dataAfter.timeToHarvest.toDate()).getDate();
+  const currentDate = new Date().getDate();
+  const box = tasks.where('gardenBoxId','==',boxId);
+  const harvestingTask = box.where('taskTemplateId','==','harvesting');
+
+  if(harvestMonth === currentMonth && harvestDate === currentDate && dataAfter.plant !== 'empty'){
+    harvestingTask.get().then((snapshot:any) => {
+      if(snapshot.empty){
+        console.log("Adding harvesting task to box: "+boxId);
+        tasks.add({
+          created: new Date(),
+          finished: false,
+          gardenBoxId: boxId,
+          taskTaken: false,
+          taskTemplateId: 'harvesting'
+        });
+      }
+    })
   }
   return 0;
 })
