@@ -22,9 +22,7 @@ export interface SideMenuProps {
 
 export const SideMenu: React.FC<SideMenuProps> = (props) => {
   const { tasks, selection, setSelection } = props;
-  const [taskDescriptions, setTaskDescriptions] = useState<
-    firebase.firestore.DocumentData[]
-  >([]);
+  const [taskDescriptions, setTaskDescriptions] = useState<firebase.firestore.DocumentData[]>([]);
   const [showTaken, setShowTaken] = useState<boolean>(false);
   const [tabChosen, setTabChosen] = useState<string>("available");
   let priorBoxId = "0";
@@ -38,7 +36,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
       });
       setTaskDescriptions(tempArray);
     });
-
+    
     return () => {
       unsub();
     };

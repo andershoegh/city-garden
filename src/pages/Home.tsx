@@ -59,7 +59,7 @@ const Home: React.FC = (props) => {
               <Have setSelection={setSelection} tasks={tasks} />
             </IonCol>
             <IonCol size='4'>
-              <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
+              <SideMenu tasks={tasks} selection={selection} setSelection={setSelection} />
             </IonCol>
           </IonRow>
         </IonGrid>
