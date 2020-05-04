@@ -62,7 +62,7 @@ const EventSignUp: React.FC<EventSignUpProps> = (props) => {
             />
           </IonItem>
 
-          <IonToolbar>
+          <IonToolbar className='sign-up-toolbar'>
             <IonButtons className='buttons'>
               <IonButton onClick={() => closeModal()} color='danger' fill='solid'>
                 Close

@@ -44,7 +44,11 @@ export const Event: React.FC<EventProps> = (props) => {
 
   return (
     <>
-      <IonModal isOpen={openSignUp} onDidDismiss={() => setOpenSignUp(false)}>
+      <IonModal
+        cssClass='sign-up-card'
+        isOpen={openSignUp}
+        onDidDismiss={() => setOpenSignUp(false)}
+      >
         <EventSignUp event={event.title} id={event.id} closeModal={() => setOpenSignUp(false)} />
       </IonModal>
       <IonCard className='event-card'>
@@ -66,24 +70,25 @@ export const Event: React.FC<EventProps> = (props) => {
             <div className='description'>{event.description}</div>
             <div className='attendees'>
               <IonIcon icon={peopleOutline} slot='start' className='attendee-icon' />
-              <span>Attendees</span>
-              <IonList className='event-list'>
-                {attendees.length !== 0 ? (
-                  attendees.map((attendee: string, index: number) => (
-                    <div key={index} className='event-list-item'>
-                      {attendee}
+              <div style={{ width: '50%' }}>
+                <span>Attendees</span>
+                <IonList className='event-list'>
+                  {attendees.length !== 0 ? (
+                    attendees.map((attendee: string, index: number) => (
+                      <div key={index} className='event-list-item'>
+                        {attendee}
+                      </div>
+                    ))
+                  ) : (
+                    <div className='event-list-item'>
+                      No one has signed up to attend this event yet
                     </div>
-                  ))
-                ) : (
-                  <div className='event-list-item'>
-                    No one has signed up to attend this event yet
-                  </div>
-                )}
-              </IonList>
-
+                  )}
+                </IonList>
+              </div>
               <IonButton
                 size='small'
-                style={{ float: 'right' }}
+                style={{ position: 'absolute', bottom: '15px', right: '5px' }}
                 onClick={() => setOpenSignUp(true)}
               >
                 Sign up

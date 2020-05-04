@@ -43,14 +43,15 @@
 
 .event-list {
   max-height: 100px;
-  width: 30%;
+  width: 100%;
+  margin: 5px 0 0 0 !important;
   overflow: scroll;
   background-color: transparent;
 }
 
 .event-list-item {
   font-size: 0.8em;
-  margin: 0.5% 0 0 5%;
+  margin: 0.5% 0 0 0.5%;
 }
 
 .no-events {
