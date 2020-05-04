@@ -1,8 +1,8 @@
-import app from 'firebase/app';
-import 'firebase/database';
-import 'firebase/firestore';
-import 'firebase/auth';
-import { firebaseConfig } from './FirebaseConfig';
+import app from "firebase/app";
+import "firebase/database";
+import "firebase/firestore";
+import "firebase/auth";
+import { firebaseConfig } from "./FirebaseConfig";
 
 class Firebase {
   db: firebase.firestore.Firestore;
@@ -36,9 +36,10 @@ class Firebase {
   getPlants = () => this.db.collection('plants');
 
   updatePlant = (id:string, plant:string) => {
+
     const dt = new Date();
 
-    if(plant !== 'empty'){
+    if (plant !== "empty") {
       this.db
       .collection('plants')
       .doc(plant)
@@ -57,7 +58,7 @@ class Firebase {
       .doc(id)
       .update({timeToHarvest:null});
     }
-    
+
     this.db
     .collection('gardenBox')
     .doc(id)
@@ -89,10 +90,14 @@ class Firebase {
 
   // NOTES
 
-  getNotes = () => this.db.collection('notes').orderBy('pinned', 'desc').orderBy('created', 'desc');
+  getNotes = () =>
+    this.db
+      .collection("notes")
+      .orderBy("pinned", "desc")
+      .orderBy("created", "desc");
 
   createNote = (author: string, text: string, announcement: boolean) =>
-    this.db.collection('notes').add({
+    this.db.collection("notes").add({
       author: author,
       note: text,
       created: new Date(),
@@ -108,32 +113,46 @@ class Firebase {
 
   getTasks = () => this.db.collection('alltasks').orderBy('gardenBoxId', 'asc');
 
-  updateTaskTaken = (id: string, taskTaken: boolean) => {
-    this.db.collection('alltasks').doc(id).update({
-      taskTaken: taskTaken,
+  updateTaskTaken = (id: string, taskTaken: boolean, helpNeeded: boolean) => {
+    this.db.collection("alltasks").doc(id).update({
+      taskTaken,
+      helpNeeded,
     });
   };
 
   setTaskFinished = (id: string, finished: boolean) => {
-    this.db.collection('alltasks').doc(id).update({
+    this.db.collection("alltasks").doc(id).update({
       finished: finished,
     });
   };
+  
+  getTaskDescription = () => this.db.collection("taskTemplate");
 
-  getTaskDescription = () => this.db.collection('taskTemplate');
+  setHelpName = (id: string, needsHelp: string) => {
+    this.db.collection("alltasks").doc(id).update({
+      needsHelp,
+    });
+  };
 
 
   // EVENTS
 
-  getEvents = () => this.db.collection('events').orderBy('startTime', 'asc');
+  updatePin = (id: string) => this.db.collection("notes").doc(id);
 
-  createEvent = (title: string, description: string, startTime: Date, endTime: Date) => 
-    this.db.collection('events').add({
+  getEvents = () => this.db.collection("events").orderBy("startTime", "asc");
+
+  createEvent = (
+    title: string,
+    description: string,
+    startTime: Date,
+    endTime: Date
+  ) =>
+    this.db.collection("events").add({
       title: title,
       description: description,
       startTime: startTime,
       endTime: endTime,
-      attendees: []
+      attendees: [],
     });
 }
 

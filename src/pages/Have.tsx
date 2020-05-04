@@ -9,7 +9,7 @@ interface HaveProps {
   tasks: firebase.firestore.DocumentData[];
 }
 
-const Have: React.FC<HaveProps> = props => {
+const Have: React.FC<HaveProps> = (props) => {
   const { setSelection, tasks } = props;
   const [beds, setBeds] = useState<firebase.firestore.DocumentData[]>([]);
   const sizeRow = '2';
@@ -32,23 +32,29 @@ const Have: React.FC<HaveProps> = props => {
   }, []);
 
   return (
-    <IonRow>
+    <IonRow className='parent-row'>
       {beds.map((bed, index) => {
         let availTasks = 0;
-        tasks.forEach(task => task.gardenBoxId === bed.id && task.taskTaken === false ? availTasks++ : null);
-        return <IonCol
-          size-sm={sizeRow}
-          key={index}
-          offset={bed.id === '19' || bed.id === '21' ? '8' : '0'}
-        >
-          <Bed bedNr={bed.id} 
-            content={bed.plant} 
-            airMoisture={bed.airMoisture}
-            soilMoisture={bed.soilMoisture}
-            soilTemperature={bed.soilTemperature}
-            setSelection={setSelection}
-            availTasks={availTasks} />
-        </IonCol>
+        tasks.forEach((task) =>
+          task.gardenBoxId === bed.id && task.taskTaken === false ? availTasks++ : null
+        );
+        return (
+          <IonCol
+            size-sm={sizeRow}
+            key={index}
+            offset={bed.id === '19' || bed.id === '21' ? '8' : '0'}
+          >
+            <Bed
+              bedNr={bed.id}
+              content={bed.plant}
+              airMoisture={bed.airMoisture}
+              soilMoisture={bed.soilMoisture}
+              soilTemperature={bed.soilTemperature}
+              setSelection={setSelection}
+              availTasks={availTasks}
+            />
+          </IonCol>
+        );
       })}
     </IonRow>
   );
