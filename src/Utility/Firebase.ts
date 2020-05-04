@@ -137,8 +137,6 @@ class Firebase {
 
   // EVENTS
 
-  updatePin = (id: string) => this.db.collection("notes").doc(id);
-
   getEvents = () => this.db.collection("events").orderBy("startTime", "asc");
 
   createEvent = (
