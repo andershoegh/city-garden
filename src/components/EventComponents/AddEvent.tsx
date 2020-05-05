@@ -29,6 +29,7 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
   const maxDate = parseInt(year) + 2 + '-' + month + '-' + day;
 
   const [title, setTitle] = useState<string>('');
+  const [organizer, setOrganizer] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [startTime, setStartTime] = useState<string>('');
@@ -37,7 +38,7 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
   const addNewEvent = (e: FormEvent) => {
     e.preventDefault();
     firebase
-      .createEvent(title, description, new Date(startTime), new Date(endTime))
+      .createEvent(title, organizer, description, new Date(startTime), new Date(endTime))
       .then((msg) => {
         firebase.presentToast(
           'You have successfully created the event, start inviting your friends!'
@@ -100,6 +101,16 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
                 onIonChange={(e) => setTitle(e.detail.value!)}
               />
             </IonItem>
+
+            <IonItem>
+              <IonLabel position='floating'>Organizer</IonLabel>
+              <IonInput
+                value={organizer}
+                required={true}
+                onIonChange={(e) => setOrganizer(e.detail.value!)}
+              />
+            </IonItem>
+
             <IonItem lines='none'>
               <IonLabel position='floating'>Date</IonLabel>
               <IonDatetime
@@ -111,6 +122,7 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
                 onIonChange={(e) => newDate(e.detail.value!)}
               />
             </IonItem>
+
             <IonItem lines='none'>
               <IonLabel position='floating'>Start time</IonLabel>
               <IonDatetime
@@ -120,6 +132,7 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
                 onIonChange={(e) => newStart(e.detail.value!)}
               />
             </IonItem>
+
             <IonItem>
               <IonLabel position='floating'>End time</IonLabel>
               <IonDatetime
@@ -130,6 +143,7 @@ const AddEvent: React.FC<AddEventProps> = (props) => {
                 onIonChange={(e) => setEndTime(e.detail.value!)}
               />
             </IonItem>
+
             <IonItem lines='none'>
               <IonLabel position='floating' className='costum-label'>
                 Description...

@@ -1,0 +1,41 @@
+.sign-up-message {
+  display: block;
+  margin: 10% 5%;
+}
+
+.text-input {
+  width: 85%;
+  display: inline-block;
+  margin: 0 0 5% 7.5%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 4%;
+}
+
+.buttons .ion--button {
+  margin-right: 20px;
+}
+
+.sign-up-toolbar {
+  width: 99%;
+}
+/* --- START --- Modal responsiv CSS --- START --- */
+@media screen and (min-width: 1000px) and (min-height: 700px) {
+  .sign-up-card {
+    --height: 22em;
+  }
+}
+
+@media screen and (min-width: 700px) and (min-height: 1000px) {
+  .sign-up-card {
+    --height: 22em;
+  }
+}
+
+.sign-up-card {
+  --min-height: 10em;
+}
+/* --- SLUT --- Modal responsiv CSS --- SLUT --- */

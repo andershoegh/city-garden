@@ -77,7 +77,7 @@ const AddNote: React.SFC<AddNoteProps> = (props) => {
           </IonItem>
 
           <IonToolbar>
-            <IonItem slot='start'>
+            <IonItem slot='start' lines='none'>
               <IonLabel className=''>Is this an Announcement?</IonLabel>
               <IonToggle
                 value='announcement'

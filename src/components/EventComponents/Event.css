@@ -4,18 +4,21 @@
   padding: 0 1%;
 }
 
-.date {
+.date,
+.organizer {
   margin: 1%;
 }
 
-.date-icon, .attendee-icon {
+.date-icon,
+.attendee-icon,
+.clipboard-icon {
   font-size: 1.4em;
   vertical-align: middle;
   margin-right: 15px;
 }
 
 .date span {
-  font-size: .8em;
+  font-size: 0.8em;
   display: inline-block;
   vertical-align: middle;
 }
@@ -25,24 +28,30 @@
   margin: 2% 5%;
 }
 
+.organizer span {
+  font-size: 0.9em;
+}
+
 .attendees {
-  display: block;
-  margin: 1% 0 .5% 1%;
+  display: flex;
+  margin: 1% 0 0.5% 1%;
 }
 
 .attendees span {
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .event-list {
   max-height: 100px;
+  width: 100%;
+  margin: 5px 0 0 0 !important;
   overflow: scroll;
   background-color: transparent;
 }
 
 .event-list-item {
-  font-size: .8em;
-  margin: .5% 0 0 5%;
+  font-size: 0.8em;
+  margin: 0.5% 0 0 0.5%;
 }
 
 .no-events {

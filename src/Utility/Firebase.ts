@@ -30,7 +30,6 @@ class Firebase {
 
   getBed = () => this.db.collection('gardenBox');
 
-
   // PLANT
 
   getPlants = () => this.db.collection('plants');
@@ -136,22 +135,42 @@ class Firebase {
 
 
   // EVENTS
-
   getEvents = () => this.db.collection("events").orderBy("startTime", "asc");
 
   createEvent = (
     title: string,
+    organizer: string,
     description: string,
     startTime: Date,
     endTime: Date
   ) =>
-    this.db.collection("events").add({
-      title: title,
-      description: description,
-      startTime: startTime,
-      endTime: endTime,
+    this.db.collection('events').add({
+      title,
+      organizer,
+      description,
+      startTime,
+      endTime,
       attendees: [],
     });
+
+  deleteNote = (id: string) => this.db.collection('notes').doc(id).delete();
+
+  presentToast = async (err: string) => {
+    const toast = document.createElement('ion-toast');
+    toast.message = err;
+    toast.duration = 5000;
+
+    document.body.appendChild(toast);
+    return toast.present();
+  };
+
+  eventSignUp = (id: string, name: string) =>
+    this.db
+      .collection('events')
+      .doc(id)
+      .update({
+        attendees: firebase.firestore.FieldValue.arrayUnion(name),
+      });
 }
 
 export const firebase = new Firebase();
