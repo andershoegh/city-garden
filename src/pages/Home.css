@@ -20,6 +20,7 @@ ion-content {
   position: absolute;
   height: 23vh;
   width: auto;
+  padding: 40px;
   top: 44%;
   left: 10%;
 }
