@@ -3,12 +3,16 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 100px;
+  /*min-height: 100px;*/
+  height: auto;
+  width: auto;
+  size: auto;
   text-align: center;
   padding-top: 42%;
   color: white;
   font-weight: 300;
-  font-size: .9em;
+  font-size: 0.9em;
+  justify-content: space-evenly;
 }
 
 .gardenbox-empty {

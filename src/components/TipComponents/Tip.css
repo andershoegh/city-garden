@@ -1,0 +1,29 @@
+.title-row {
+  margin: 0 0 0 50px;
+}
+
+.plant-title {
+  text-align: left;
+  width: fit-content;
+  padding: 0;
+}
+
+.tip-card {
+  height: 150px;
+  display: flex;
+  align-items: center;
+}
+
+.delete-tip-icon {
+  font-size: 25px;
+  z-index: 3;
+  position: absolute;
+  left: 87%;
+  top: 78%;
+}
+
+.no-tips {
+  width: 100%;
+  color: rgb(155, 155, 155);
+  margin-left: 50px;
+}

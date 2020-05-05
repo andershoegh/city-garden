@@ -2,6 +2,11 @@
   text-align: center;
   justify-content: flex-start;
 }
+.parent-row {
+  height: 80vh;
+  position: relative;
+  justify-content: space-evenly;
+}
 
 .bed-col {
   /* margin-bottom: 5%; */

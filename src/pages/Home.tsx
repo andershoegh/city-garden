@@ -48,18 +48,18 @@ const Home: React.FC = (props) => {
         </IonToolbar>
       </IonHeader>
       <IonContent
-        style={{ height: '100%', display: 'flex', alignItems: 'center' }}
+        style={{ height: '90vh', display: 'flex', alignItems: 'center' }}
         className='page-background'
         slot='fixed'
       >
         <img alt='bonfire' src={require('../pics/garden-bonfire.png')} className='bonfire-img' />
         <IonGrid slot='fixed'>
           <IonRow>
-            <IonCol size='8' style={{ alignSelf: 'center' }}>
+            <IonCol size='8' style={{ alignSelf: 'center', height: '80vh' }}>
               <Have setSelection={setSelection} tasks={tasks} />
             </IonCol>
             <IonCol size='4'>
-              <SideMenu selection={selection} setSelection={setSelection} tasks={tasks} />
+              <SideMenu tasks={tasks} selection={selection} setSelection={setSelection} />
             </IonCol>
           </IonRow>
         </IonGrid>

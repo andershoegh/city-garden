@@ -26,7 +26,11 @@ const Events: React.FC = () => {
       let tempArray: firebase.firestore.DocumentData[];
       tempArray = [];
       snapShot.forEach((doc) => {
-        tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+        if(new Date(doc.data().endTime.toDate()) > new Date()){
+          tempArray = [...tempArray, { ...doc.data(), id: doc.id }];
+        }else{
+          firebase.db.collection('events').doc(doc.id).delete();
+        }
       });
       setEvents(tempArray);
     });

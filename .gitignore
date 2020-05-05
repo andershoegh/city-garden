@@ -26,3 +26,16 @@ yarn-error.log*
 
 /src/Utility/FirebaseConfig.ts
 package-lock.json
+
+
+functions/tslint.json
+
+package.json
+
+firebase.json
+
+.firebaserc
+
+functions/lib/index.js
+
+functions/lib/index.js.map

@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { firebase } from "../../Utility/Firebase";
 import "./SideMenu.css";
 import Task from "./Task";
+import HelpTask from "./HelpTask";
 
 export interface SideMenuProps {
   tasks: firebase.firestore.DocumentData[];
@@ -21,9 +22,7 @@ export interface SideMenuProps {
 
 export const SideMenu: React.FC<SideMenuProps> = (props) => {
   const { tasks, selection, setSelection } = props;
-  const [taskDescriptions, setTaskDescriptions] = useState<
-    firebase.firestore.DocumentData[]
-  >([]);
+  const [taskDescriptions, setTaskDescriptions] = useState<firebase.firestore.DocumentData[]>([]);
   const [showTaken, setShowTaken] = useState<boolean>(false);
   const [tabChosen, setTabChosen] = useState<string>("available");
   let priorBoxId = "0";
@@ -37,7 +36,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
       });
       setTaskDescriptions(tempArray);
     });
-
+    
     return () => {
       unsub();
     };
@@ -53,10 +52,15 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
     setSelection(id);
   };
 
-  const toggleTask = (taskId: string, update: string, takenStatus: boolean) => {
+  const toggleTask = (
+    taskId: string,
+    update: string,
+    takenStatus: boolean,
+    helpNeeded: boolean
+  ) => {
     switch (update) {
       case "toggleTaken":
-        firebase.updateTaskTaken(taskId, !takenStatus);
+        firebase.updateTaskTaken(taskId, !takenStatus, helpNeeded);
         break;
       case "setFinished":
         firebase.setTaskFinished(taskId, true);
@@ -64,6 +68,10 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
       default:
         break;
     }
+  };
+
+  const insertHelpName = (taskId: string, helpName: string) => {
+    firebase.setHelpName(taskId, helpName);
   };
 
   return (
@@ -93,9 +101,26 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               (task) => !task.finished && task.taskTaken === showTaken
             ).length
               ? "These garden boxes need your help!"
-              : "Noone is working on anything"}
+              : "No one is working on anything"}
           </div>
         </IonItemDivider>
+
+        {/* Help tasks */}
+        <IonList>
+          {tasks
+            .filter((task) => task.helpNeeded)
+            .map((task, index) => {
+              return (
+                <HelpTask
+                  key={task.id}
+                  helpName={task.needsHelp}
+                  taskTemplateId={task.taskTemplateId}
+                  gardenBoxId={task.gardenBoxId}
+                ></HelpTask>
+              );
+            })}
+        </IonList>
+
         <IonList>
           {tasks
             .filter((task) => !task.finished && task.taskTaken === showTaken)
@@ -106,8 +131,9 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
               }
               return (
                 <Task
-                  key={index}
+                  key={task.id}
                   task={task}
+                  helpName={insertHelpName}
                   taskDescription={taskDescriptions}
                   showTaken={showTaken}
                   index={index}

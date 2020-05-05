@@ -41,7 +41,7 @@ const Note: React.SFC<NoteProps> = ({ note, author, pinned, id, created }) => {
         .then((msg) => {
           firebase.presentToast('The note has been successfully deleted.');
         })
-        .catch((err) => firebase.presentToast('An error occurred. the note has NOT been deleted.'));
+        .catch((err) => firebase.presentToast('An error occurred. The note could not be deleted. Please try again.'));
     },
     [id]
   );

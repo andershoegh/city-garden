@@ -12,11 +12,12 @@ import {
 import React from 'react';
 import { Redirect, Route } from 'react-router';
 import Home from '../pages/Home';
-import { leafOutline, clipboardOutline, calendarOutline } from 'ionicons/icons';
+import { leafOutline, clipboardOutline, calendarOutline, bulbOutline } from 'ionicons/icons';
 import { IonReactRouter } from '@ionic/react-router';
 import MessageBoard from '../pages/MessageBoard';
 import Dummy from '../pages/Dummy';
 import Events from '../pages/Events';
+import Tips from '../pages/Tips';
 
 
 interface BottomNavigationProps {}
@@ -31,6 +32,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
               <Route path="/garden" component={Home} exact />
               <Route path="/messageboard" component={MessageBoard} exact />
               <Route path="/events" component={Events} />
+              <Route path='/tips' component={Tips} />
               <Route path="/dummy" component={Dummy} />
               <Redirect path="/" to="/garden" exact />
             </IonRouterOutlet>
@@ -50,6 +52,12 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = () => {
               <IonTabButton tab="events" href="/events">
                 <IonIcon icon={calendarOutline} />
                 <IonLabel>Events</IonLabel>
+                <IonRippleEffect />
+              </IonTabButton>
+
+              <IonTabButton tab="tips" href="/tips">
+                <IonIcon icon={bulbOutline} />
+                <IonLabel>Tips</IonLabel>
                 <IonRippleEffect />
               </IonTabButton>
             </IonTabBar>

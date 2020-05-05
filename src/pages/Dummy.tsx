@@ -13,6 +13,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonDatetime,
+  IonToggle,
 } from "@ionic/react";
 import "./Dummy.css";
 import { firebase } from "../Utility/Firebase";
@@ -22,15 +23,16 @@ export interface IDummyData {
   gardenBoxId: string;
   gardenBoxArray: firebase.firestore.DocumentData[];
   taskTemplateId: string;
-  airMoisture: string;
-  soilMoisture: string;
-  soilTemperature: string;
+  airMoisture: number;
+  soilMoisture: number;
+  soilTemperature: number;
   taskDescription: string;
   taskTitle: string;
   chosenTaskTemplate: string;
   lastWeeding: string;
   lastWatered: string;
   lastFertilized: string;
+  helpNeeded: boolean;
 }
 
 export interface ITemplateArray {
@@ -42,15 +44,16 @@ const Dummy: React.SFC = () => {
     gardenBoxId: "",
     gardenBoxArray: [],
     taskTemplateId: "",
-    airMoisture: "",
-    soilMoisture: "",
-    soilTemperature: "",
+    airMoisture: 0,
+    soilMoisture: 0,
+    soilTemperature: 0,
     taskDescription: "",
     taskTitle: "",
     chosenTaskTemplate: "",
     lastWeeding: "",
     lastWatered: "",
-    lastFertilized: ""
+    lastFertilized: "",
+    helpNeeded: false,
   });
 
   const [taskTemplateArray, setTaskTemplateArray] = useState<
@@ -61,12 +64,18 @@ const Dummy: React.SFC = () => {
     setState({ ...state, [e.target.id]: e.detail.value! });
   };
 
+  const handleToggle = (e) => {
+    setState({ ...state, [e.target.id]: e.detail.checked });
+    console.log(e.detail.checked);
+    console.log(e.target.id);
+  };
+
   useEffect(() => {
     const unsub = firebase.db
       .collection("taskTemplate")
-      .onSnapshot(snapshot => {
+      .onSnapshot((snapshot) => {
         let documents: any = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           documents.push({ ...doc.data(), id: doc.id });
         });
         setTaskTemplateArray(documents);
@@ -77,9 +86,9 @@ const Dummy: React.SFC = () => {
   }, []);
 
   useEffect(() => {
-    const unsub = firebase.db.collection("gardenBox").onSnapshot(snapshot => {
+    const unsub = firebase.db.collection("gardenBox").onSnapshot((snapshot) => {
       let documents: any = [];
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         documents.push({ ...doc.data(), id: doc.id });
       });
       documents.sort(
@@ -90,7 +99,7 @@ const Dummy: React.SFC = () => {
           return Number(a.id) - Number(b.id);
         }
       );
-      setState(s => {
+      setState((s) => {
         return { ...s, gardenBoxArray: documents };
       });
     });
@@ -108,9 +117,10 @@ const Dummy: React.SFC = () => {
         finished: false,
         gardenBoxId: state.gardenBoxId,
         taskTaken: false,
-        taskTemplateId: state.chosenTaskTemplate
+        taskTemplateId: state.chosenTaskTemplate,
+        helpNeeded: state.helpNeeded,
       })
-      .then(function() {
+      .then(function () {
         console.log("Document in Firebase = OK!");
       });
   };
@@ -126,19 +136,19 @@ const Dummy: React.SFC = () => {
     return gardenBox
       .set(
         {
-          airMoisture: state.airMoisture,
-          soilMoisture: state.soilMoisture,
-          soilTemperature: state.soilTemperature,
+          airMoisture: Number(state.airMoisture),
+          soilMoisture: Number(state.soilMoisture),
+          soilTemperature: Number(state.soilTemperature),
           lastWeeding: new Date(state.lastWeeding),
           lastWatered: new Date(state.lastWatered),
-          lastFertilized: new Date(state.lastFertilized)
+          lastFertilized: new Date(state.lastFertilized),
         },
         { merge: true }
       )
-      .then(function() {
+      .then(function () {
         console.log("Document updated");
       })
-      .catch(function(err: any) {
+      .catch(function (err: any) {
         console.log("Error updating: ", err);
       });
   };
@@ -151,9 +161,9 @@ const Dummy: React.SFC = () => {
       .doc(taskTemplateId)
       .set({
         taskDescription: state.taskDescription,
-        taskTitle: state.taskTitle
+        taskTitle: state.taskTitle,
       })
-      .then(function() {
+      .then(function () {
         console.log("Document in Firebase = OK!");
       });
   };
@@ -198,6 +208,15 @@ const Dummy: React.SFC = () => {
                     </IonSelectOption>
                   ))}
                 </IonSelect>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>Help needed?</IonLabel>
+                <IonToggle
+                  id="helpNeeded"
+                  checked={state.helpNeeded}
+                  onIonChange={handleToggle}
+                ></IonToggle>
               </IonItem>
 
               <IonButton
@@ -315,7 +334,8 @@ const Dummy: React.SFC = () => {
                   placeholder="Please select date"
                   value={state.lastWeeding}
                   onIonChange={handleChange}
-                  className="ion-text-right ion-padding-top"/>
+                  className="ion-text-right ion-padding-top"
+                />
               </IonItem>
               <IonItem>
                 <IonLabel>Last watered</IonLabel>
@@ -324,17 +344,19 @@ const Dummy: React.SFC = () => {
                   displayFormat="MM DD YYYY"
                   placeholder="Please select date"
                   value={state.lastWatered}
-                  onIonChange={handleChange}/>
+                  onIonChange={handleChange}
+                />
               </IonItem>
               <IonItem>
                 <IonLabel>Last Fertilized</IonLabel>
                 <IonDatetime
-                    id="lastFertilized"
-                    displayFormat="MM DD YYYY"
-                    placeholder="Please select date"
-                    value={state.lastFertilized}
-                    onIonChange={handleChange}/>
-                </IonItem>
+                  id="lastFertilized"
+                  displayFormat="MM DD YYYY"
+                  placeholder="Please select date"
+                  value={state.lastFertilized}
+                  onIonChange={handleChange}
+                />
+              </IonItem>
               <IonButton
                 expand="block"
                 className="ion-margin"

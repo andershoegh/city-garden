@@ -1,0 +1,15 @@
+.info-card {
+  text-align: center;
+  width: 50vw;
+  margin: 20px auto;
+  padding: 0 5px;
+}
+
+.tips-grid {
+  width: 100vw;
+  margin: 0 auto;
+}
+
+.row {
+  margin: 2% 0 4% 0;
+}
