@@ -51,7 +51,7 @@ const Tips: React.FC<TipsProps> = () => {
           <IonTitle>Tips</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className='page-background'>
         <IonModal 
           cssClass='costum-modal'
           isOpen={modalOpen} 

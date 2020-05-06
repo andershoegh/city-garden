@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { 
-  IonTitle, 
   IonCol, 
   IonCard, 
   IonCardContent, 
@@ -70,10 +69,10 @@ const Tip: React.FC<TipProps> = props => {
       <IonCol>
         <IonRow className='title-row'>
           <IonCol size='1' className='title-col'>
-            <IonTitle className='plant-title'>{plantCapitalized}</IonTitle>
+            <h2 className='plant-title'>{plantCapitalized}</h2>
           </IonCol>
-          <IonCol size='1'>
-            <IonButton size='small' onClick={() => newTip(plant)}>
+          <IonCol size='1' className='tip-btn-col'>
+            <IonButton size='default' onClick={() => newTip(plant)}>
               <IonIcon icon={addOutline} />
               tip
             </IonButton>
@@ -93,12 +92,9 @@ const Tip: React.FC<TipProps> = props => {
             )) 
           :
             <div className='no-tips'>
-              <h5>
                 There are currently no tips for {plant}.
                 <br />
-                <br />
                 Click the "+ tip" button to add the first tip!
-              </h5>
             </div>
           }
         </IonRow>
