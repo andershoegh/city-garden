@@ -189,3 +189,84 @@ exports.updateHarvestTask = functions.firestore
   }
   return 0;
 })
+
+
+exports.updateStorm = functions.firestore
+.document('/weather/data')
+.onUpdate((snap:any, context:any) => {
+  const weather = snap.after.data();
+  const plants = db.collection('plants');
+  
+  if(weather.isStorm){
+    gardenBox.get().then((snapshot:any) => {
+      snapshot.forEach((box:any) => {
+        const stormTask = tasks.where('gardenBoxId','==',box.id).where('taskTemplateId','==','storm');
+        stormTask.get().then((stormCheck:any) => {
+          console.log(stormCheck.empty);
+          if(box.data().plant !== 'empty' && stormCheck.empty){
+            plants.doc(box.data().plant).onSnapshot((plant:any) => {           
+              if(!plant.data().canHandleStorm){
+                tasks.add({
+                  created: new Date(),
+                  finished: false,
+                  gardenBoxId: box.id,
+                  taskTaken: false,
+                  taskTemplateId: 'storm'
+                });
+              }
+            })
+          }
+        })
+      })
+    })
+  }else{
+    tasks.get().then((snapshot:any) => {
+      snapshot.forEach((task:any) => {
+        if(task.data().taskTemplateId === 'storm'){
+          return tasks.doc(task.id).delete();
+        }
+      })
+    })
+  }
+  return 0;
+})
+
+
+exports.updateFrost = functions.firestore
+.document('/weather/data')
+.onUpdate((snap:any, context:any) => {
+  const weather = snap.after.data();
+  const plants = db.collection('plants');
+  
+  if(weather.isFrost){
+    gardenBox.get().then((snapshot:any) => {
+      snapshot.forEach((box:any) => {
+        const frostTask = tasks.where('gardenBoxId','==',box.id).where('taskTemplateId','==','frost');
+        frostTask.get().then((frostCheck:any) => {
+          if(box.data().plant !== 'empty' && frostCheck.empty){
+            plants.doc(box.data().plant).onSnapshot((plant:any) => {           
+              if(!plant.data().canHandleFrost){
+                tasks.add({
+                  created: new Date(),
+                  finished: false,
+                  gardenBoxId: box.id,
+                  taskTaken: false,
+                  taskTemplateId: 'frost'
+                });
+              }
+            })
+          }
+        })
+      })
+    })
+  }else{
+    tasks.get().then((snapshot:any) => {
+      snapshot.forEach((task:any) => {
+        if(task.data().taskTemplateId === 'frost'){
+          return tasks.doc(task.id).delete();
+        }
+      })
+    })
+  }
+  return 0;
+})
