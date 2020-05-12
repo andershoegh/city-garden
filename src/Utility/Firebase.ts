@@ -1,15 +1,19 @@
 import app from 'firebase/app';
 import 'firebase/database';
 import 'firebase/firestore';
+import 'firebase/functions';
 import 'firebase/auth';
 import { firebaseConfig } from './FirebaseConfig';
 
 class Firebase {
   db: firebase.firestore.Firestore;
   firestore: any;
+  functions: any;
 
   constructor() {
     app.initializeApp(firebaseConfig);
+    // app.functions().useFunctionsEmulator('http://localhost:5001');
+    this.functions = app.functions();
     this.db = app.firestore();
     this.firestore = app.firestore;
   }

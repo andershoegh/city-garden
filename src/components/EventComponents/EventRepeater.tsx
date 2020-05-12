@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Event from './Event';
 import './Event.css';
 import { IonGrid, IonRow, IonCol } from '@ionic/react';
+import { firebase } from '../../Utility/Firebase';
 
 interface EventRepeaterProps {
   events: firebase.firestore.DocumentData[];
 }
 
-export const EventRepeater: React.FC<EventRepeaterProps> = props => {
+export const EventRepeater: React.FC<EventRepeaterProps> = (props) => {
   const { events } = props;
+  const [newEventMsg, setNewEventMsg] = useState(
+    'Click the "+ Event" button to start planning a new event'
+  );
+
+  useEffect(() => {
+    const eventMsgFunction = firebase.functions.httpsCallable('autoCreateGreatWeatherEvent');
+    eventMsgFunction().then((res) => {
+      setNewEventMsg(res.data);
+    });
+  });
 
   return (
     <IonGrid>
@@ -21,15 +32,16 @@ export const EventRepeater: React.FC<EventRepeaterProps> = props => {
           ))
         ) : (
           <div className='no-events'>
-            <h2>Seems like there are currently no events planned.
+            <h2>
+              Seems like there are currently no events planned.
               <br />
-              Click the "+ Event" button to start planning a new event.
+              {newEventMsg}
             </h2>
           </div>
         )}
       </IonRow>
     </IonGrid>
   );
-}
+};
 
 export default EventRepeater;
