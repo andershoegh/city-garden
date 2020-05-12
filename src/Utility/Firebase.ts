@@ -12,7 +12,7 @@ class Firebase {
 
   constructor() {
     app.initializeApp(firebaseConfig);
-    app.functions().useFunctionsEmulator('http://localhost:5001');
+    // app.functions().useFunctionsEmulator('http://localhost:5001');
     this.functions = app.functions();
     this.db = app.firestore();
     this.firestore = app.firestore;
