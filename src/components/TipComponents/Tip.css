@@ -1,11 +1,23 @@
 .title-row {
   margin: 0 0 0 50px;
+  color: white;
+}
+
+.title-col {
+  padding: 0;
+  display: flex;
+}
+
+.tip-btn-col {
+  display: flex;
+  align-items: center;
 }
 
 .plant-title {
   text-align: left;
   width: fit-content;
   padding: 0;
+  margin: auto 0;
 }
 
 .tip-card {
@@ -24,6 +36,6 @@
 
 .no-tips {
   width: 100%;
-  color: rgb(155, 155, 155);
-  margin-left: 50px;
+  color: white;
+  margin: 20px 0 0 50px;
 }
